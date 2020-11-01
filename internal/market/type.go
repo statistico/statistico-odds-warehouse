@@ -13,7 +13,7 @@ type Market struct {
 	Exchange       string            `json:"exchange"`
 	ExchangeMarket ExchangeMarket    `json:"exchangeMarket"`
 	StatisticoOdds []*StatisticoOdds `json:"statisticoOdds"`
-	Timestamp      uint64            `json:"timestamp"`
+	Timestamp      int64             `json:"timestamp"`
 }
 
 func (m Market) Value() (driver.Value, error) {

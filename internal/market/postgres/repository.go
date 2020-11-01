@@ -6,7 +6,6 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	_ "github.com/lib/pq"
 	"github.com/statistico/statistico-odds-warehouse/internal/market"
-	"time"
 )
 
 type MarketRepository struct {
@@ -46,7 +45,7 @@ func (r *MarketRepository) Insert(m *market.Market) error {
 			m.Side,
 			string(e),
 			string(s),
-			m.Timestamp.Unix(),
+			m.Timestamp,
 		).
 		Exec()
 
@@ -104,7 +103,6 @@ func rowsToMarketSlice(rows *sql.Rows) ([]*market.Market, error) {
 		var m market.Market
 		var exchange string
 		var odds string
-		var timestamp int64
 
 		err := rows.Scan(
 			&m.EventID,
@@ -113,14 +111,12 @@ func rowsToMarketSlice(rows *sql.Rows) ([]*market.Market, error) {
 			&m.Side,
 			&exchange,
 			&odds,
-			&timestamp,
+			&m.Timestamp,
 		)
 
 		if err != nil {
 			return markets, err
 		}
-
-		m.Timestamp = time.Unix(timestamp, 0)
 
 		err = json.Unmarshal([]byte(exchange), &m.ExchangeMarket)
 
