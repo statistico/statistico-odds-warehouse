@@ -4,17 +4,16 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
-	"time"
 )
 
 type Market struct {
-	EventID        uint64            `json:"event_id"`
+	EventID        uint64            `json:"eventId"`
 	Name           string            `json:"name"`
 	Side           string            `json:"side"`
 	Exchange       string            `json:"exchange"`
-	ExchangeMarket ExchangeMarket    `json:"exchange_market"`
-	StatisticoOdds []*StatisticoOdds `json:"statistico_odds"`
-	Timestamp      time.Time         `json:"timestamp"`
+	ExchangeMarket ExchangeMarket    `json:"exchangeMarket"`
+	StatisticoOdds []*StatisticoOdds `json:"statisticoOdds"`
+	Timestamp      uint64            `json:"timestamp"`
 }
 
 func (m Market) Value() (driver.Value, error) {
