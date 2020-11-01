@@ -138,7 +138,7 @@ func newMarket(eventID uint64, name, side string, t time.Time) *market.Market {
 				Selection: "under",
 			},
 		},
-		Timestamp:      t,
+		Timestamp:      t.Unix(),
 	}
 }
 
