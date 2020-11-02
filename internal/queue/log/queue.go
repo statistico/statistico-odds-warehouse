@@ -11,14 +11,22 @@ type Queue struct {
 	logger *logrus.Logger
 }
 
-func (q *Queue) ReceiveMarkets(ch chan<- *market.Market) error {
+func (q *Queue) ReceiveMarkets() <-chan *market.Market {
+	ch := make(chan *market.Market, 100)
+
 	q.logger.Infof("Pretending to poll for messages from queue...")
 
-	time.Sleep(3 * time.Second)
+	go q.simulate(ch)
+
+	return ch
+}
+
+func (q *Queue) simulate(ch chan<- *market.Market) {
+	time.Sleep(10 * time.Second)
 
 	q.logger.Infof("..polling complete.")
 
-	return nil
+	close(ch)
 }
 
 func NewQueue(l *logrus.Logger) queue.Queue {

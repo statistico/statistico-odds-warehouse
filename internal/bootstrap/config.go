@@ -42,6 +42,7 @@ func BuildConfig() *Config {
 		Key:    os.Getenv("AWS_KEY"),
 		Secret: os.Getenv("AWS_SECRET"),
 		Region: os.Getenv("AWS_REGION"),
+		QueueUrl: os.Getenv("AWS_QUEUE_URL"),
 	}
 
 	return &config

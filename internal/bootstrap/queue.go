@@ -28,7 +28,7 @@ func (c Container) Queue() queue.Queue {
 			sqs.New(sess),
 			c.Logger,
 			c.Config.AwsConfig.QueueUrl,
-			30,
+			10,
 		)
 	}
 
