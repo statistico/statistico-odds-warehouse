@@ -22,11 +22,7 @@ services:
       DB_PASSWORD: password
       DB_USER: statistico
       DB_PORT: 5432
-      QUEUE_DRIVER: aws
-      AWS_KEY: AKIATE4BATV4W6DQ5XEE
-      AWS_QUEUE_URL: https://sqs.eu-west-2.amazonaws.com/216629550457/statistico-odds-warehouse
-      AWS_REGION: eu-west-2
-      AWS_SECRET: qpWiLDsYPzHAqNp9xGzoDecNr2UBoNTeLAZcKY2D
+      QUEUE_DRIVER: log
     tty: true
     links:
       - postgres
