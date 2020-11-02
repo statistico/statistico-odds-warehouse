@@ -8,9 +8,9 @@ import (
 )
 
 type Container struct {
-	Config *Config
+	Config             *Config
 	DatabaseConnection *sql.DB
-	Logger *logrus.Logger
+	Logger             *logrus.Logger
 }
 
 func BuildContainer(config *Config) *Container {

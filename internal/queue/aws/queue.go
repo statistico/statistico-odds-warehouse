@@ -10,6 +10,17 @@ import (
 	"github.com/statistico/statistico-odds-warehouse/internal/queue"
 )
 
+type Message struct {
+	Type   string   `json:"type"`
+	MessageID string `json:"messageId"`
+	TopicArn string `json:"topicArn"`
+	Message string `json:"message"`
+	Timestamp string `json:"timestamp"`
+	Signature string `json:"signature"`
+	SigningCertURL string `json:"signingCertUrl"`
+	UnsubscribeURL string `json:"unsubscribeUrl"`
+}
+
 type Queue struct {
 	client   sqsiface.SQSAPI
 	logger   *logrus.Logger
@@ -17,7 +28,17 @@ type Queue struct {
 	timeout  int64
 }
 
-func (q *Queue) ReceiveMarkets(ch chan<- *market.Market) error {
+func (q *Queue) ReceiveMarkets() <-chan *market.Market {
+	ch := make(chan *market.Market, 100)
+
+	go q.receiveMessages(ch)
+
+	return ch
+}
+
+func (q *Queue) receiveMessages(ch chan<- *market.Market) {
+	defer close(ch)
+
 	input := &sqs.ReceiveMessageInput{
 		QueueUrl: &q.queueUrl,
 		MessageAttributeNames: aws.StringSlice([]string{
@@ -30,19 +51,25 @@ func (q *Queue) ReceiveMarkets(ch chan<- *market.Market) error {
 
 	if err != nil {
 		q.logger.Errorf("Unable to receive messages from queue %q, %v.", q.queueUrl, err)
-		return err
+		return
 	}
 
 	for _, message := range result.Messages {
 		q.parseMessage(message, ch)
 	}
-
-	return nil
 }
 
 func (q *Queue) parseMessage(ms *sqs.Message, ch chan<- *market.Market) {
+	var message Message
+	err := json.Unmarshal([]byte(*ms.Body), &message)
+
+	if err != nil {
+		q.logger.Errorf("Unable to marshal message into message struct, %v.", err)
+		return
+	}
+
 	var mk *market.Market
-	err := json.Unmarshal([]byte(*ms.Body), &mk)
+	err = json.Unmarshal([]byte(message.Message), &mk)
 
 	if err != nil {
 		q.logger.Errorf("Unable to marshal message into market struct, %v.", err)
@@ -50,6 +77,21 @@ func (q *Queue) parseMessage(ms *sqs.Message, ch chan<- *market.Market) {
 	}
 
 	ch <- mk
+
+	q.deleteMessage(ms.ReceiptHandle)
+}
+
+func (q *Queue) deleteMessage(handle *string) {
+	input := &sqs.DeleteMessageInput{
+		QueueUrl:      &q.queueUrl,
+		ReceiptHandle: handle,
+	}
+
+	_, err := q.client.DeleteMessage(input)
+
+	if err != nil {
+		q.logger.Errorf("Error deleting message from queue %q", err)
+	}
 }
 
 func NewQueue(c sqsiface.SQSAPI, l *logrus.Logger, queue string, timeout int64) queue.Queue {

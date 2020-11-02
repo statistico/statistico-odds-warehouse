@@ -15,3 +15,8 @@ func (m *MockSqsClient) ReceiveMessage(input *sqs.ReceiveMessageInput) (*sqs.Rec
 	args := m.Called(input)
 	return args.Get(0).(*sqs.ReceiveMessageOutput), args.Error(1)
 }
+
+func (m *MockSqsClient) DeleteMessage(input *sqs.DeleteMessageInput) (*sqs.DeleteMessageOutput, error) {
+	args := m.Called(input)
+	return args.Get(0).(*sqs.DeleteMessageOutput), args.Error(1)
+}

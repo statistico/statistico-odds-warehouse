@@ -15,8 +15,6 @@ services:
     build:
       dockerfile: ./.docker/Dockerfile
       context: .
-    volumes:
-      - .:/opt
     environment:
       DB_DRIVER: postgres
       DB_HOST: postgres
@@ -28,6 +26,9 @@ services:
     tty: true
     links:
       - postgres
+
+  queue:
+    <<: *console
 
   migrate:
     <<: *console
