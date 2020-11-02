@@ -151,7 +151,7 @@ var messageBody = `
 	{
 	  "Type": "Notification",
 	  "MessageId": "72b286fb-a288-5b04-9093-dee1c8e08a85",
-	  "TopicArn": "arn:aws:sns:eu-west-2:216629550457:statistico-market-feed",
+	  "TopicArn": "arn:aws:",
 	  "Message": "{\"eventId\":148192,\"name\":\"OVER_UNDER_25\",\"side\":\"BACK\",\"exchange\":\"betfair\",\"exchangeMarket\":{\"id\":\"1.28910191\",\"runners\":[{\"id\":472671,\"name\":\"Over 2.5 Goals\",\"prices\":[{\"price\":1.95,\"size\":156.91}]}]},\"statisticoOdds\":[{\"price\":1.56,\"selection\":\"over\"}],\"timestamp\":1583971200}",
 	  "Timestamp": "2020-11-02T20:12:24.030Z",
 	  "SignatureVersion": "1",
