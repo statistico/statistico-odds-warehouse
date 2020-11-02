@@ -156,7 +156,7 @@ var messageBody = `
 	  "Timestamp": "2020-11-02T20:12:24.030Z",
 	  "SignatureVersion": "1",
 	  "Signature": "aMVOnhHOyvVg4JhJ1TfopQQ55Ow5EbqzA6A/Cbhxl+ZOhI9fTEogukCQAG4lMBReh0Xbtx2BIJx+j+pDgKW3FPEuZxP/CeKdLQU+KAP1J86Nlja1cAeNMk05tJE6P4IwR07P6+0hIsZmEE9bFfwV5zw5cip7TnbpD/o9QyPnEv8Dt16RDprQfkuuJa+XAUvpFOgX6l1SQRnf3AwmZeV9H6mWPLFSyrc2RKkRzlOhbNXt31qul7+fT4R23p90TB42UtGXsf73l40Pz6s4ibb9QzMhl0kjHW7qwsH0iRMYJFtznoX4YP/X4InVzSYl7vv201ih3Wiixu0gbNByM8OBFg==",
-	  "SigningCertURL": "https://sns.eu-west-2.amazonaws.com/SimpleNotificationService-a86cb10b4e1f29c941702d737128f7b6.pem",
-	  "UnsubscribeURL": "https://sns.eu-west-2.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-west-2:216629550457:statistico-market-feed:9a99ef4d-9cb1-4d17-ab13-4875bdb74e60"
+	  "SigningCertURL": "https://sns.eu-west-2.amazonaws.com",
+	  "UnsubscribeURL": "https://sns.eu-west-2.amazonaws.com"
 	}
 `

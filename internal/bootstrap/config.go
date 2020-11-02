@@ -18,9 +18,9 @@ type Database struct {
 }
 
 type AwsConfig struct {
-	Key   string
-	Secret  string
-	Region  string
+	Key      string
+	Secret   string
+	Region   string
 	QueueUrl string
 }
 
@@ -39,9 +39,9 @@ func BuildConfig() *Config {
 	}
 
 	config.AwsConfig = AwsConfig{
-		Key:    os.Getenv("AWS_KEY"),
-		Secret: os.Getenv("AWS_SECRET"),
-		Region: os.Getenv("AWS_REGION"),
+		Key:      os.Getenv("AWS_KEY"),
+		Secret:   os.Getenv("AWS_SECRET"),
+		Region:   os.Getenv("AWS_REGION"),
 		QueueUrl: os.Getenv("AWS_QUEUE_URL"),
 	}
 
