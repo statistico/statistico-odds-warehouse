@@ -24,6 +24,7 @@ services:
       DB_PASSWORD: password
       DB_USER: statistico
       DB_PORT: 5432
+      QUEUE_DRIVER: log
     tty: true
     links:
       - postgres
@@ -45,6 +46,7 @@ services:
       DB_NAME: statistico_odds_warehouse
       DB_USER: statistico
       DB_PORT: 5432
+      QUEUE_DRIVER: log
     links:
       - postgres
     depends_on:
