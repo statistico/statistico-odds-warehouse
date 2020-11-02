@@ -100,6 +100,8 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 
 		ch := r.ReceiveMarkets()
 
+		<-ch
+
 		assert.Equal(t, 0, len(ch))
 		assert.Equal(t, 1, len(hook.Entries))
 		assert.Equal(t, logrus.ErrorLevel, hook.LastEntry().Level)
@@ -134,10 +136,12 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 
 		ch := r.ReceiveMarkets()
 
+		<-ch
+
 		assert.Equal(t, 0, len(ch))
 		assert.Equal(t, 1, len(hook.Entries))
 		assert.Equal(t, logrus.ErrorLevel, hook.LastEntry().Level)
-		assert.Equal(t, "Unable to marshal message into market struct, invalid character 'i' looking for beginning of value.", hook.LastEntry().Message)
+		assert.Equal(t, "Unable to marshal message into message struct, invalid character 'i' looking for beginning of value.", hook.LastEntry().Message)
 
 		client.AssertExpectations(t)
 	})

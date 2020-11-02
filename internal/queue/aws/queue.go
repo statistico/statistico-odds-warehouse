@@ -78,14 +78,16 @@ func (q *Queue) parseMessage(ms *sqs.Message, ch chan<- *market.Market) {
 
 	ch <- mk
 
-	go q.deleteMessage(ms.ReceiptHandle)
+	q.deleteMessage(ms.ReceiptHandle)
 }
 
 func (q *Queue) deleteMessage(handle *string) {
-	_, err := q.client.DeleteMessage(&sqs.DeleteMessageInput{
-		QueueUrl:      aws.String(q.queueUrl),
+	input := &sqs.DeleteMessageInput{
+		QueueUrl:      &q.queueUrl,
 		ReceiptHandle: handle,
-	})
+	}
+
+	_, err := q.client.DeleteMessage(input)
 
 	if err != nil {
 		q.logger.Errorf("Error deleting message from queue %q", err)
