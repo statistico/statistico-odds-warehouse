@@ -19,7 +19,7 @@ func TestMarketReceiver_Receive(t *testing.T) {
 		client := new(aws.MockSqsClient)
 		logger, _ := test.NewNullLogger()
 
-		r := aws.NewMarketReceiver(client, logger, "messages", 3600)
+		r := aws.NewQueue(client, logger, "messages", 3600)
 
 		input := mock.MatchedBy(func(i *sqs.ReceiveMessageInput) bool {
 			assert.Equal(t, "messages", *i.QueueUrl)
@@ -66,7 +66,7 @@ func TestMarketReceiver_Receive(t *testing.T) {
 
 		ch := make(chan *market.Market, 10)
 
-		err := r.Receive(ch)
+		err := r.ReceiveMarkets(ch)
 
 		if err != nil {
 			t.Fatalf("Expected nil, got %s", err)
@@ -83,7 +83,7 @@ func TestMarketReceiver_Receive(t *testing.T) {
 		client := new(aws.MockSqsClient)
 		logger, hook := test.NewNullLogger()
 
-		r := aws.NewMarketReceiver(client, logger, "messages", 3600)
+		r := aws.NewQueue(client, logger, "messages", 3600)
 
 		input := mock.MatchedBy(func(i *sqs.ReceiveMessageInput) bool {
 			assert.Equal(t, "messages", *i.QueueUrl)
@@ -97,7 +97,7 @@ func TestMarketReceiver_Receive(t *testing.T) {
 
 		ch := make(chan *market.Market, 10)
 
-		err := r.Receive(ch)
+		err := r.ReceiveMarkets(ch)
 
 		if err == nil {
 			t.Fatal("Expected error, got nil")
@@ -116,7 +116,7 @@ func TestMarketReceiver_Receive(t *testing.T) {
 		client := new(aws.MockSqsClient)
 		logger, hook := test.NewNullLogger()
 
-		r := aws.NewMarketReceiver(client, logger, "messages", 3600)
+		r := aws.NewQueue(client, logger, "messages", 3600)
 
 		input := mock.MatchedBy(func(i *sqs.ReceiveMessageInput) bool {
 			assert.Equal(t, "messages", *i.QueueUrl)
@@ -136,7 +136,7 @@ func TestMarketReceiver_Receive(t *testing.T) {
 
 		ch := make(chan *market.Market, 10)
 
-		err := r.Receive(ch)
+		err := r.ReceiveMarkets(ch)
 
 		if err != nil {
 			t.Fatalf("Expected nil, got %s", err)

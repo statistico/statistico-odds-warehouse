@@ -4,6 +4,8 @@ import "os"
 
 type Config struct {
 	Database
+	AwsConfig
+	QueueDriver string
 }
 
 type Database struct {
@@ -15,8 +17,17 @@ type Database struct {
 	Name     string
 }
 
+type AwsConfig struct {
+	Key   string
+	Secret  string
+	Region  string
+	QueueUrl string
+}
+
 func BuildConfig() *Config {
 	config := Config{}
+
+	config.QueueDriver = os.Getenv("QUEUE_DRIVER")
 
 	config.Database = Database{
 		Driver:   os.Getenv("DB_DRIVER"),
@@ -25,6 +36,12 @@ func BuildConfig() *Config {
 		User:     os.Getenv("DB_USER"),
 		Password: os.Getenv("DB_PASSWORD"),
 		Name:     os.Getenv("DB_NAME"),
+	}
+
+	config.AwsConfig = AwsConfig{
+		Key:    os.Getenv("AWS_KEY"),
+		Secret: os.Getenv("AWS_SECRET"),
+		Region: os.Getenv("AWS_REGION"),
 	}
 
 	return &config
