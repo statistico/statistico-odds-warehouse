@@ -4,4 +4,4 @@ set -e
 
 mkdir -p /tmp/workspace/docker-cache
 
-docker save -o /tmp/workspace/docker-cache/statisticoddswarehouse_queue.tar statisticoddswarehouse_queue:latest
+docker save -o /tmp/workspace/docker-cache/statisticooddswarehouse_queue.tar statisticooddswarehouse_queue:latest
