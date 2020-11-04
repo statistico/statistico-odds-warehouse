@@ -27,7 +27,7 @@ func TestMarketRepository_Insert(t *testing.T) {
 		}
 
 		for _, tc := range tradeCounts {
-			insertTrade(t, repo, tc.Market)
+			insertMarket(t, repo, tc.Market)
 
 			var count int8
 
@@ -56,9 +56,9 @@ func TestMarketRepository_Get(t *testing.T) {
 		marketTwo := newMarket(5678, "OVER_UNDER_15", "BACK", timestamp)
 		marketThree := newMarket(9999, "OVER_UNDER_25", "LAY", timestamp)
 
-		insertTrade(t, repo, marketOne)
-		insertTrade(t, repo, marketTwo)
-		insertTrade(t, repo, marketThree)
+		insertMarket(t, repo, marketOne)
+		insertMarket(t, repo, marketTwo)
+		insertMarket(t, repo, marketThree)
 
 		cases := []struct{
 			Query *market.RepositoryQuery
@@ -105,25 +105,23 @@ func TestMarketRepository_Get(t *testing.T) {
 
 func newMarket(eventID uint64, name, side string, t time.Time) *market.Market {
 	return &market.Market{
+		ID:             "1.2729821",
 		EventID:        eventID,
 		Name:           name,
 		Side:           side,
 		Exchange:   "betfair",
-		ExchangeMarket: market.ExchangeMarket{
-			ID:      "1.2981871",
-			Runners: []market.Runner{
-				{
-					ID: 48291,
-					Name: "Over 2.5 Goals",
-					Prices: []market.PriceSize{
-						{
-							Price: 1.95,
-							Size: 159001,
-						},
-						{
-							Price: 2.00,
-							Size: 50.56,
-						},
+		ExchangeRunners: []*market.Runner{
+			{
+				ID: 48291,
+				Name: "Over 2.5 Goals",
+				Prices: []market.PriceSize{
+					{
+						Price: 1.95,
+						Size: 159001,
+					},
+					{
+						Price: 2.00,
+						Size: 50.56,
 					},
 				},
 			},
@@ -142,7 +140,7 @@ func newMarket(eventID uint64, name, side string, t time.Time) *market.Market {
 	}
 }
 
-func insertTrade(t *testing.T, repo *postgres.MarketRepository, m *market.Market) {
+func insertMarket(t *testing.T, repo *postgres.MarketRepository, m *market.Market) {
 	if err := repo.Insert(m); err != nil {
 		t.Errorf("Error when inserting market into the database: %s", err.Error())
 	}

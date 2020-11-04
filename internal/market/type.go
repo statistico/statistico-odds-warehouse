@@ -7,11 +7,12 @@ import (
 )
 
 type Market struct {
+	ID             string            `json:"id"`
 	EventID        uint64            `json:"eventId"`
 	Name           string            `json:"name"`
 	Side           string            `json:"side"`
 	Exchange       string            `json:"exchange"`
-	ExchangeMarket ExchangeMarket    `json:"exchangeMarket"`
+	ExchangeRunners []*Runner        `json:"exchangeRunners"`
 	StatisticoOdds []*StatisticoOdds `json:"statisticoOdds"`
 	Timestamp      int64             `json:"timestamp"`
 }
@@ -32,11 +33,6 @@ func (m *Market) Scan(value interface{}) error {
 type StatisticoOdds struct {
 	Price     float32 `json:"price"`
 	Selection string  `json:"selection"`
-}
-
-type ExchangeMarket struct {
-	ID      string   `json:"id"`
-	Runners []Runner `json:"runners"`
 }
 
 type Runner struct {
