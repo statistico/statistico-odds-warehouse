@@ -3,9 +3,10 @@ package bootstrap
 import "os"
 
 type Config struct {
-	Database
 	AwsConfig
+	Database
 	QueueDriver string
+	Sentry
 }
 
 type Database struct {
@@ -22,6 +23,10 @@ type AwsConfig struct {
 	Secret   string
 	Region   string
 	QueueUrl string
+}
+
+type Sentry struct {
+	DSN string
 }
 
 func BuildConfig() *Config {
@@ -44,6 +49,8 @@ func BuildConfig() *Config {
 		Region:   os.Getenv("AWS_REGION"),
 		QueueUrl: os.Getenv("AWS_QUEUE_URL"),
 	}
+
+	config.Sentry = Sentry{DSN: os.Getenv("SENTRY_DSN")}
 
 	return &config
 }
