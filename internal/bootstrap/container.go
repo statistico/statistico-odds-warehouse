@@ -3,8 +3,10 @@ package bootstrap
 import (
 	"database/sql"
 	"fmt"
+	"github.com/evalphobia/logrus_sentry"
 	"github.com/sirupsen/logrus"
 	"os"
+	"time"
 )
 
 type Container struct {
@@ -19,7 +21,7 @@ func BuildContainer(config *Config) *Container {
 	}
 
 	c.DatabaseConnection = databaseConnection(config)
-	c.Logger = logger()
+	c.Logger = logger(config)
 
 	return &c
 }
@@ -43,9 +45,27 @@ func databaseConnection(config *Config) *sql.DB {
 	return conn
 }
 
-func logger() *logrus.Logger {
+func logger(config *Config) *logrus.Logger {
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{})
 	logger.SetOutput(os.Stdout)
+
+	tags := map[string]string{
+		"application": "statistico-odds-warehouse",
+	}
+
+	levels := []logrus.Level{
+		logrus.PanicLevel,
+		logrus.FatalLevel,
+		logrus.ErrorLevel,
+	}
+
+	hook, err := logrus_sentry.NewWithTagsSentryHook(config.Sentry.DSN, tags, levels)
+
+	if err == nil {
+		hook.Timeout = 20 * time.Second
+		logger.AddHook(hook)
+	}
+
 	return logger
 }

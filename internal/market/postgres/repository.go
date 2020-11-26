@@ -15,13 +15,7 @@ type MarketRepository struct {
 func (r *MarketRepository) Insert(m *market.Market) error {
 	builder := r.queryBuilder()
 
-	e, err := json.Marshal(m.ExchangeRunners)
-
-	if err != nil {
-		return err
-	}
-
-	s, err := json.Marshal(m.StatisticoOdds)
+	runners, err := json.Marshal(m.Runners)
 
 	if err != nil {
 		return err
@@ -35,8 +29,7 @@ func (r *MarketRepository) Insert(m *market.Market) error {
 			"name",
 			"exchange",
 			"side",
-			"exchange_runners",
-			"statistico_odds",
+			"runners",
 			"timestamp",
 		).
 		Values(
@@ -45,8 +38,7 @@ func (r *MarketRepository) Insert(m *market.Market) error {
 			m.Name,
 			m.Exchange,
 			m.Side,
-			string(e),
-			string(s),
+			string(runners),
 			m.Timestamp,
 		).
 		Exec()
@@ -104,30 +96,22 @@ func rowsToMarketSlice(rows *sql.Rows) ([]*market.Market, error) {
 	for rows.Next() {
 		var m market.Market
 		var runners string
-		var odds string
 
 		err := rows.Scan(
+			&m.ID,
 			&m.EventID,
 			&m.Name,
 			&m.Exchange,
 			&m.Side,
 			&runners,
-			&odds,
 			&m.Timestamp,
-			&m.ID,
 		)
 
 		if err != nil {
 			return markets, err
 		}
 
-		err = json.Unmarshal([]byte(runners), &m.ExchangeRunners)
-
-		if err != nil {
-			return markets, err
-		}
-
-		err = json.Unmarshal([]byte(odds), &m.StatisticoOdds)
+		err = json.Unmarshal([]byte(runners), &m.Runners)
 
 		if err != nil {
 			return markets, err

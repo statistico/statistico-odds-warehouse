@@ -7,14 +7,13 @@ import (
 )
 
 type Market struct {
-	ID              string            `json:"id"`
-	EventID         uint64            `json:"eventId"`
-	Name            string            `json:"name"`
-	Side            string            `json:"side"`
-	Exchange        string            `json:"exchange"`
-	ExchangeRunners []*Runner         `json:"exchangeRunners"`
-	StatisticoOdds  []*StatisticoOdds `json:"statisticoOdds"`
-	Timestamp       int64             `json:"timestamp"`
+	ID        string    `json:"id"`
+	EventID   uint64    `json:"eventId"`
+	Name      string    `json:"name"`
+	Side      string    `json:"side"`
+	Exchange  string    `json:"exchange"`
+	Runners   []*Runner `json:"runners"`
+	Timestamp int64     `json:"timestamp"`
 }
 
 func (m Market) Value() (driver.Value, error) {
@@ -28,11 +27,6 @@ func (m *Market) Scan(value interface{}) error {
 	}
 
 	return json.Unmarshal(b, &m)
-}
-
-type StatisticoOdds struct {
-	Price     float32 `json:"price"`
-	Selection string  `json:"selection"`
 }
 
 type Runner struct {

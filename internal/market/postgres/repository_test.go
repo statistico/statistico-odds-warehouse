@@ -110,7 +110,7 @@ func newMarket(eventID uint64, name, side string, t time.Time) *market.Market {
 		Name:           name,
 		Side:           side,
 		Exchange:   "betfair",
-		ExchangeRunners: []*market.Runner{
+		Runners: []*market.Runner{
 			{
 				ID: 48291,
 				Name: "Over 2.5 Goals",
@@ -124,16 +124,6 @@ func newMarket(eventID uint64, name, side string, t time.Time) *market.Market {
 						Size: 50.56,
 					},
 				},
-			},
-		},
-		StatisticoOdds: []*market.StatisticoOdds{
-			{
-				Price: 1.45,
-				Selection: "over",
-			},
-			{
-				Price: 2.95,
-				Selection: "under",
 			},
 		},
 		Timestamp:      t.Unix(),
