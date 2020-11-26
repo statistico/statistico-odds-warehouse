@@ -64,6 +64,8 @@ func logger(config *Config) *logrus.Logger {
 
 	if err == nil {
 		hook.Timeout = 20 * time.Second
+		hook.StacktraceConfiguration.Enable = true
+		hook.StacktraceConfiguration.IncludeErrorBreadcrumb = true
 		logger.AddHook(hook)
 	}
 
