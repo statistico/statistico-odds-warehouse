@@ -9,7 +9,7 @@ func main() {
 	app := bootstrap.BuildContainer(bootstrap.BuildConfig())
 
 	q := app.Queue()
-	r := app.MarketRepository()
+	h := app.MarketHandler()
 	l := app.Logger
 
 	for {
@@ -18,7 +18,7 @@ func main() {
 		markets := q.ReceiveMarkets()
 
 		for m := range markets {
-			err := r.Insert(m)
+			err := h.Handle(m)
 
 			if err != nil {
 				l.Errorf("Error inserting market %q", err)

@@ -10,7 +10,7 @@ import (
 )
 
 func TestMarketRepository_Insert(t *testing.T) {
-	conn, cleanUp := test.GetConnection(t, "market")
+	conn, cleanUp := test.GetConnection(t, "market_over_under")
 	repo := postgres.NewMarketRepository(conn)
 
 	t.Run("increases table count", func(t *testing.T) {
@@ -18,12 +18,12 @@ func TestMarketRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		tradeCounts := []struct {
-			Market *market.Market
+			Market *market.OverUnderMarket
 			Count int8
 		}{
-			{newMarket(182981, "OVER_UNDER_25", "BACK", time.Now()), 1},
-			{newMarket(182981, "OVER_UNDER_25", "BACK", time.Now()), 2},
-			{newMarket(182981, "OVER_UNDER_25", "BACK", time.Now()), 3},
+			{newOverUnderMarket(182981, "OVER_UNDER_25", "BACK", time.Now()), 1},
+			{newOverUnderMarket(182981, "OVER_UNDER_25", "BACK", time.Now()), 2},
+			{newOverUnderMarket(182981, "OVER_UNDER_25", "BACK", time.Now()), 3},
 		}
 
 		for _, tc := range tradeCounts {
@@ -31,7 +31,7 @@ func TestMarketRepository_Insert(t *testing.T) {
 
 			var count int8
 
-			row := conn.QueryRow("select count(*) from market")
+			row := conn.QueryRow("select count(*) from market_over_under")
 
 			if err := row.Scan(&count); err != nil {
 				t.Errorf("Error when scanning rows returned by the database: %s", err.Error())
@@ -42,96 +42,31 @@ func TestMarketRepository_Insert(t *testing.T) {
 	})
 }
 
-func TestMarketRepository_Get(t *testing.T) {
-	conn, cleanUp := test.GetConnection(t, "market")
-	repo := postgres.NewMarketRepository(conn)
+func newOverUnderMarket(eventID uint64, name, side string, t time.Time) *market.OverUnderMarket {
+	over := market.PriceSize{
+		Price: 1.95,
+		Size:  1591.01,
+	}
 
-	t.Run("returns a slice of filtered market struct", func(t *testing.T) {
-		t.Helper()
-		defer cleanUp()
+	under := market.PriceSize{
+		Price: 2.05,
+		Size:  1591.01,
+	}
 
-		timestamp := time.Date(2020, 03, 12, 0, 0, 0, 0, &time.Location{})
-
-		marketOne := newMarket(1234, "OVER_UNDER_25", "BACK", timestamp)
-		marketTwo := newMarket(5678, "OVER_UNDER_15", "BACK", timestamp)
-		marketThree := newMarket(9999, "OVER_UNDER_25", "LAY", timestamp)
-
-		insertMarket(t, repo, marketOne)
-		insertMarket(t, repo, marketTwo)
-		insertMarket(t, repo, marketThree)
-
-		cases := []struct{
-			Query *market.RepositoryQuery
-			Markets []*market.Market
-		} {
-			{
-				Query: &market.RepositoryQuery{
-					EventID:    &marketOne.EventID,
-				},
-				Markets: []*market.Market{marketOne},
-			},
-			{
-				Query: &market.RepositoryQuery{
-					MarketName:    &marketOne.Name,
-				},
-				Markets: []*market.Market{marketOne, marketThree},
-			},
-			{
-				Query: &market.RepositoryQuery{
-					Side:    &marketThree.Side,
-				},
-				Markets: []*market.Market{marketThree},
-			},
-			{
-				Query: &market.RepositoryQuery{
-					EventID: &marketOne.EventID,
-					MarketName: &marketTwo.Name,
-					Side: &marketThree.Side,
-				},
-			},
-		}
-
-		for _, c := range cases {
-			markets, err := repo.Get(c.Query)
-
-			if err != nil {
-				t.Errorf("Error fetching markets from the database: %s", err.Error())
-			}
-
-			assert.Equal(t, c.Markets, markets)
-		}
-	})
-}
-
-func newMarket(eventID uint64, name, side string, t time.Time) *market.Market {
-	return &market.Market{
+	return &market.OverUnderMarket{
 		ID:             "1.2729821",
 		EventID:        eventID,
 		Name:           name,
 		Side:           side,
 		Exchange:   "betfair",
-		Runners: []*market.Runner{
-			{
-				ID: 48291,
-				Name: "Over 2.5 Goals",
-				Prices: []market.PriceSize{
-					{
-						Price: 1.95,
-						Size: 159001,
-					},
-					{
-						Price: 2.00,
-						Size: 50.56,
-					},
-				},
-			},
-		},
+		Over: over,
+		Under: under,
 		Timestamp:      t.Unix(),
 	}
 }
 
-func insertMarket(t *testing.T, repo *postgres.MarketRepository, m *market.Market) {
-	if err := repo.Insert(m); err != nil {
+func insertMarket(t *testing.T, repo *postgres.MarketRepository, m *market.OverUnderMarket) {
+	if err := repo.InsertOverUnderMarket(m); err != nil {
 		t.Errorf("Error when inserting market into the database: %s", err.Error())
 	}
 }
