@@ -31,7 +31,7 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 		messages := []*sqs.Message{
 			{
 				ReceiptHandle: aws.String("1234"),
-				Body: &messageBody,
+				Body:          &messageBody,
 			},
 		}
 
@@ -49,7 +49,7 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 			Name:     "OVER_UNDER_25",
 			Side:     "BACK",
 			Exchange: "betfair",
-			Runners:  []*queue.Runner{
+			Runners: []*queue.Runner{
 				{
 					ID:   472671,
 					Name: "Over 2.5 Goals",

@@ -93,19 +93,19 @@ func createBTTSMarket(m *queue.Market) *BTTSMarket {
 }
 
 func createMatchOddsMarket(m *queue.Market) *MatchOddsMarket {
-	home :=  PriceSize{
+	home := PriceSize{
 		Price: m.Runners[0].Prices[0].Price,
-		Size: m.Runners[0].Prices[0].Size,
+		Size:  m.Runners[0].Prices[0].Size,
 	}
 
 	away := PriceSize{
 		Price: m.Runners[1].Prices[0].Price,
-		Size: m.Runners[1].Prices[0].Size,
+		Size:  m.Runners[1].Prices[0].Size,
 	}
 
 	draw := PriceSize{
 		Price: m.Runners[2].Prices[0].Price,
-		Size: m.Runners[2].Prices[0].Size,
+		Size:  m.Runners[2].Prices[0].Size,
 	}
 
 	return &MatchOddsMarket{
@@ -114,9 +114,9 @@ func createMatchOddsMarket(m *queue.Market) *MatchOddsMarket {
 		Name:      m.Name,
 		Side:      m.Side,
 		Exchange:  m.Exchange,
-		Home:       home,
-		Away:        away,
-		Draw:       draw,
+		Home:      home,
+		Away:      away,
+		Draw:      draw,
 		Timestamp: m.Timestamp,
 	}
 }

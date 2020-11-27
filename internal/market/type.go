@@ -34,9 +34,9 @@ type MatchOddsMarket struct {
 	Name      string    `json:"name"`
 	Side      string    `json:"side"`
 	Exchange  string    `json:"exchange"`
-	Home       PriceSize `json:"home"`
-	Away        PriceSize `json:"away"`
-	Draw        PriceSize `json:"draw"`
+	Home      PriceSize `json:"home"`
+	Away      PriceSize `json:"away"`
+	Draw      PriceSize `json:"draw"`
 	Timestamp int64     `json:"timestamp"`
 }
 
@@ -54,6 +54,6 @@ func (m *OverUnderMarket) Scan(value interface{}) error {
 }
 
 type PriceSize struct {
-	Price  float32     `json:"price"`
-	Size   float32     `json:"size"`
+	Price float32 `json:"price"`
+	Size  float32 `json:"size"`
 }

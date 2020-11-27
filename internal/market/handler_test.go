@@ -22,7 +22,7 @@ func TestHandler_Handle(t *testing.T) {
 			Name:     "OVER_UNDER_25",
 			Side:     "BACK",
 			Exchange: "betfair",
-			Runners:  []*queue.Runner{
+			Runners: []*queue.Runner{
 				{
 					ID:   472671,
 					Name: "Over 2.5 Goals",
@@ -85,7 +85,7 @@ func TestHandler_Handle(t *testing.T) {
 			Name:     "BOTH_TEAMS_TO_SCORE",
 			Side:     "BACK",
 			Exchange: "betfair",
-			Runners:  []*queue.Runner{
+			Runners: []*queue.Runner{
 				{
 					ID:   472671,
 					Name: "Yes",
@@ -148,7 +148,7 @@ func TestHandler_Handle(t *testing.T) {
 			Name:     "MATCH_ODDS",
 			Side:     "BACK",
 			Exchange: "betfair",
-			Runners:  []*queue.Runner{
+			Runners: []*queue.Runner{
 				{
 					ID:   472671,
 					Name: "West Ham United",
@@ -218,11 +218,11 @@ func TestHandler_Handle(t *testing.T) {
 		handler := market.NewHandler(repo)
 
 		mk := &queue.Market{
-			ID:       "1.2818721",
-			EventID:  148192,
-			Name:     "OVER_UNDER_111625",
-			Side:     "BACK",
-			Exchange: "betfair",
+			ID:        "1.2818721",
+			EventID:   148192,
+			Name:      "OVER_UNDER_111625",
+			Side:      "BACK",
+			Exchange:  "betfair",
 			Timestamp: 1583971200,
 		}
 
@@ -249,7 +249,7 @@ func TestHandler_Handle(t *testing.T) {
 			Name:     "OVER_UNDER_135_CORNR",
 			Side:     "BACK",
 			Exchange: "betfair",
-			Runners:  []*queue.Runner{
+			Runners: []*queue.Runner{
 				{
 					ID:   472671,
 					Name: "Over 13.5 Corners",
