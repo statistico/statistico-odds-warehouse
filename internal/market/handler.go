@@ -6,6 +6,7 @@ import (
 )
 
 const BTTS = "BOTH_TEAMS_TO_SCORE"
+const MatchOdds = "MATCH_ODDS"
 
 type Handler struct {
 	repository Repository
@@ -18,6 +19,10 @@ func (m *Handler) Handle(q *queue.Market) error {
 
 	if q.Name == BTTS {
 		return m.repository.InsertBTTSMarket(createBTTSMarket(q))
+	}
+
+	if q.Name == MatchOdds {
+		return m.repository.InsertMatchOddsMarket(createMatchOddsMarket(q))
 	}
 
 	return fmt.Errorf("market %s is not supported", q.Name)
@@ -83,6 +88,35 @@ func createBTTSMarket(m *queue.Market) *BTTSMarket {
 		Exchange:  m.Exchange,
 		Yes:       yes,
 		No:        no,
+		Timestamp: m.Timestamp,
+	}
+}
+
+func createMatchOddsMarket(m *queue.Market) *MatchOddsMarket {
+	home :=  PriceSize{
+		Price: m.Runners[0].Prices[0].Price,
+		Size: m.Runners[0].Prices[0].Size,
+	}
+
+	away := PriceSize{
+		Price: m.Runners[1].Prices[0].Price,
+		Size: m.Runners[1].Prices[0].Size,
+	}
+
+	draw := PriceSize{
+		Price: m.Runners[2].Prices[0].Price,
+		Size: m.Runners[2].Prices[0].Size,
+	}
+
+	return &MatchOddsMarket{
+		ID:        m.ID,
+		EventID:   m.EventID,
+		Name:      m.Name,
+		Side:      m.Side,
+		Exchange:  m.Exchange,
+		Home:       home,
+		Away:        away,
+		Draw:       draw,
 		Timestamp: m.Timestamp,
 	}
 }

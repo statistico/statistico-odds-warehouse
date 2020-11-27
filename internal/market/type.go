@@ -28,6 +28,18 @@ type BTTSMarket struct {
 	Timestamp int64     `json:"timestamp"`
 }
 
+type MatchOddsMarket struct {
+	ID        string    `json:"id"`
+	EventID   uint64    `json:"eventId"`
+	Name      string    `json:"name"`
+	Side      string    `json:"side"`
+	Exchange  string    `json:"exchange"`
+	Home       PriceSize `json:"home"`
+	Away        PriceSize `json:"away"`
+	Draw        PriceSize `json:"draw"`
+	Timestamp int64     `json:"timestamp"`
+}
+
 func (m OverUnderMarket) Value() (driver.Value, error) {
 	return json.Marshal(m)
 }

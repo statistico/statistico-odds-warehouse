@@ -136,6 +136,81 @@ func TestHandler_Handle(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 
+	t.Run("parses match odds market and persist via the repository", func(t *testing.T) {
+		t.Helper()
+
+		repo := new(market.MockRepository)
+		handler := market.NewHandler(repo)
+
+		mk := &queue.Market{
+			ID:       "1.2818721",
+			EventID:  148192,
+			Name:     "MATCH_ODDS",
+			Side:     "BACK",
+			Exchange: "betfair",
+			Runners:  []*queue.Runner{
+				{
+					ID:   472671,
+					Name: "West Ham United",
+					Prices: []queue.PriceSize{
+						{
+							Price: 1.95,
+							Size:  156.91,
+						},
+					},
+				},
+				{
+					ID:   472671,
+					Name: "Chelsea",
+					Prices: []queue.PriceSize{
+						{
+							Price: 2.05,
+							Size:  1.92,
+						},
+					},
+				},
+				{
+					ID:   472671,
+					Name: "The Draw",
+					Prices: []queue.PriceSize{
+						{
+							Price: 5.51,
+							Size:  224.12,
+						},
+					},
+				},
+			},
+			Timestamp: 1583971200,
+		}
+
+		mkt := mock.MatchedBy(func(m *market.MatchOddsMarket) bool {
+			assert.Equal(t, "1.2818721", m.ID)
+			assert.Equal(t, uint64(148192), m.EventID)
+			assert.Equal(t, "MATCH_ODDS", m.Name)
+			assert.Equal(t, "BACK", m.Side)
+			assert.Equal(t, "betfair", m.Exchange)
+			assert.Equal(t, "betfair", m.Exchange)
+			assert.Equal(t, float32(1.95), m.Home.Price)
+			assert.Equal(t, float32(156.91), m.Home.Size)
+			assert.Equal(t, float32(2.05), m.Away.Price)
+			assert.Equal(t, float32(1.92), m.Away.Size)
+			assert.Equal(t, float32(5.51), m.Draw.Price)
+			assert.Equal(t, float32(224.12), m.Draw.Size)
+			assert.Equal(t, int64(1583971200), m.Timestamp)
+			return true
+		})
+
+		repo.On("InsertMatchOddsMarket", mkt).Return(nil)
+
+		err := handler.Handle(mk)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		repo.AssertExpectations(t)
+	})
+
 	t.Run("returns error if market is not supported", func(t *testing.T) {
 		t.Helper()
 

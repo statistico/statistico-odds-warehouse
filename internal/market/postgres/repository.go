@@ -79,6 +79,44 @@ func (r *MarketRepository) InsertBTTSMarket(m *market.BTTSMarket) error {
 	return err
 }
 
+func (r *MarketRepository) InsertMatchOddsMarket(m *market.MatchOddsMarket) error {
+	builder := r.queryBuilder()
+
+	_, err := builder.
+		Insert("market_match_odds").
+		Columns(
+			"id",
+			"event_id",
+			"name",
+			"exchange",
+			"side",
+			"home_price",
+			"home_size",
+			"away_price",
+			"away_size",
+			"draw_price",
+			"draw_size",
+			"timestamp",
+		).
+		Values(
+			m.ID,
+			m.EventID,
+			m.Name,
+			m.Exchange,
+			m.Side,
+			m.Home.Price,
+			m.Home.Size,
+			m.Away.Price,
+			m.Away.Size,
+			m.Draw.Price,
+			m.Draw.Size,
+			m.Timestamp,
+		).
+		Exec()
+
+	return err
+}
+
 func (r *MarketRepository) queryBuilder() sq.StatementBuilderType {
 	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(r.connection)
 }
