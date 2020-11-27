@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
-	"github.com/statistico/statistico-odds-warehouse/internal/market"
+	"github.com/statistico/statistico-odds-warehouse/internal/queue"
 	saws "github.com/statistico/statistico-odds-warehouse/internal/queue/aws"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -31,7 +31,7 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 		messages := []*sqs.Message{
 			{
 				ReceiptHandle: aws.String("1234"),
-				Body: &messageBody,
+				Body:          &messageBody,
 			},
 		}
 
@@ -43,17 +43,17 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 		client.On("ReceiveMessage", input).Return(&sqs.ReceiveMessageOutput{Messages: messages}, nil)
 		client.On("DeleteMessage", deleteInput).Return(&sqs.DeleteMessageOutput{}, nil)
 
-		mk := &market.Market{
+		mk := &queue.Market{
 			ID:       "1.2818721",
 			EventID:  148192,
 			Name:     "OVER_UNDER_25",
 			Side:     "BACK",
 			Exchange: "betfair",
-			Runners:  []*market.Runner{
+			Runners: []*queue.Runner{
 				{
 					ID:   472671,
 					Name: "Over 2.5 Goals",
-					Prices: []market.PriceSize{
+					Prices: []queue.PriceSize{
 						{
 							Price: 1.95,
 							Size:  156.91,

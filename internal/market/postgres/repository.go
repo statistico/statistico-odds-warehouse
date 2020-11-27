@@ -2,7 +2,6 @@ package postgres
 
 import (
 	"database/sql"
-	"encoding/json"
 	sq "github.com/Masterminds/squirrel"
 	_ "github.com/lib/pq"
 	"github.com/statistico/statistico-odds-warehouse/internal/market"
@@ -12,24 +11,21 @@ type MarketRepository struct {
 	connection *sql.DB
 }
 
-func (r *MarketRepository) Insert(m *market.Market) error {
+func (r *MarketRepository) InsertOverUnderMarket(m *market.OverUnderMarket) error {
 	builder := r.queryBuilder()
 
-	runners, err := json.Marshal(m.Runners)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = builder.
-		Insert("market").
+	_, err := builder.
+		Insert("market_over_under").
 		Columns(
 			"id",
 			"event_id",
 			"name",
 			"exchange",
 			"side",
-			"runners",
+			"over_price",
+			"over_size",
+			"under_price",
+			"under_size",
 			"timestamp",
 		).
 		Values(
@@ -38,7 +34,10 @@ func (r *MarketRepository) Insert(m *market.Market) error {
 			m.Name,
 			m.Exchange,
 			m.Side,
-			string(runners),
+			m.Over.Price,
+			m.Over.Size,
+			m.Under.Price,
+			m.Under.Size,
 			m.Timestamp,
 		).
 		Exec()
@@ -46,81 +45,76 @@ func (r *MarketRepository) Insert(m *market.Market) error {
 	return err
 }
 
-func (r *MarketRepository) Get(q *market.RepositoryQuery) ([]*market.Market, error) {
+func (r *MarketRepository) InsertBTTSMarket(m *market.BTTSMarket) error {
 	builder := r.queryBuilder()
 
-	query := builder.Select("market.*").From("market")
+	_, err := builder.
+		Insert("market_btts").
+		Columns(
+			"id",
+			"event_id",
+			"name",
+			"exchange",
+			"side",
+			"yes_price",
+			"yes_size",
+			"no_price",
+			"no_size",
+			"timestamp",
+		).
+		Values(
+			m.ID,
+			m.EventID,
+			m.Name,
+			m.Exchange,
+			m.Side,
+			m.Yes.Price,
+			m.Yes.Size,
+			m.No.Price,
+			m.No.Size,
+			m.Timestamp,
+		).
+		Exec()
 
-	rows, err := buildQuery(query, q).Query()
-
-	if err != nil {
-		return []*market.Market{}, err
-	}
-
-	return rowsToMarketSlice(rows)
+	return err
 }
 
-func buildQuery(b sq.SelectBuilder, q *market.RepositoryQuery) sq.SelectBuilder {
-	if q.EventID != nil {
-		b = b.Where(sq.Eq{"event_id": *q.EventID})
-	}
+func (r *MarketRepository) InsertMatchOddsMarket(m *market.MatchOddsMarket) error {
+	builder := r.queryBuilder()
 
-	if q.MarketName != nil {
-		b = b.Where(sq.Eq{"name": *q.MarketName})
-	}
+	_, err := builder.
+		Insert("market_match_odds").
+		Columns(
+			"id",
+			"event_id",
+			"name",
+			"exchange",
+			"side",
+			"home_price",
+			"home_size",
+			"away_price",
+			"away_size",
+			"draw_price",
+			"draw_size",
+			"timestamp",
+		).
+		Values(
+			m.ID,
+			m.EventID,
+			m.Name,
+			m.Exchange,
+			m.Side,
+			m.Home.Price,
+			m.Home.Size,
+			m.Away.Price,
+			m.Away.Size,
+			m.Draw.Price,
+			m.Draw.Size,
+			m.Timestamp,
+		).
+		Exec()
 
-	if q.Side != nil {
-		b = b.Where(sq.Eq{"side": *q.Side})
-	}
-
-	if q.SortBy != nil && *q.SortBy == "timestamp_asc" {
-		b = b.OrderBy("timestamp ASC")
-	}
-
-	if q.SortBy != nil && *q.SortBy == "timestamp_desc" {
-		b = b.OrderBy("timestamp DESC")
-	}
-
-	if q.SortBy == nil {
-		b = b.OrderBy("timestamp DESC")
-	}
-
-	return b
-}
-
-func rowsToMarketSlice(rows *sql.Rows) ([]*market.Market, error) {
-	defer rows.Close()
-
-	var markets []*market.Market
-
-	for rows.Next() {
-		var m market.Market
-		var runners string
-
-		err := rows.Scan(
-			&m.ID,
-			&m.EventID,
-			&m.Name,
-			&m.Exchange,
-			&m.Side,
-			&runners,
-			&m.Timestamp,
-		)
-
-		if err != nil {
-			return markets, err
-		}
-
-		err = json.Unmarshal([]byte(runners), &m.Runners)
-
-		if err != nil {
-			return markets, err
-		}
-
-		markets = append(markets, &m)
-	}
-
-	return markets, nil
+	return err
 }
 
 func (r *MarketRepository) queryBuilder() sq.StatementBuilderType {

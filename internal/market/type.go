@@ -1,38 +1,37 @@
 package market
 
-import (
-	"database/sql/driver"
-	"encoding/json"
-	"errors"
-)
-
-type Market struct {
+type BTTSMarket struct {
 	ID        string    `json:"id"`
 	EventID   uint64    `json:"eventId"`
 	Name      string    `json:"name"`
 	Side      string    `json:"side"`
 	Exchange  string    `json:"exchange"`
-	Runners   []*Runner `json:"runners"`
+	Yes       PriceSize `json:"yes"`
+	No        PriceSize `json:"no"`
 	Timestamp int64     `json:"timestamp"`
 }
 
-func (m Market) Value() (driver.Value, error) {
-	return json.Marshal(m)
+type MatchOddsMarket struct {
+	ID        string    `json:"id"`
+	EventID   uint64    `json:"eventId"`
+	Name      string    `json:"name"`
+	Side      string    `json:"side"`
+	Exchange  string    `json:"exchange"`
+	Home      PriceSize `json:"home"`
+	Away      PriceSize `json:"away"`
+	Draw      PriceSize `json:"draw"`
+	Timestamp int64     `json:"timestamp"`
 }
 
-func (m *Market) Scan(value interface{}) error {
-	b, ok := value.([]byte)
-	if !ok {
-		return errors.New("type assertion to []byte failed")
-	}
-
-	return json.Unmarshal(b, &m)
-}
-
-type Runner struct {
-	ID     uint64      `json:"id"`
-	Name   string      `json:"name"`
-	Prices []PriceSize `json:"prices"`
+type OverUnderMarket struct {
+	ID        string    `json:"id"`
+	EventID   uint64    `json:"eventId"`
+	Name      string    `json:"name"`
+	Side      string    `json:"side"`
+	Exchange  string    `json:"exchange"`
+	Over      PriceSize `json:"over"`
+	Under     PriceSize `json:"under"`
+	Timestamp int64     `json:"timestamp"`
 }
 
 type PriceSize struct {

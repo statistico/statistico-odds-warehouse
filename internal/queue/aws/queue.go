@@ -6,17 +6,16 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/aws/aws-sdk-go/service/sqs/sqsiface"
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/statistico-odds-warehouse/internal/market"
 	"github.com/statistico/statistico-odds-warehouse/internal/queue"
 )
 
 type Message struct {
-	Type   string   `json:"type"`
-	MessageID string `json:"messageId"`
-	TopicArn string `json:"topicArn"`
-	Message string `json:"message"`
-	Timestamp string `json:"timestamp"`
-	Signature string `json:"signature"`
+	Type           string `json:"type"`
+	MessageID      string `json:"messageId"`
+	TopicArn       string `json:"topicArn"`
+	Message        string `json:"message"`
+	Timestamp      string `json:"timestamp"`
+	Signature      string `json:"signature"`
 	SigningCertURL string `json:"signingCertUrl"`
 	UnsubscribeURL string `json:"unsubscribeUrl"`
 }
@@ -28,15 +27,15 @@ type Queue struct {
 	timeout  int64
 }
 
-func (q *Queue) ReceiveMarkets() <-chan *market.Market {
-	ch := make(chan *market.Market, 100)
+func (q *Queue) ReceiveMarkets() <-chan *queue.Market {
+	ch := make(chan *queue.Market, 100)
 
 	go q.receiveMessages(ch)
 
 	return ch
 }
 
-func (q *Queue) receiveMessages(ch chan<- *market.Market) {
+func (q *Queue) receiveMessages(ch chan<- *queue.Market) {
 	defer close(ch)
 
 	input := &sqs.ReceiveMessageInput{
@@ -59,7 +58,7 @@ func (q *Queue) receiveMessages(ch chan<- *market.Market) {
 	}
 }
 
-func (q *Queue) parseMessage(ms *sqs.Message, ch chan<- *market.Market) {
+func (q *Queue) parseMessage(ms *sqs.Message, ch chan<- *queue.Market) {
 	var message Message
 	err := json.Unmarshal([]byte(*ms.Body), &message)
 
@@ -68,7 +67,7 @@ func (q *Queue) parseMessage(ms *sqs.Message, ch chan<- *market.Market) {
 		return
 	}
 
-	var mk *market.Market
+	var mk *queue.Market
 	err = json.Unmarshal([]byte(message.Message), &mk)
 
 	if err != nil {

@@ -8,6 +8,7 @@ type RepositoryQuery struct {
 }
 
 type Repository interface {
-	Insert(m *Market) error
-	Get(q *RepositoryQuery) ([]*Market, error)
+	InsertBTTSMarket(m *BTTSMarket) error
+	InsertMatchOddsMarket(m *MatchOddsMarket) error
+	InsertOverUnderMarket(m *OverUnderMarket) error
 }
