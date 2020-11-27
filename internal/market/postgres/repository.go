@@ -45,6 +45,40 @@ func (r *MarketRepository) InsertOverUnderMarket(m *market.OverUnderMarket) erro
 	return err
 }
 
+func (r *MarketRepository) InsertBTTSMarket(m *market.BTTSMarket) error {
+	builder := r.queryBuilder()
+
+	_, err := builder.
+		Insert("market_btts").
+		Columns(
+			"id",
+			"event_id",
+			"name",
+			"exchange",
+			"side",
+			"yes_price",
+			"yes_size",
+			"no_price",
+			"no_size",
+			"timestamp",
+		).
+		Values(
+			m.ID,
+			m.EventID,
+			m.Name,
+			m.Exchange,
+			m.Side,
+			m.Yes.Price,
+			m.Yes.Size,
+			m.No.Price,
+			m.No.Size,
+			m.Timestamp,
+		).
+		Exec()
+
+	return err
+}
+
 func (r *MarketRepository) queryBuilder() sq.StatementBuilderType {
 	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(r.connection)
 }

@@ -73,6 +73,69 @@ func TestHandler_Handle(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 
+	t.Run("parses both teams to score market and persist via the repository", func(t *testing.T) {
+		t.Helper()
+
+		repo := new(market.MockRepository)
+		handler := market.NewHandler(repo)
+
+		mk := &queue.Market{
+			ID:       "1.2818721",
+			EventID:  148192,
+			Name:     "BOTH_TEAMS_TO_SCORE",
+			Side:     "BACK",
+			Exchange: "betfair",
+			Runners:  []*queue.Runner{
+				{
+					ID:   472671,
+					Name: "Yes",
+					Prices: []queue.PriceSize{
+						{
+							Price: 1.95,
+							Size:  156.91,
+						},
+					},
+				},
+				{
+					ID:   472671,
+					Name: "No",
+					Prices: []queue.PriceSize{
+						{
+							Price: 2.05,
+							Size:  1.92,
+						},
+					},
+				},
+			},
+			Timestamp: 1583971200,
+		}
+
+		mkt := mock.MatchedBy(func(m *market.BTTSMarket) bool {
+			assert.Equal(t, "1.2818721", m.ID)
+			assert.Equal(t, uint64(148192), m.EventID)
+			assert.Equal(t, "BOTH_TEAMS_TO_SCORE", m.Name)
+			assert.Equal(t, "BACK", m.Side)
+			assert.Equal(t, "betfair", m.Exchange)
+			assert.Equal(t, "betfair", m.Exchange)
+			assert.Equal(t, float32(1.95), m.Yes.Price)
+			assert.Equal(t, float32(156.91), m.Yes.Size)
+			assert.Equal(t, float32(2.05), m.No.Price)
+			assert.Equal(t, float32(1.92), m.No.Size)
+			assert.Equal(t, int64(1583971200), m.Timestamp)
+			return true
+		})
+
+		repo.On("InsertBTTSMarket", mkt).Return(nil)
+
+		err := handler.Handle(mk)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		repo.AssertExpectations(t)
+	})
+
 	t.Run("returns error if market is not supported", func(t *testing.T) {
 		t.Helper()
 

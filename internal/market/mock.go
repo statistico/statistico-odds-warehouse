@@ -10,3 +10,8 @@ func (m *MockRepository) InsertOverUnderMarket(o *OverUnderMarket) error {
 	args := m.Called(o)
 	return args.Error(0)
 }
+
+func (m *MockRepository) InsertBTTSMarket(o *BTTSMarket) error {
+	args := m.Called(o)
+	return args.Error(0)
+}

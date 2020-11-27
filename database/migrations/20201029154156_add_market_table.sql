@@ -13,9 +13,23 @@ CREATE TABLE market_over_under (
     timestamp INTEGER NOT NULL
 );
 
+CREATE TABLE market_btts (
+    id VARCHAR NOT NULL,
+    event_id INTEGER NOT NULL,
+    name VARCHAR NOT NULL,
+    exchange VARCHAR NOT NULL,
+    side VARCHAR NOT NULL,
+    yes_price FLOAT NOT NULL,
+    yes_size FLOAT NOT NULL,
+    no_price FLOAT NOT NULL,
+    no_size FLOAT NOT NULL,
+    timestamp INTEGER NOT NULL
+);
+
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
 DROP TABLE market_over_under;
+DROP TABLE market_btts;
 -- +goose StatementEnd
