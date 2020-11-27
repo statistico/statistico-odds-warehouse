@@ -13,5 +13,5 @@ This service provides one application:
 
 - Queue
 
-For help with testing and deployment for documentation can be found in the  [docs](https://github.com/statistico/statistico-data/docs)
+For help with testing and deployment additional documentation can be found in the [docs](https://github.com/statistico/statistico-data/docs)
 directory
