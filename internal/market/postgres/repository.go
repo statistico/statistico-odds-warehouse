@@ -11,33 +11,57 @@ type MarketRepository struct {
 	connection *sql.DB
 }
 
-func (r *MarketRepository) InsertOverUnderMarket(m *market.OverUnderMarket) error {
+func (r *MarketRepository) InsertMarket(m *market.Market) error {
+	var exists bool
+
+	err := r.connection.QueryRow(`SELECT exists (SELECT id FROM market where id = $1)`, m.ID).Scan(&exists)
+
+	if err != nil {
+		return err
+	}
+
+	if !exists {
+		if err := r.insertMarket(m); err != nil {
+			return err
+		}
+	}
+
+	for _, run := range m.Runners {
+		err := r.insertRunner(run, m.ID, m.Timestamp)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return err
+}
+
+func (r *MarketRepository) insertMarket(m *market.Market) error {
 	builder := r.queryBuilder()
 
 	_, err := builder.
-		Insert("market_over_under").
+		Insert("market").
 		Columns(
 			"id",
 			"event_id",
+			"event_date",
+			"competition_id",
+			"season_id",
 			"name",
 			"exchange",
 			"side",
-			"over_price",
-			"over_size",
-			"under_price",
-			"under_size",
 			"timestamp",
 		).
 		Values(
 			m.ID,
 			m.EventID,
+			m.EventDate.Unix(),
+			m.CompetitionID,
+			m.SeasonID,
 			m.Name,
 			m.Exchange,
 			m.Side,
-			m.Over.Price,
-			m.Over.Size,
-			m.Under.Price,
-			m.Under.Size,
 			m.Timestamp,
 		).
 		Exec()
@@ -45,72 +69,26 @@ func (r *MarketRepository) InsertOverUnderMarket(m *market.OverUnderMarket) erro
 	return err
 }
 
-func (r *MarketRepository) InsertBTTSMarket(m *market.BTTSMarket) error {
+func (r *MarketRepository) insertRunner(runner *market.Runner, marketID string, timestamp int64) error {
 	builder := r.queryBuilder()
 
 	_, err := builder.
-		Insert("market_btts").
+		Insert("market_runner").
 		Columns(
+			"market_id",
 			"id",
-			"event_id",
 			"name",
-			"exchange",
-			"side",
-			"yes_price",
-			"yes_size",
-			"no_price",
-			"no_size",
+			"price",
+			"size",
 			"timestamp",
 		).
 		Values(
-			m.ID,
-			m.EventID,
-			m.Name,
-			m.Exchange,
-			m.Side,
-			m.Yes.Price,
-			m.Yes.Size,
-			m.No.Price,
-			m.No.Size,
-			m.Timestamp,
-		).
-		Exec()
-
-	return err
-}
-
-func (r *MarketRepository) InsertMatchOddsMarket(m *market.MatchOddsMarket) error {
-	builder := r.queryBuilder()
-
-	_, err := builder.
-		Insert("market_match_odds").
-		Columns(
-			"id",
-			"event_id",
-			"name",
-			"exchange",
-			"side",
-			"home_price",
-			"home_size",
-			"away_price",
-			"away_size",
-			"draw_price",
-			"draw_size",
-			"timestamp",
-		).
-		Values(
-			m.ID,
-			m.EventID,
-			m.Name,
-			m.Exchange,
-			m.Side,
-			m.Home.Price,
-			m.Home.Size,
-			m.Away.Price,
-			m.Away.Size,
-			m.Draw.Price,
-			m.Draw.Size,
-			m.Timestamp,
+			marketID,
+			runner.ID,
+			runner.Name,
+			runner.Price,
+			runner.Size,
+			timestamp,
 		).
 		Exec()
 

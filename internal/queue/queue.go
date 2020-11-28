@@ -5,13 +5,16 @@ type Queue interface {
 }
 
 type Market struct {
-	ID        string    `json:"id"`
-	EventID   uint64    `json:"eventId"`
-	Name      string    `json:"name"`
-	Side      string    `json:"side"`
-	Exchange  string    `json:"exchange"`
-	Runners   []*Runner `json:"runners"`
-	Timestamp int64     `json:"timestamp"`
+	ID            string    `json:"id"`
+	EventID       uint64    `json:"eventId"`
+	Name          string    `json:"name"`
+	CompetitionID uint64    `json:"competitionId"`
+	SeasonID      uint64    `json:"seasonId"`
+	EventDate     string    `json:"date"`
+	Side          string    `json:"side"`
+	Exchange      string    `json:"exchange"`
+	Runners       []*Runner `json:"runners"`
+	Timestamp     int64     `json:"timestamp"`
 }
 
 type Runner struct {
