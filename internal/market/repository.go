@@ -8,7 +8,5 @@ type RepositoryQuery struct {
 }
 
 type Repository interface {
-	InsertBTTSMarket(m *BTTSMarket) error
-	InsertMatchOddsMarket(m *MatchOddsMarket) error
-	InsertOverUnderMarket(m *OverUnderMarket) error
+	InsertMarket(m *Market) error
 }

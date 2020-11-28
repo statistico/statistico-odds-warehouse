@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func GetConnection(t *testing.T, table string) (*sql.DB, func()) {
+func GetConnection(t *testing.T, tables []string) (*sql.DB, func()) {
 	db := bootstrap.BuildConfig().Database
 
 	dsn := "host=%s port=%s user=%s " + "password=%s dbname=%s sslmode=disable"
@@ -21,9 +21,11 @@ func GetConnection(t *testing.T, table string) (*sql.DB, func()) {
 	}
 
 	return conn, func() {
-		_, err := conn.Exec("delete from " + table)
-		if err != nil {
-			t.Fatalf("Failed to clear database. %s", err.Error())
+		for _, table := range tables {
+			_, err := conn.Exec("delete from " + table)
+			if err != nil {
+				t.Fatalf("Failed to clear database. %s", err.Error())
+			}
 		}
 	}
 }

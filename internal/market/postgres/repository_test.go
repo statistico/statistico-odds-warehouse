@@ -10,193 +10,81 @@ import (
 )
 
 func TestMarketRepository_Insert(t *testing.T) {
-	conn, cleanUp := test.GetConnection(t, "market_over_under")
+	conn, cleanUp := test.GetConnection(t, []string{"market", "market_runner"})
 	repo := postgres.NewMarketRepository(conn)
 
 	t.Run("increases table count", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		tradeCounts := []struct {
-			Market *market.OverUnderMarket
-			Count int8
+		marketCounts := []struct {
+			Market      *market.Market
+			MarketCount int8
+			RunnerCount int8
 		}{
-			{newOverUnderMarket(182981, "OVER_UNDER_25", "BACK", time.Now()), 1},
-			{newOverUnderMarket(182981, "OVER_UNDER_25", "BACK", time.Now()), 2},
-			{newOverUnderMarket(182981, "OVER_UNDER_25", "BACK", time.Now()), 3},
+			{newMarket("1.2729821", "OVER_UNDER_25", "BACK", time.Now()), 1, 2},
+			{newMarket("1.2729822", "OVER_UNDER_25", "BACK", time.Now()), 2, 4},
+			{newMarket("1.2729823", "OVER_UNDER_25", "BACK", time.Now()), 3, 6},
 		}
 
-		for _, tc := range tradeCounts {
+		for _, tc := range marketCounts {
 			insertOverUnderMarket(t, repo, tc.Market)
 
-			var count int8
+			var marketCount int8
+			var runnerCount int8
 
-			row := conn.QueryRow("select count(*) from market_over_under")
+			row := conn.QueryRow("select count(*) from market")
 
-			if err := row.Scan(&count); err != nil {
+			if err := row.Scan(&marketCount); err != nil {
 				t.Errorf("Error when scanning rows returned by the database: %s", err.Error())
 			}
 
-			assert.Equal(t, tc.Count, count)
+			row = conn.QueryRow("select count(*) from market_runner")
+
+			if err := row.Scan(&runnerCount); err != nil {
+				t.Errorf("Error when scanning rows returned by the database: %s", err.Error())
+			}
+
+			assert.Equal(t, tc.MarketCount, marketCount)
+			assert.Equal(t, tc.RunnerCount, runnerCount)
 		}
 	})
 }
 
-func TestMarketRepository_InsertBTTSMarket(t *testing.T) {
-	conn, cleanUp := test.GetConnection(t, "market_btts")
-	repo := postgres.NewMarketRepository(conn)
-
-	t.Run("increases table count", func(t *testing.T) {
-		t.Helper()
-		defer cleanUp()
-
-		tradeCounts := []struct {
-			Market *market.BTTSMarket
-			Count int8
-		}{
-			{newBTTSMarket(182981, "BACK", time.Now()), 1},
-			{newBTTSMarket(182981, "BACK", time.Now()), 2},
-			{newBTTSMarket(182981, "BACK", time.Now()), 3},
-		}
-
-		for _, tc := range tradeCounts {
-			insertBTTSMarket(t, repo, tc.Market)
-
-			var count int8
-
-			row := conn.QueryRow("select count(*) from market_btts")
-
-			if err := row.Scan(&count); err != nil {
-				t.Errorf("Error when scanning rows returned by the database: %s", err.Error())
-			}
-
-			assert.Equal(t, tc.Count, count)
-		}
-	})
-}
-
-func TestMarketRepository_MatchOddsMarket(t *testing.T) {
-	conn, cleanUp := test.GetConnection(t, "market_match_odds")
-	repo := postgres.NewMarketRepository(conn)
-
-	t.Run("increases table count", func(t *testing.T) {
-		t.Helper()
-		defer cleanUp()
-
-		tradeCounts := []struct {
-			Market *market.MatchOddsMarket
-			Count int8
-		}{
-			{newMatchOddsMarket(182981, "BACK", time.Now()), 1},
-			{newMatchOddsMarket(182981, "BACK", time.Now()), 2},
-			{newMatchOddsMarket(182981, "BACK", time.Now()), 3},
-		}
-
-		for _, tc := range tradeCounts {
-			insertMatchOddsMarket(t, repo, tc.Market)
-
-			var count int8
-
-			row := conn.QueryRow("select count(*) from market_match_odds")
-
-			if err := row.Scan(&count); err != nil {
-				t.Errorf("Error when scanning rows returned by the database: %s", err.Error())
-			}
-
-			assert.Equal(t, tc.Count, count)
-		}
-	})
-}
-
-func newOverUnderMarket(eventID uint64, name, side string, t time.Time) *market.OverUnderMarket {
-	over := market.PriceSize{
+func newMarket(marketID, name, side string, t time.Time) *market.Market {
+	over := market.Runner{
+		ID:    423721,
+		Name:  "Over 2.5 Goals",
 		Price: 1.95,
 		Size:  1591.01,
 	}
 
-	under := market.PriceSize{
+	under := market.Runner{
+		ID:    423721,
+		Name:  "Under 2.5 Goals",
 		Price: 2.05,
-		Size:  1591.01,
+		Size:  11.55,
 	}
 
-	return &market.OverUnderMarket{
-		ID:             "1.2729821",
-		EventID:        eventID,
-		Name:           name,
-		Side:           side,
-		Exchange:   "betfair",
-		Over: over,
-		Under: under,
-		Timestamp:      t.Unix(),
-	}
-}
-
-func newBTTSMarket(eventID uint64, side string, t time.Time) *market.BTTSMarket {
-	yes := market.PriceSize{
-		Price: 1.95,
-		Size:  1591.01,
-	}
-
-	no := market.PriceSize{
-		Price: 2.05,
-		Size:  1591.01,
-	}
-
-	return &market.BTTSMarket{
-		ID:             "1.2729821",
-		EventID:        eventID,
-		Name:           "BOTH_TEAMS_TO_SCORE",
-		Side:           side,
-		Exchange:       "betfair",
-		Yes:            yes,
-		No:             no,
-		Timestamp:      t.Unix(),
+	return &market.Market{
+		ID:            marketID,
+		Name:          name,
+		EventID:       1827711,
+		CompetitionID: 8,
+		SeasonID:      17420,
+		EventDate:     time.Now(),
+		Side:          side,
+		Exchange:      "betfair",
+		Runners: []*market.Runner{
+			&over,
+			&under,
+		},
+		Timestamp: t.Unix(),
 	}
 }
 
-func newMatchOddsMarket(eventID uint64, side string, t time.Time) *market.MatchOddsMarket {
-	home := market.PriceSize{
-		Price: 1.95,
-		Size:  1591.01,
-	}
-
-	away := market.PriceSize{
-		Price: 2.05,
-		Size:  1591.01,
-	}
-
-	draw := market.PriceSize{
-		Price: 2.05,
-		Size:  1591.01,
-	}
-
-	return &market.MatchOddsMarket{
-		ID:             "1.2729821",
-		EventID:        eventID,
-		Name:           "MATCH_ODDS",
-		Side:           side,
-		Exchange:       "betfair",
-		Home:            home,
-		Away:             away,
-		Draw:           draw,
-		Timestamp:      t.Unix(),
-	}
-}
-
-func insertOverUnderMarket(t *testing.T, repo *postgres.MarketRepository, m *market.OverUnderMarket) {
-	if err := repo.InsertOverUnderMarket(m); err != nil {
-		t.Errorf("Error when inserting market into the database: %s", err.Error())
-	}
-}
-
-func insertBTTSMarket(t *testing.T, repo *postgres.MarketRepository, m *market.BTTSMarket) {
-	if err := repo.InsertBTTSMarket(m); err != nil {
-		t.Errorf("Error when inserting market into the database: %s", err.Error())
-	}
-}
-
-func insertMatchOddsMarket(t *testing.T, repo *postgres.MarketRepository, m *market.MatchOddsMarket) {
-	if err := repo.InsertMatchOddsMarket(m); err != nil {
+func insertOverUnderMarket(t *testing.T, repo *postgres.MarketRepository, m *market.Market) {
+	if err := repo.InsertMarket(m); err != nil {
 		t.Errorf("Error when inserting market into the database: %s", err.Error())
 	}
 }
