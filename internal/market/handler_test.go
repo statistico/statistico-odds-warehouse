@@ -237,7 +237,7 @@ func TestHandler_Handle(t *testing.T) {
 				{
 					ID:   472671,
 					Name: "West Ham",
-					SortPriority: 1,
+					Sort: 1,
 					Prices: []queue.PriceSize{
 						{
 							Price: 1.95,
@@ -248,7 +248,7 @@ func TestHandler_Handle(t *testing.T) {
 				{
 					ID:   472672,
 					Name: "Arsenal",
-					SortPriority: 2,
+					Sort: 2,
 					Prices: []queue.PriceSize{
 						{
 							Price: 2.05,
@@ -259,7 +259,7 @@ func TestHandler_Handle(t *testing.T) {
 				{
 					ID:   472673,
 					Name: "The Draw",
-					SortPriority: 3,
+					Sort: 3,
 					Prices: []queue.PriceSize{
 						{
 							Price: 3.05,
