@@ -20,7 +20,7 @@ type Market struct {
 type Runner struct {
 	ID           uint64      `json:"id"`
 	Name         string      `json:"name"`
-	SortPriority int8        `json:"sort"`
+	Sort         int8        `json:"sort"`
 	Prices       []PriceSize `json:"prices"`
 }
 

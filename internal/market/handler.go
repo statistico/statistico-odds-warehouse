@@ -55,11 +55,11 @@ func parseRunner(market string, runner *queue.Runner) string {
 		return runner.Name
 	}
 
-	if runner.SortPriority == 1 {
+	if runner.Sort == 1 {
 		return Home
 	}
 
-	if runner.SortPriority == 2 {
+	if runner.Sort == 2 {
 		return Away
 	}
 
