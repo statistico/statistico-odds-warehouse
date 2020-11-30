@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "internal/grpc/proto";
+
+import "google/protobuf/wrappers.proto";
+
+service MarketService {
+  rpc MarketSearch(MarketSearchRequest) returns (stream Market) {}
+}
+
+message MarketSearchRequest {
+  string market = 1;
+  repeated MarketFilter filters = 2;
+  repeated uint64 competition_ids = 3;
+  repeated uint64 season_ids = 4;
+  google.protobuf.StringValue dateFrom = 5;
+  google.protobuf.StringValue dateTo = 6;
+}
+
+message MarketFilter {
+  string selection = 1;
+  enum Operator {
+    GTE = 0;
+    LTE = 1;
+  };
+  Operator operator = 3;
+  float value = 4;
+  enum Line {
+    CLOSING = 0;
+    MAX = 1;
+  }
+  Line line = 5;
+}
+
+message Market {
+  uint64 string = 1;
+  string name = 2;
+  uint64 event_id = 3;
+  uint64 competition_id = 4;
+  uint64 season_id = 5;
+  string event_date = 6;
+  string side = 7;
+  string exchange = 8;
+  repeated Runner runners = 9;
+  int64 timestamp = 10;
+}
+
+message Runner {
+  uint64 id = 1;
+  string name = 2;
+  float price = 3;
+  float size = 4;
+}
