@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 	sq "github.com/Masterminds/squirrel"
+	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/statistico/statistico-odds-warehouse/internal/market"
 )
@@ -26,8 +27,10 @@ func (r *MarketRepository) InsertMarket(m *market.Market) error {
 		}
 	}
 
+	insertId := uuid.New()
+
 	for _, run := range m.Runners {
-		err := r.insertRunner(run, m.ID, m.Timestamp)
+		err := r.insertRunner(run, m.ID, m.Timestamp, insertId)
 
 		if err != nil {
 			return err
@@ -69,7 +72,7 @@ func (r *MarketRepository) insertMarket(m *market.Market) error {
 	return err
 }
 
-func (r *MarketRepository) insertRunner(runner *market.Runner, marketID string, timestamp int64) error {
+func (r *MarketRepository) insertRunner(runner *market.Runner, marketID string, timestamp int64, insertId uuid.UUID) error {
 	builder := r.queryBuilder()
 
 	_, err := builder.
@@ -81,6 +84,7 @@ func (r *MarketRepository) insertRunner(runner *market.Runner, marketID string, 
 			"price",
 			"size",
 			"timestamp",
+			"insert_id",
 		).
 		Values(
 			marketID,
@@ -89,6 +93,7 @@ func (r *MarketRepository) insertRunner(runner *market.Runner, marketID string, 
 			runner.Price,
 			runner.Size,
 			timestamp,
+			insertId.String(),
 		).
 		Exec()
 
