@@ -5,9 +5,9 @@ import (
 	"time"
 )
 
-const Away = "away"
-const Draw = "draw"
-const Home = "home"
+const Away = "Away"
+const Draw = "Draw"
+const Home = "Home"
 const MatchOdds = "MATCH_ODDS"
 
 type Handler struct {
