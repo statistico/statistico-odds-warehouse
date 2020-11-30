@@ -9,6 +9,7 @@ require (
 	github.com/evalphobia/logrus_sentry v0.8.2
 	github.com/getsentry/raven-go v0.2.0 // indirect
 	github.com/golang/protobuf v1.4.3
+	github.com/google/uuid v1.1.2
 	github.com/lib/pq v1.8.0
 	github.com/sirupsen/logrus v1.7.0
 	github.com/stretchr/objx v0.3.0 // indirect
