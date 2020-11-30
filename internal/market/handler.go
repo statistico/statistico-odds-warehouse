@@ -5,6 +5,11 @@ import (
 	"time"
 )
 
+const Away = "away"
+const Draw = "draw"
+const Home = "home"
+const MatchOdds = "MATCH_ODDS"
+
 type Handler struct {
 	repository Repository
 }
@@ -15,7 +20,7 @@ func (m *Handler) Handle(q *queue.Market) error {
 	for _, r := range q.Runners {
 		run := Runner{
 			ID:    r.ID,
-			Name:  r.Name,
+			Name:  parseRunner(q.Name, r),
 			Price: r.Prices[0].Price,
 			Size:  r.Prices[0].Size,
 		}
@@ -43,6 +48,22 @@ func (m *Handler) Handle(q *queue.Market) error {
 	}
 
 	return m.repository.InsertMarket(&market)
+}
+
+func parseRunner(market string, runner *queue.Runner) string {
+	if market != MatchOdds {
+		return runner.Name
+	}
+
+	if runner.Sort == 1 {
+		return Home
+	}
+
+	if runner.Sort == 2 {
+		return Away
+	}
+
+	return Draw
 }
 
 func NewHandler(r Repository) *Handler {
