@@ -11,7 +11,7 @@ service MarketService {
 }
 
 message MarketSearchRequest {
-  string market = 1;
+  string name = 1;
   repeated RunnerFilter filters = 2;
   repeated uint64 competition_ids = 3;
   repeated uint64 season_ids = 4;
