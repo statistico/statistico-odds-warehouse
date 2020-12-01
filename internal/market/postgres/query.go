@@ -9,18 +9,19 @@ func buildMarketRunnerQuery(q *market.RunnerQuery, b *sq.StatementBuilderType) s
 	query := b.
 		Select(
 			"m.id",
-			"m.name",
 			"m.event_id",
 			"m.event_date",
 			"m.competition_id",
 			"m.season_id",
+			"m.name",
 			"m.exchange",
 			"m.side",
-			"m.timestamp",
+			"mr.market_id",
 			"mr.id",
 			"mr.name",
 			"mr.price",
 			"mr.size",
+			"mr.timestamp",
 		).
 		From("market m")
 

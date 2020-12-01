@@ -5,14 +5,7 @@ import "time"
 type Repository interface {
 	InsertMarket(market *Market) error
 	InsertRunners(runners []*Runner) error
-}
-
-type RepositoryQuery struct {
-	MarketName   *string
-	DateFrom     *time.Time
-	DateTo       *time.Time
-	CompetitionIDs []uint64
-	SeasonIDs    []uint64
+	MarketRunners(q *RunnerQuery) ([]*MarketRunner, error)
 }
 
 type RunnerQuery struct {
