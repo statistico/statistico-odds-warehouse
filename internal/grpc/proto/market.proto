@@ -7,7 +7,7 @@ option go_package = "internal/grpc/proto";
 import "google/protobuf/wrappers.proto";
 
 service MarketService {
-  rpc MarketSelectionSearch(MarketSelectionRequest) returns (stream MarketSelection) {}
+  rpc MarketRunnerSearch(MarketSelectionRequest) returns (stream MarketSelection) {}
 }
 
 message MarketSelectionRequest {
