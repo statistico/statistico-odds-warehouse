@@ -7,10 +7,10 @@ option go_package = "internal/grpc/proto";
 import "google/protobuf/wrappers.proto";
 
 service MarketService {
-  rpc MarketSelectionSearch(MarketSelectionSearchRequest) returns (stream MarketSelection) {}
+  rpc MarketSelectionSearch(MarketSelectionRequest) returns (stream MarketSelection) {}
 }
 
-message MarketSelectionSearchRequest {
+message MarketSelectionRequest {
   string name = 1;
   RunnerFilter runner_filter = 2;
   repeated uint64 competition_ids = 3;
