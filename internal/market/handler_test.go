@@ -62,20 +62,25 @@ func TestHandler_Handle(t *testing.T) {
 			assert.Equal(t, "BACK", m.Side)
 			assert.Equal(t, "betfair", m.Exchange)
 			assert.Equal(t, date, m.EventDate)
-			assert.Equal(t, uint64(472671), m.Runners[0].ID)
-			assert.Equal(t, "Over 2.5 Goals", m.Runners[0].Name)
-			assert.Equal(t, float32(1.95), m.Runners[0].Price)
-			assert.Equal(t, float32(156.91), m.Runners[0].Size)
-			assert.Equal(t, int64(1583971200), m.Runners[0].Timestamp)
-			assert.Equal(t, uint64(472672), m.Runners[1].ID)
-			assert.Equal(t, "Under 2.5 Goals", m.Runners[1].Name)
-			assert.Equal(t, float32(2.05), m.Runners[1].Price)
-			assert.Equal(t, float32(1.92), m.Runners[1].Size)
-			assert.Equal(t, int64(1583971200), m.Runners[1].Timestamp)
 			return true
 		})
 
-		repo.On("Persist", mkt).Return(nil)
+		run := mock.MatchedBy(func(r []*market.Runner) bool {
+			assert.Equal(t, uint64(472671), r[0].ID)
+			assert.Equal(t, "Over 2.5 Goals", r[0].Name)
+			assert.Equal(t, float32(1.95), r[0].Price.Value)
+			assert.Equal(t, float32(156.91), r[0].Price.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[0].Price.Timestamp)
+			assert.Equal(t, uint64(472672), r[1].ID)
+			assert.Equal(t, "Under 2.5 Goals", r[1].Name)
+			assert.Equal(t, float32(2.05), r[1].Price.Value)
+			assert.Equal(t, float32(1.92), r[1].Price.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[1].Price.Timestamp)
+			return true
+		})
+
+		repo.On("InsertMarket", mkt).Return(nil)
+		repo.On("InsertRunners", run).Return(nil)
 
 		err := handler.Handle(mk)
 
@@ -137,20 +142,11 @@ func TestHandler_Handle(t *testing.T) {
 			assert.Equal(t, "BACK", m.Side)
 			assert.Equal(t, "betfair", m.Exchange)
 			assert.Equal(t, date, m.EventDate)
-			assert.Equal(t, uint64(472671), m.Runners[0].ID)
-			assert.Equal(t, "Over 2.5 Goals", m.Runners[0].Name)
-			assert.Equal(t, float32(1.95), m.Runners[0].Price)
-			assert.Equal(t, float32(156.92), m.Runners[0].Size)
-			assert.Equal(t, int64(1583971200), m.Runners[0].Timestamp)
-			assert.Equal(t, uint64(472672), m.Runners[1].ID)
-			assert.Equal(t, "Under 2.5 Goals", m.Runners[1].Name)
-			assert.Equal(t, float32(2.06), m.Runners[1].Price)
-			assert.Equal(t, float32(1.92), m.Runners[1].Size)
-			assert.Equal(t, int64(1583971200), m.Runners[1].Timestamp)
 			return true
 		})
 
-		repo.On("Persist", mkt).Return(errors.New("oh no"))
+		repo.On("InsertMarket", mkt).Return(errors.New("oh no"))
+		repo.AssertNotCalled(t, "InsertRunners")
 
 		err := handler.Handle(mk)
 
@@ -284,24 +280,29 @@ func TestHandler_Handle(t *testing.T) {
 			assert.Equal(t, "BACK", m.Side)
 			assert.Equal(t, "betfair", m.Exchange)
 			assert.Equal(t, date, m.EventDate)
-			assert.Equal(t, uint64(472671), m.Runners[0].ID)
-			assert.Equal(t, "Home", m.Runners[0].Name)
-			assert.Equal(t, float32(1.96), m.Runners[0].Price)
-			assert.Equal(t, float32(156.92), m.Runners[0].Size)
-			assert.Equal(t, int64(1583971200), m.Runners[0].Timestamp)
-			assert.Equal(t, uint64(472672), m.Runners[1].ID)
-			assert.Equal(t, "Away", m.Runners[1].Name)
-			assert.Equal(t, float32(2.05), m.Runners[1].Price)
-			assert.Equal(t, float32(1.93), m.Runners[1].Size)
-			assert.Equal(t, int64(1583971200), m.Runners[1].Timestamp)
-			assert.Equal(t, "Draw", m.Runners[2].Name)
-			assert.Equal(t, float32(3.05), m.Runners[2].Price)
-			assert.Equal(t, float32(0.99), m.Runners[2].Size)
-			assert.Equal(t, int64(1583971200), m.Runners[2].Timestamp)
 			return true
 		})
 
-		repo.On("Persist", mkt).Return(nil)
+		run := mock.MatchedBy(func(r []*market.Runner) bool {
+			assert.Equal(t, uint64(472671), r[0].ID)
+			assert.Equal(t, "Home", r[0].Name)
+			assert.Equal(t, float32(1.96), r[0].Price.Value)
+			assert.Equal(t, float32(156.92), r[0].Price.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[0].Price.Timestamp)
+			assert.Equal(t, uint64(472672), r[1].ID)
+			assert.Equal(t, "Away", r[1].Name)
+			assert.Equal(t, float32(2.05), r[1].Price.Value)
+			assert.Equal(t, float32(1.93), r[1].Price.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[1].Price.Timestamp)
+			assert.Equal(t, "Draw", r[2].Name)
+			assert.Equal(t, float32(3.05), r[2].Price.Value)
+			assert.Equal(t, float32(0.99), r[2].Price.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[2].Price.Timestamp)
+			return true
+		})
+
+		repo.On("InsertMarket", mkt).Return(nil)
+		repo.On("InsertRunners", run).Return(nil)
 
 		err := handler.Handle(mk)
 

@@ -11,13 +11,17 @@ type Market struct {
 	EventDate     time.Time `json:"date"`
 	Side          string    `json:"side"`
 	Exchange      string    `json:"exchange"`
-	Runners       []*Runner `json:"runners"`
 }
 
 type Runner struct {
-	ID        uint64  `json:"id"`
-	Name      string  `json:"name"`
-	Price     float32 `json:"price"`
-	Size      float32 `json:"size"`
-	Timestamp int64   `json:"timestamp"`
+	ID        uint64     `json:"id"`
+	MarketID  string     `json:"marketId"`
+	Name      string     `json:"name"`
+	Price     Price      `json:"price"`
+}
+
+type Price struct {
+	Value     float32      `json:"price"`
+	Size      float32     `json:"size"`
+	Timestamp time.Time   `json:"timestamp"`
 }

@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-func TestMarketRepository_Persist(t *testing.T) {
-	conn, cleanUp := test.GetConnection(t, []string{"market", "market_runner"})
+func TestMarketRepository_InsertMarket(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, []string{"market"})
 	repo := postgres.NewMarketRepository(conn)
 
 	t.Run("increases table count", func(t *testing.T) {
@@ -20,18 +20,16 @@ func TestMarketRepository_Persist(t *testing.T) {
 		marketCounts := []struct {
 			Market      *market.Market
 			MarketCount int8
-			RunnerCount int8
 		}{
-			{newMarket("1.2729821", "OVER_UNDER_25", "BACK", time.Now()), 1, 2},
-			{newMarket("1.2729822", "OVER_UNDER_25", "BACK", time.Now()), 2, 4},
-			{newMarket("1.2729823", "OVER_UNDER_25", "BACK", time.Now()), 3, 6},
+			{newMarket("1.2729821", "OVER_UNDER_25", "BACK"), 1},
+			{newMarket("1.2729822", "OVER_UNDER_25", "BACK"), 2},
+			{newMarket("1.2729823", "OVER_UNDER_25", "BACK"), 3},
 		}
 
 		for _, tc := range marketCounts {
-			persistMarket(t, repo, tc.Market)
+			insertMarket(t, repo, tc.Market)
 
 			var marketCount int8
-			var runnerCount int8
 
 			row := conn.QueryRow("select count(*) from market")
 
@@ -39,35 +37,66 @@ func TestMarketRepository_Persist(t *testing.T) {
 				t.Errorf("Error when scanning rows returned by the database: %s", err.Error())
 			}
 
-			row = conn.QueryRow("select count(*) from market_runner")
+			assert.Equal(t, tc.MarketCount, marketCount)
+		}
+	})
+}
+
+func TestMarketRepository_InsertRunners(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, []string{"market_runner"})
+	repo := postgres.NewMarketRepository(conn)
+
+	t.Run("increases table count", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		runners := []*market.Runner{
+			{
+				ID:    423721,
+				Name:  "Over 2.5 Goals",
+				Price: market.Price{
+					Value:     1.95,
+					Size:  1591.01,
+					Timestamp: time.Unix(1606824710, 0),
+				},
+			},
+			{
+				ID:    423721,
+				Name:  "Under 2.5 Goals",
+				Price: market.Price{
+					Value:     2.05,
+					Size:  11.55,
+					Timestamp: time.Unix(1606824710, 0),
+				},
+			},
+		}
+
+		runnerCounts := []struct {
+			Runners     []*market.Runner
+			RunnerCount int8
+		}{
+			{runners, 2},
+			{runners, 4},
+			{runners, 6},
+		}
+
+		for _, tc := range runnerCounts {
+			insertRunners(t, repo, tc.Runners)
+
+			var runnerCount int8
+
+			row := conn.QueryRow("select count(*) from market_runner")
 
 			if err := row.Scan(&runnerCount); err != nil {
 				t.Errorf("Error when scanning rows returned by the database: %s", err.Error())
 			}
 
-			assert.Equal(t, tc.MarketCount, marketCount)
 			assert.Equal(t, tc.RunnerCount, runnerCount)
 		}
 	})
 }
 
-func newMarket(marketID, name, side string, t time.Time) *market.Market {
-	over := market.Runner{
-		ID:    423721,
-		Name:  "Over 2.5 Goals",
-		Price: 1.95,
-		Size:  1591.01,
-		Timestamp: t.Unix(),
-	}
-
-	under := market.Runner{
-		ID:    423721,
-		Name:  "Under 2.5 Goals",
-		Price: 2.05,
-		Size:  11.55,
-		Timestamp: t.Unix(),
-	}
-
+func newMarket(marketID, name, side string) *market.Market {
 	return &market.Market{
 		ID:            marketID,
 		Name:          name,
@@ -77,15 +106,17 @@ func newMarket(marketID, name, side string, t time.Time) *market.Market {
 		EventDate:     time.Now(),
 		Side:          side,
 		Exchange:      "betfair",
-		Runners: []*market.Runner{
-			&over,
-			&under,
-		},
 	}
 }
 
-func persistMarket(t *testing.T, repo *postgres.MarketRepository, m *market.Market) {
-	if err := repo.Persist(m); err != nil {
+func insertMarket(t *testing.T, repo *postgres.MarketRepository, m *market.Market) {
+	if err := repo.InsertMarket(m); err != nil {
+		t.Errorf("Error when inserting market into the database: %s", err.Error())
+	}
+}
+
+func insertRunners(t *testing.T, repo *postgres.MarketRepository, r []*market.Runner) {
+	if err := repo.InsertRunners(r); err != nil {
 		t.Errorf("Error when inserting market into the database: %s", err.Error())
 	}
 }
