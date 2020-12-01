@@ -6,12 +6,12 @@ type MockRepository struct {
 	mock.Mock
 }
 
-func (m *MockRepository) Persist(o *Market) error {
+func (m *MockRepository) InsertMarket(o *Market) error {
 	args := m.Called(o)
 	return args.Error(0)
 }
 
-func (m *MockRepository) GetByRunner(q *RunnerQuery) ([]*Market, error) {
-	args := m.Called(q)
-	return args.Get(0).([]*Market), args.Error(1)
+func (m *MockRepository) InsertRunners(r []*Runner) error {
+	args := m.Called(r)
+	return args.Error(0)
 }

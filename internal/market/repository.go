@@ -3,8 +3,8 @@ package market
 import "time"
 
 type Repository interface {
-	Persist(m *Market) error
-	GetByRunner(q *RunnerQuery) ([]*Market, error)
+	InsertMarket(market *Market) error
+	InsertRunners(runners []*Runner) error
 }
 
 type RepositoryQuery struct {

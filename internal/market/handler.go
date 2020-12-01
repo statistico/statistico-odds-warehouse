@@ -19,12 +19,17 @@ func (m *Handler) Handle(q *queue.Market) error {
 	var runners []*Runner
 
 	for _, r := range q.Runners {
+		price := Price{
+			Value:     float32(math.Round(float64(r.Prices[0].Price*100)) / 100),
+			Size:      float32(math.Round(float64(r.Prices[0].Size*100)) / 100),
+			Timestamp: time.Unix(q.Timestamp, 0),
+		}
+
 		run := Runner{
 			ID:        r.ID,
+			MarketID:  q.ID,
 			Name:      parseRunner(q.Name, r),
-			Price:     float32(math.Round(float64(r.Prices[0].Price*100)) / 100),
-			Size:      float32(math.Round(float64(r.Prices[0].Size*100)) / 100),
-			Timestamp: q.Timestamp,
+			Price:     price,
 		}
 
 		runners = append(runners, &run)
@@ -45,10 +50,17 @@ func (m *Handler) Handle(q *queue.Market) error {
 		EventDate:     date,
 		Side:          q.Side,
 		Exchange:      q.Exchange,
-		Runners:       runners,
 	}
 
-	return m.repository.Persist(&market)
+	if err := m.repository.InsertMarket(&market); err != nil {
+		return err
+	}
+
+	if err := m.repository.InsertRunners(runners); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func parseRunner(market string, runner *queue.Runner) string {
