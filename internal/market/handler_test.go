@@ -106,8 +106,8 @@ func TestHandler_Handle(t *testing.T) {
 					Name: "Over 2.5 Goals",
 					Prices: []queue.PriceSize{
 						{
-							Price: 1.95,
-							Size:  156.91,
+							Price: 1.951827161651,
+							Size:  156.91671761,
 						},
 					},
 				},
@@ -116,8 +116,8 @@ func TestHandler_Handle(t *testing.T) {
 					Name: "Under 2.5 Goals",
 					Prices: []queue.PriceSize{
 						{
-							Price: 2.05,
-							Size:  1.92,
+							Price: 2.0555411311,
+							Size:  1.92141241,
 						},
 					},
 				},
@@ -139,10 +139,10 @@ func TestHandler_Handle(t *testing.T) {
 			assert.Equal(t, uint64(472671), m.Runners[0].ID)
 			assert.Equal(t, "Over 2.5 Goals", m.Runners[0].Name)
 			assert.Equal(t, float32(1.95), m.Runners[0].Price)
-			assert.Equal(t, float32(156.91), m.Runners[0].Size)
+			assert.Equal(t, float32(156.92), m.Runners[0].Size)
 			assert.Equal(t, uint64(472672), m.Runners[1].ID)
 			assert.Equal(t, "Under 2.5 Goals", m.Runners[1].Name)
-			assert.Equal(t, float32(2.05), m.Runners[1].Price)
+			assert.Equal(t, float32(2.06), m.Runners[1].Price)
 			assert.Equal(t, float32(1.92), m.Runners[1].Size)
 			assert.Equal(t, int64(1583971200), m.Timestamp)
 			return true
@@ -182,8 +182,8 @@ func TestHandler_Handle(t *testing.T) {
 					Name: "Over 2.5 Goals",
 					Prices: []queue.PriceSize{
 						{
-							Price: 1.95,
-							Size:  156.91,
+							Price: 1.951827161651,
+							Size:  156.91671761,
 						},
 					},
 				},
@@ -192,8 +192,8 @@ func TestHandler_Handle(t *testing.T) {
 					Name: "Under 2.5 Goals",
 					Prices: []queue.PriceSize{
 						{
-							Price: 2.05,
-							Size:  1.92,
+							Price: 2.0555411311,
+							Size:  1.92141241,
 						},
 					},
 				},
@@ -240,8 +240,8 @@ func TestHandler_Handle(t *testing.T) {
 					Sort: 1,
 					Prices: []queue.PriceSize{
 						{
-							Price: 1.95,
-							Size:  156.91,
+							Price: 1.95581981,
+							Size:  156.9198171,
 						},
 					},
 				},
@@ -251,8 +251,8 @@ func TestHandler_Handle(t *testing.T) {
 					Sort: 2,
 					Prices: []queue.PriceSize{
 						{
-							Price: 2.05,
-							Size:  1.92,
+							Price: 2.05091981,
+							Size:  1.92719817,
 						},
 					},
 				},
@@ -262,8 +262,8 @@ func TestHandler_Handle(t *testing.T) {
 					Sort: 3,
 					Prices: []queue.PriceSize{
 						{
-							Price: 3.05,
-							Size:  0.98,
+							Price: 3.051111,
+							Size:  0.989819,
 						},
 					},
 				},
@@ -284,15 +284,15 @@ func TestHandler_Handle(t *testing.T) {
 			assert.Equal(t, date, m.EventDate)
 			assert.Equal(t, uint64(472671), m.Runners[0].ID)
 			assert.Equal(t, "Home", m.Runners[0].Name)
-			assert.Equal(t, float32(1.95), m.Runners[0].Price)
-			assert.Equal(t, float32(156.91), m.Runners[0].Size)
+			assert.Equal(t, float32(1.96), m.Runners[0].Price)
+			assert.Equal(t, float32(156.92), m.Runners[0].Size)
 			assert.Equal(t, uint64(472672), m.Runners[1].ID)
 			assert.Equal(t, "Away", m.Runners[1].Name)
 			assert.Equal(t, float32(2.05), m.Runners[1].Price)
-			assert.Equal(t, float32(1.92), m.Runners[1].Size)
+			assert.Equal(t, float32(1.93), m.Runners[1].Size)
 			assert.Equal(t, "Draw", m.Runners[2].Name)
 			assert.Equal(t, float32(3.05), m.Runners[2].Price)
-			assert.Equal(t, float32(0.98), m.Runners[2].Size)
+			assert.Equal(t, float32(0.99), m.Runners[2].Size)
 			assert.Equal(t, int64(1583971200), m.Timestamp)
 			return true
 		})

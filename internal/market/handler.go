@@ -2,6 +2,7 @@ package market
 
 import (
 	"github.com/statistico/statistico-odds-warehouse/internal/queue"
+	"math"
 	"time"
 )
 
@@ -21,8 +22,8 @@ func (m *Handler) Handle(q *queue.Market) error {
 		run := Runner{
 			ID:    r.ID,
 			Name:  parseRunner(q.Name, r),
-			Price: r.Prices[0].Price,
-			Size:  r.Prices[0].Size,
+			Price: float32(math.Round(float64(r.Prices[0].Price * 100))  / 100),
+			Size:  float32(math.Round(float64(r.Prices[0].Size * 100)) / 100),
 		}
 
 		runners = append(runners, &run)
