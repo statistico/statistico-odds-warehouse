@@ -15,3 +15,8 @@ func (m *MockRepository) InsertRunners(r []*Runner) error {
 	args := m.Called(r)
 	return args.Error(0)
 }
+
+func (m *MockRepository) MarketRunners(q *RunnerQuery) ([]*MarketRunner, error) {
+	args := m.Called(q)
+	return args.Get(0).([]*MarketRunner), args.Error(1)
+}

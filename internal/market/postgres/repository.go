@@ -100,20 +100,20 @@ func (r *MarketRepository) MarketRunners(q *market.RunnerQuery) ([]*market.Marke
 		var timestamp int64
 
 		err := rows.Scan(
-			mkt.ID,
-			mkt.EventID,
-			date,
-			mkt.CompetitionID,
-			mkt.SeasonID,
-			mkt.Name,
-			mkt.Exchange,
-			mkt.Side,
-			run.MarketID,
-			run.ID,
-			run.Name,
-			run.Price.Value,
-			run.Price.Size,
-			timestamp,
+			&mkt.ID,
+			&mkt.EventID,
+			&date,
+			&mkt.CompetitionID,
+			&mkt.SeasonID,
+			&mkt.Name,
+			&mkt.Exchange,
+			&mkt.Side,
+			&run.MarketID,
+			&run.ID,
+			&run.Name,
+			&run.Price.Value,
+			&run.Price.Size,
+			&timestamp,
 		)
 
 		if err != nil {
@@ -122,10 +122,12 @@ func (r *MarketRepository) MarketRunners(q *market.RunnerQuery) ([]*market.Marke
 
 		mkt.EventDate = time.Unix(date, 0)
 		run.Price.Timestamp = time.Unix(timestamp, 0)
+
 		mr := market.MarketRunner{
 			Market: mkt,
 			Runner: run,
 		}
+
 		markets = append(markets, &mr)
 	}
 

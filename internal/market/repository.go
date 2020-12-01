@@ -9,7 +9,8 @@ type Repository interface {
 }
 
 type RunnerQuery struct {
-	Name         string
+	MarketName   string
+	RunnerName   string
 	Line         string
 	GreaterThan  *float32
 	LessThan     *float32
