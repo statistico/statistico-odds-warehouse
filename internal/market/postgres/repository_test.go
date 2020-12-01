@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestMarketRepository_Insert(t *testing.T) {
+func TestMarketRepository_Persist(t *testing.T) {
 	conn, cleanUp := test.GetConnection(t, []string{"market", "market_runner"})
 	repo := postgres.NewMarketRepository(conn)
 
@@ -28,7 +28,7 @@ func TestMarketRepository_Insert(t *testing.T) {
 		}
 
 		for _, tc := range marketCounts {
-			insertOverUnderMarket(t, repo, tc.Market)
+			persistMarket(t, repo, tc.Market)
 
 			var marketCount int8
 			var runnerCount int8
@@ -57,6 +57,7 @@ func newMarket(marketID, name, side string, t time.Time) *market.Market {
 		Name:  "Over 2.5 Goals",
 		Price: 1.95,
 		Size:  1591.01,
+		Timestamp: t.Unix(),
 	}
 
 	under := market.Runner{
@@ -64,6 +65,7 @@ func newMarket(marketID, name, side string, t time.Time) *market.Market {
 		Name:  "Under 2.5 Goals",
 		Price: 2.05,
 		Size:  11.55,
+		Timestamp: t.Unix(),
 	}
 
 	return &market.Market{
@@ -79,12 +81,11 @@ func newMarket(marketID, name, side string, t time.Time) *market.Market {
 			&over,
 			&under,
 		},
-		Timestamp: t.Unix(),
 	}
 }
 
-func insertOverUnderMarket(t *testing.T, repo *postgres.MarketRepository, m *market.Market) {
-	if err := repo.InsertMarket(m); err != nil {
+func persistMarket(t *testing.T, repo *postgres.MarketRepository, m *market.Market) {
+	if err := repo.Persist(m); err != nil {
 		t.Errorf("Error when inserting market into the database: %s", err.Error())
 	}
 }
