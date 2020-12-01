@@ -34,6 +34,12 @@ services:
     <<: *console
     command: [ "./bin/migrate" ]
 
+  statistico-odds-warehouse-grpc:
+    <<: *console
+    ports:
+      - "50051:50051"
+    command: [ "./grpc", "--port 50051" ]
+
   test:
     build:
       dockerfile: ./.docker/test/Dockerfile
