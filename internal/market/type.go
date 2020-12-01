@@ -15,9 +15,9 @@ type Market struct {
 }
 
 type Runner struct {
-	ID            uint64  `json:"id"`
-	Name          string  `json:"name"`
-	Price         float32 `json:"price"`
-	Size          float32 `json:"size"`
-	Timestamp     int64     `json:"timestamp"`
+	ID        uint64  `json:"id"`
+	Name      string  `json:"name"`
+	Price     float32 `json:"price"`
+	Size      float32 `json:"size"`
+	Timestamp int64   `json:"timestamp"`
 }

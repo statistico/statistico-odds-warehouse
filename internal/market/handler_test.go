@@ -18,14 +18,14 @@ func TestHandler_Handle(t *testing.T) {
 		handler := market.NewHandler(repo)
 
 		mk := &queue.Market{
-			ID:       "1.2818721",
-			EventID:  148192,
-			CompetitionID:  8,
-			SeasonID:  17420,
-			EventDate: "2020-11-28T12:00:00+00:00",
-			Name:     "OVER_UNDER_25",
-			Side:     "BACK",
-			Exchange: "betfair",
+			ID:            "1.2818721",
+			EventID:       148192,
+			CompetitionID: 8,
+			SeasonID:      17420,
+			EventDate:     "2020-11-28T12:00:00+00:00",
+			Name:          "OVER_UNDER_25",
+			Side:          "BACK",
+			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
 					ID:   472671,
@@ -93,14 +93,14 @@ func TestHandler_Handle(t *testing.T) {
 		handler := market.NewHandler(repo)
 
 		mk := &queue.Market{
-			ID:       "1.2818721",
-			EventID:  148192,
-			CompetitionID:  8,
-			SeasonID:  17420,
-			EventDate: "2020-11-28T12:00:00+00:00",
-			Name:     "OVER_UNDER_25",
-			Side:     "BACK",
-			Exchange: "betfair",
+			ID:            "1.2818721",
+			EventID:       148192,
+			CompetitionID: 8,
+			SeasonID:      17420,
+			EventDate:     "2020-11-28T12:00:00+00:00",
+			Name:          "OVER_UNDER_25",
+			Side:          "BACK",
+			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
 					ID:   472671,
@@ -227,14 +227,14 @@ func TestHandler_Handle(t *testing.T) {
 		handler := market.NewHandler(repo)
 
 		mk := &queue.Market{
-			ID:       "1.2818721",
-			EventID:  148192,
-			CompetitionID:  8,
-			SeasonID:  17420,
-			EventDate: "2020-11-28T12:00:00+00:00",
-			Name:     "MATCH_ODDS",
-			Side:     "BACK",
-			Exchange: "betfair",
+			ID:            "1.2818721",
+			EventID:       148192,
+			CompetitionID: 8,
+			SeasonID:      17420,
+			EventDate:     "2020-11-28T12:00:00+00:00",
+			Name:          "MATCH_ODDS",
+			Side:          "BACK",
+			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
 					ID:   472671,

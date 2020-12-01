@@ -20,10 +20,10 @@ func (m *Handler) Handle(q *queue.Market) error {
 
 	for _, r := range q.Runners {
 		run := Runner{
-			ID:    r.ID,
-			Name:  parseRunner(q.Name, r),
-			Price: float32(math.Round(float64(r.Prices[0].Price * 100))  / 100),
-			Size:  float32(math.Round(float64(r.Prices[0].Size * 100)) / 100),
+			ID:        r.ID,
+			Name:      parseRunner(q.Name, r),
+			Price:     float32(math.Round(float64(r.Prices[0].Price*100)) / 100),
+			Size:      float32(math.Round(float64(r.Prices[0].Size*100)) / 100),
 			Timestamp: q.Timestamp,
 		}
 
