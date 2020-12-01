@@ -8,5 +8,5 @@ type RepositoryQuery struct {
 }
 
 type Repository interface {
-	InsertMarket(m *Market) error
+	Persist(m *Market) error
 }
