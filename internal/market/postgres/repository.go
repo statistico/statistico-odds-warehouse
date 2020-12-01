@@ -12,7 +12,7 @@ type MarketRepository struct {
 	connection *sql.DB
 }
 
-func (r *MarketRepository) InsertMarket(m *market.Market) error {
+func (r *MarketRepository) Persist(m *market.Market) error {
 	var exists bool
 
 	err := r.connection.QueryRow(`SELECT exists (SELECT id FROM market where id = $1)`, m.ID).Scan(&exists)
@@ -28,7 +28,7 @@ func (r *MarketRepository) InsertMarket(m *market.Market) error {
 	}
 
 	for _, run := range m.Runners {
-		err := r.insertRunner(run, m.ID, m.Timestamp)
+		err := r.insertRunner(run, m.ID)
 
 		if err != nil {
 			return err
@@ -97,7 +97,6 @@ func (r *MarketRepository) insertMarket(m *market.Market) error {
 			"name",
 			"exchange",
 			"side",
-			"timestamp",
 		).
 		Values(
 			m.ID,
@@ -108,21 +107,20 @@ func (r *MarketRepository) insertMarket(m *market.Market) error {
 			m.Name,
 			m.Exchange,
 			m.Side,
-			m.Timestamp,
 		).
 		Exec()
 
 	return err
 }
 
-func (r *MarketRepository) insertRunner(runner *market.Runner, marketID string, timestamp int64) error {
+func (r *MarketRepository) insertRunner(runner *market.Runner, marketID string) error {
 	builder := r.queryBuilder()
 
 	_, err := builder.
 		Insert("market_runner").
 		Columns(
 			"market_id",
-			"id",
+			"runner_id",
 			"name",
 			"price",
 			"size",
@@ -134,7 +132,7 @@ func (r *MarketRepository) insertRunner(runner *market.Runner, marketID string, 
 			runner.Name,
 			runner.Price,
 			runner.Size,
-			timestamp,
+			runner.Timestamp,
 		).
 		Exec()
 

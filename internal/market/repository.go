@@ -3,7 +3,7 @@ package market
 import "time"
 
 type Repository interface {
-	InsertMarket(m *Market) error
+	Persist(m *Market) error
 	GetByRunner(q *RunnerQuery) ([]*Market, error)
 }
 
