@@ -8,6 +8,7 @@ COPY . .
 RUN go get gotest.tools/gotestsum && go get -u github.com/pressly/goose/cmd/goose && go mod download
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/console
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/grpc
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/queue
 
 # Step 2
@@ -19,6 +20,7 @@ COPY ./database ./database
 COPY ./.docker/wait-for-it.sh .
 COPY --from=builder /go/bin/goose /usr/local/bin
 COPY --from=builder /app/console .
+COPY --from=builder /app/grpc .
 COPY --from=builder /app/queue .
 
 CMD ["/bin/sh"]
