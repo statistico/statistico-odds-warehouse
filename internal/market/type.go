@@ -25,3 +25,8 @@ type Price struct {
 	Size      float32     `json:"size"`
 	Timestamp time.Time   `json:"timestamp"`
 }
+
+type MarketRunner struct {
+	Market  `json:"market"`
+	Runner  `json:"runner"`
+}

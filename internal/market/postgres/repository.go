@@ -5,6 +5,7 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	_ "github.com/lib/pq"
 	"github.com/statistico/statistico-odds-warehouse/internal/market"
+	"time"
 )
 
 type MarketRepository struct {
@@ -81,50 +82,57 @@ func (r *MarketRepository) InsertRunners(runners []*market.Runner) error {
 	return nil
 }
 
-//func (r *MarketRepository) GetByRunner(q *market.RunnerQuery) ([]*market.Market, error) {
-//	builder := r.queryBuilder()
-//
-//	rows, err := buildMarketRunnerQuery(q, &builder).Query()
-//
-//	if err != nil {
-//		return []*market.Market{}, err
-//	}
-//
-//	var markets []*market.Market
-//
-//	for rows.Next() {
-//		var mkt market.Market
-//		var run market.Runner
-//		var date int64
-//
-//		err := rows.Scan(
-//			mkt.ID,
-//			mkt.Name,
-//			mkt.EventID,
-//			date,
-//			mkt.CompetitionID,
-//			mkt.SeasonID,
-//			mkt.Exchange,
-//			mkt.Side,
-//			mkt.Timestamp,
-//			run.ID,
-//			run.Name,
-//			run.Price,
-//			run.Size,
-//		)
-//
-//		if err != nil {
-//			return markets, err
-//		}
-//
-//		mkt.EventDate = time.Unix(date, 0)
-//		mkt.Runners = append(mkt.Runners, &run)
-//
-//		markets = append(markets, &mkt)
-//	}
-//
-//	return markets, nil
-//}
+func (r *MarketRepository) MarketRunners(q *market.RunnerQuery) ([]*market.MarketRunner, error) {
+	builder := r.queryBuilder()
+
+	rows, err := buildMarketRunnerQuery(q, &builder).Query()
+
+	if err != nil {
+		return []*market.MarketRunner{}, err
+	}
+
+	var markets []*market.MarketRunner
+
+	for rows.Next() {
+		var mkt market.Market
+		var run market.Runner
+		var date int64
+		var timestamp int64
+
+		err := rows.Scan(
+			&mkt.ID,
+			&mkt.EventID,
+			&date,
+			&mkt.CompetitionID,
+			&mkt.SeasonID,
+			&mkt.Name,
+			&mkt.Exchange,
+			&mkt.Side,
+			&run.MarketID,
+			&run.ID,
+			&run.Name,
+			&run.Price.Value,
+			&run.Price.Size,
+			&timestamp,
+		)
+
+		if err != nil {
+			return markets, err
+		}
+
+		mkt.EventDate = time.Unix(date, 0)
+		run.Price.Timestamp = time.Unix(timestamp, 0)
+
+		mr := market.MarketRunner{
+			Market: mkt,
+			Runner: run,
+		}
+
+		markets = append(markets, &mr)
+	}
+
+	return markets, nil
+}
 
 func (r *MarketRepository) queryBuilder() sq.StatementBuilderType {
 	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(r.connection)

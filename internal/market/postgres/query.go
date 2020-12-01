@@ -9,24 +9,26 @@ func buildMarketRunnerQuery(q *market.RunnerQuery, b *sq.StatementBuilderType) s
 	query := b.
 		Select(
 			"m.id",
-			"m.name",
 			"m.event_id",
 			"m.event_date",
 			"m.competition_id",
 			"m.season_id",
+			"m.name",
 			"m.exchange",
 			"m.side",
-			"m.timestamp",
-			"mr.id",
+			"mr.market_id",
+			"mr.runner_id",
 			"mr.name",
 			"mr.price",
 			"mr.size",
+			"mr.timestamp",
 		).
-		From("market m")
+		From("market m").
+		Where(sq.Eq{"m.name": q.MarketName})
 
 	join := sq.Select("DISTINCT on (market_id) *").
 		From("market_runner mr").
-		Where(sq.Eq{"mr.name": q.Name})
+		Where(sq.Eq{"mr.name": q.RunnerName})
 
 	if q.GreaterThan != nil {
 		join = join.Where(sq.Gt{"price": *q.GreaterThan})
@@ -37,11 +39,11 @@ func buildMarketRunnerQuery(q *market.RunnerQuery, b *sq.StatementBuilderType) s
 	}
 
 	if q.Line == "CLOSING" {
-		join = join.OrderBy("mr.timestamp DESC")
+		join = join.OrderBy("mr.market_id", "mr.timestamp DESC")
 	}
 
 	if q.Line == "MAX" {
-		join = join.OrderBy("market_id", "mr.price DESC")
+		join = join.OrderBy("mr.market_id", "mr.price DESC")
 	}
 
 	query = query.JoinClause(join.Prefix("JOIN (").Suffix(") as mr ON m.id = mr.market_id"))
@@ -52,6 +54,14 @@ func buildMarketRunnerQuery(q *market.RunnerQuery, b *sq.StatementBuilderType) s
 
 	if q.DateTo != nil {
 		query = query.Where(sq.Lt{"m.event_date": q.DateTo.Unix()})
+	}
+
+	if len(q.CompetitionIDs) > 0 {
+		query = query.Where(sq.Eq{"m.competition_id": q.CompetitionIDs})
+	}
+
+	if len(q.SeasonIDs) > 0 {
+		query = query.Where(sq.Eq{"m.season_id": q.SeasonIDs})
 	}
 
 	return query
