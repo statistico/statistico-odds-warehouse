@@ -54,5 +54,13 @@ func buildMarketRunnerQuery(q *market.RunnerQuery, b *sq.StatementBuilderType) s
 		query = query.Where(sq.Lt{"m.event_date": q.DateTo.Unix()})
 	}
 
+	if len(q.CompetitionIDs) > 0 {
+		query = query.Where(sq.Eq{"m.competition_id": q.CompetitionIDs})
+	}
+
+	if len(q.SeasonIDs) > 0 {
+		query = query.Where(sq.Eq{"m.season_id": q.SeasonIDs})
+	}
+
 	return query
 }

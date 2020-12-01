@@ -23,6 +23,8 @@ func Test_buildMarketRunnerQuery(t *testing.T) {
 			Line:        "MAX",
 			GreaterThan: &gt,
 			LessThan:    &lt,
+			CompetitionIDs: []uint64{123, 456},
+			SeasonIDs: []uint64{999, 000},
 			DateFrom:    &from,
 			DateTo:      &to,
 		}
@@ -56,7 +58,9 @@ func Test_buildMarketRunnerQuery(t *testing.T) {
 			"ORDER BY " +
 			"market_id, mr.price DESC ) as mr ON " +
 			"m.id = mr.market_id " +
-			"WHERE m.event_date > $4 AND m.event_date < $5"
+			"WHERE m.event_date > $4 AND m.event_date < $5 " +
+			"AND m.competition_id IN ($6,$7) " +
+			"AND m.season_id IN ($8,$9)"
 
 		sql, _, _ := query.ToSql()
 

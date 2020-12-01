@@ -16,10 +16,12 @@ type RepositoryQuery struct {
 }
 
 type RunnerQuery struct {
-	Name    string
-	Line  string
-	GreaterThan *float32
-	LessThan    *float32
+	Name         string
+	Line         string
+	GreaterThan  *float32
+	LessThan     *float32
+	CompetitionIDs []uint64
+	SeasonIDs    []uint64
 	DateFrom     *time.Time
 	DateTo       *time.Time
 }
