@@ -1,7 +1,7 @@
 package mock
 
 import (
-	"github.com/statistico/statistico-odds-warehouse/internal/grpc/proto"
+	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 )
@@ -11,7 +11,7 @@ type MarketSelectionServer struct {
 	grpc.ServerStream
 }
 
-func (m *MarketSelectionServer) Send(mk *proto.MarketSelection) error {
+func (m *MarketSelectionServer) Send(mk *statisticoproto.MarketRunner) error {
 	args := m.Called(mk)
 	return args.Error(0)
 }

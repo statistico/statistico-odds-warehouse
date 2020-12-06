@@ -2,32 +2,32 @@ package grpc
 
 import (
 	"github.com/golang/protobuf/ptypes/wrappers"
-	"github.com/statistico/statistico-odds-warehouse/internal/grpc/proto"
+	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
 )
 
 func Test_convertMarketSelectionRequest(t *testing.T) {
-	t.Run("converts MarketSelectionRequest in RunnerQuery", func(t *testing.T) {
+	t.Run("converts MarketRunnerRequest in RunnerQuery", func(t *testing.T) {
 		t.Helper()
 
-		f := proto.RunnerFilter{
+		f := statisticoproto.RunnerFilter{
 			Name:      "Home",
-			Line:      proto.RunnerFilter_MAX,
-			Operators: []*proto.FilterOperator{
+			Line:      statisticoproto.RunnerFilter_MAX,
+			Operators: []*statisticoproto.FilterOperator{
 				{
-					Operator: proto.FilterOperator_GTE,
+					Operator: statisticoproto.FilterOperator_GTE,
 					Value: 1.95,
 				},
 				{
-					Operator: proto.FilterOperator_LTE,
+					Operator: statisticoproto.FilterOperator_LTE,
 					Value: 3.55,
 				},
 			},
 		}
 
-		r := proto.MarketSelectionRequest{
+		r := statisticoproto.MarketRunnerRequest{
 			Name:           "MATCH_ODDS",
 			RunnerFilter:   &f,
 			CompetitionIds: []uint64{1, 2, 3},
@@ -55,15 +55,15 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 		a.Equal(float32(3.55), *query.LessThan)
 	})
 
-	t.Run("converts MarketSelectionRequest in RunnerQuery handling nullable fields", func(t *testing.T) {
+	t.Run("converts MarketRunnerRequest in RunnerQuery handling nullable fields", func(t *testing.T) {
 		t.Helper()
 
-		f := proto.RunnerFilter{
+		f := statisticoproto.RunnerFilter{
 			Name:      "Home",
-			Line:      proto.RunnerFilter_CLOSING,
+			Line:      statisticoproto.RunnerFilter_CLOSING,
 		}
 
-		r := proto.MarketSelectionRequest{
+		r := statisticoproto.MarketRunnerRequest{
 			Name:           "MATCH_ODDS",
 			RunnerFilter:   &f,
 		}

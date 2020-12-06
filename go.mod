@@ -12,12 +12,13 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/lib/pq v1.8.0
 	github.com/sirupsen/logrus v1.7.0
+	github.com/statistico/statistico-proto/statistico-odds-warehouse/go v0.0.0-20201206192523-9e9a9f4893da
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.6.1
-	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
-	golang.org/x/sys v0.0.0-20201130072748-111129e158e2 // indirect
+	golang.org/x/net v0.0.0-20201202161906-c7110b5ffcbb // indirect
+	golang.org/x/sys v0.0.0-20201204225414-ed752295db88 // indirect
 	golang.org/x/text v0.3.4 // indirect
-	google.golang.org/genproto v0.0.0-20201119123407-9b1e624d6bc4 // indirect
-	google.golang.org/grpc v1.33.2
+	google.golang.org/genproto v0.0.0-20201204160425-06b3db808446 // indirect
+	google.golang.org/grpc v1.34.0
 	google.golang.org/protobuf v1.25.0
 )
