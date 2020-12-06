@@ -1,32 +1,22 @@
 package grpc
 
 import (
-	"github.com/statistico/statistico-odds-warehouse/internal/grpc/proto"
 	"github.com/statistico/statistico-odds-warehouse/internal/market"
+	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
 	"time"
 )
 
-func createMarketSelection(m *market.MarketRunner) *proto.MarketSelection {
-	mk := proto.Market{
-		MarketId:      m.Market.ID,
-		MarketName:    m.Market.Name,
-		EventId:       m.EventID,
-		CompetitionId: m.CompetitionID,
-		SeasonId:      m.SeasonID,
-		EventDate:     m.EventDate.Format(time.RFC3339),
-		Side:          m.Side,
-		Exchange:      m.Exchange,
-	}
-
-	rn := proto.Runner{
-		Id:    m.Runner.ID,
-		Name:  m.Runner.Name,
-		Price: m.Price.Value,
-		Size:  m.Price.Size,
-	}
-
-	return &proto.MarketSelection{
-		Market: &mk,
-		Runner: &rn,
+func createMarketSelection(m *market.MarketRunner) *statisticoproto.MarketRunner {
+	return &statisticoproto.MarketRunner{
+		MarketId:             m.MarketID,
+		MarketName:           m.Market.Name,
+		RunnerName:           m.Runner.Name,
+		RunnerPrice:          m.Price.Value,
+		EventId:              m.EventID,
+		CompetitionId:        m.CompetitionID,
+		SeasonId:             m.SeasonID,
+		EventDate:            m.EventDate.Format(time.RFC3339),
+		Side:                 m.Side,
+		Exchange:             m.Exchange,
 	}
 }

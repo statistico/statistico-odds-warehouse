@@ -6,9 +6,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/statistico/statistico-odds-warehouse/internal/grpc"
-	"github.com/statistico/statistico-odds-warehouse/internal/grpc/proto"
 	"github.com/statistico/statistico-odds-warehouse/internal/market"
 	"github.com/statistico/statistico-odds-warehouse/internal/mock"
+	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
 	"github.com/stretchr/testify/assert"
 	mock2 "github.com/stretchr/testify/mock"
 	"testing"
@@ -26,22 +26,22 @@ func TestMarketService_MarketSelectionSearch(t *testing.T) {
 
 		server := new(mock.MarketSelectionServer)
 
-		f := proto.RunnerFilter{
+		f := statisticoproto.RunnerFilter{
 			Name:      "Home",
-			Line:      proto.RunnerFilter_MAX,
-			Operators: []*proto.FilterOperator{
+			Line:      statisticoproto.RunnerFilter_MAX,
+			Operators: []*statisticoproto.FilterOperator{
 				{
-					Operator: proto.FilterOperator_GTE,
+					Operator: statisticoproto.FilterOperator_GTE,
 					Value: 1.95,
 				},
 				{
-					Operator: proto.FilterOperator_LTE,
+					Operator: statisticoproto.FilterOperator_LTE,
 					Value: 3.55,
 				},
 			},
 		}
 
-		req := proto.MarketSelectionRequest{
+		req := statisticoproto.MarketRunnerRequest{
 			Name:           "MATCH_ODDS",
 			RunnerFilter:   &f,
 			CompetitionIds: []uint64{1, 2, 3},
@@ -72,11 +72,11 @@ func TestMarketService_MarketSelectionSearch(t *testing.T) {
 
 		repo.On("MarketRunners", q).Return(mRunners, nil)
 
-		server.On("Send", mock2.AnythingOfType("*proto.MarketSelection")).
+		server.On("Send", mock2.AnythingOfType("*statisticoproto.MarketRunner")).
 			Times(2).
 			Return(nil)
 
-		err := service.MarketSelectionSearch(&req, server)
+		err := service.MarketRunnerSearch(&req, server)
 
 		if err != nil {
 			t.Fatalf("Expected nil, got %s", err.Error())
@@ -97,22 +97,22 @@ func TestMarketService_MarketSelectionSearch(t *testing.T) {
 
 		server := new(mock.MarketSelectionServer)
 
-		f := proto.RunnerFilter{
+		f := statisticoproto.RunnerFilter{
 			Name:      "Home",
-			Line:      proto.RunnerFilter_MAX,
-			Operators: []*proto.FilterOperator{
+			Line:      statisticoproto.RunnerFilter_MAX,
+			Operators: []*statisticoproto.FilterOperator{
 				{
-					Operator: proto.FilterOperator_GTE,
+					Operator: statisticoproto.FilterOperator_GTE,
 					Value: 1.95,
 				},
 				{
-					Operator: proto.FilterOperator_LTE,
+					Operator: statisticoproto.FilterOperator_LTE,
 					Value: 3.55,
 				},
 			},
 		}
 
-		req := proto.MarketSelectionRequest{
+		req := statisticoproto.MarketRunnerRequest{
 			Name:           "MATCH_ODDS",
 			RunnerFilter:   &f,
 			CompetitionIds: []uint64{1, 2, 3},
@@ -138,9 +138,9 @@ func TestMarketService_MarketSelectionSearch(t *testing.T) {
 
 		repo.On("MarketRunners", q).Return([]*market.MarketRunner{}, errors.New("oh no"))
 
-		server.AssertNotCalled(t, "Send", mock2.AnythingOfType("*proto.MarketSelection"))
+		server.AssertNotCalled(t, "Send", mock2.AnythingOfType("*statisticoproto.MarketRunner"))
 
-		err := service.MarketSelectionSearch(&req, server)
+		err := service.MarketRunnerSearch(&req, server)
 
 		if err == nil {
 			t.Fatal("Expected error, got nil")
@@ -153,7 +153,7 @@ func TestMarketService_MarketSelectionSearch(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 
-	t.Run("logs error if error streaming MarketSelection", func(t *testing.T) {
+	t.Run("logs error if error streaming MarketRunner", func(t *testing.T) {
 		t.Helper()
 
 		repo := new(market.MockRepository)
@@ -163,22 +163,22 @@ func TestMarketService_MarketSelectionSearch(t *testing.T) {
 
 		server := new(mock.MarketSelectionServer)
 
-		f := proto.RunnerFilter{
+		f := statisticoproto.RunnerFilter{
 			Name:      "Home",
-			Line:      proto.RunnerFilter_MAX,
-			Operators: []*proto.FilterOperator{
+			Line:      statisticoproto.RunnerFilter_MAX,
+			Operators: []*statisticoproto.FilterOperator{
 				{
-					Operator: proto.FilterOperator_GTE,
+					Operator: statisticoproto.FilterOperator_GTE,
 					Value: 1.95,
 				},
 				{
-					Operator: proto.FilterOperator_LTE,
+					Operator: statisticoproto.FilterOperator_LTE,
 					Value: 3.55,
 				},
 			},
 		}
 
-		req := proto.MarketSelectionRequest{
+		req := statisticoproto.MarketRunnerRequest{
 			Name:           "MATCH_ODDS",
 			RunnerFilter:   &f,
 			CompetitionIds: []uint64{1, 2, 3},
@@ -209,11 +209,11 @@ func TestMarketService_MarketSelectionSearch(t *testing.T) {
 
 		repo.On("MarketRunners", q).Return(mRunners, nil)
 
-		server.On("Send", mock2.AnythingOfType("*proto.MarketSelection")).
+		server.On("Send", mock2.AnythingOfType("*statisticoproto.MarketRunner")).
 			Times(2).
 			Return(errors.New("oh no"))
 
-		err := service.MarketSelectionSearch(&req, server)
+		err := service.MarketRunnerSearch(&req, server)
 
 		if err != nil {
 			t.Fatalf("Expected nil, got %s", err.Error())
