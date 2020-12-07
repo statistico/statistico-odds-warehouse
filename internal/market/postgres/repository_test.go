@@ -119,8 +119,8 @@ func TestMarketRepository_MarketRunners(t *testing.T) {
 		}
 
 		assert.Equal(t, 1, len(fetched))
-		assert.Equal(t, "1.567", fetched[0].Market.ID)
-		assert.Equal(t, "BOTH_TEAMS_TO_SCORE", fetched[0].Market.Name)
+		assert.Equal(t, "1.567", fetched[0].MarketID)
+		assert.Equal(t, "BOTH_TEAMS_TO_SCORE", fetched[0].MarketName)
 		assert.Equal(t, uint64(1827711), fetched[0].EventID)
 		assert.Equal(t, uint64(8), fetched[0].CompetitionID)
 		assert.Equal(t, uint64(17420), fetched[0].SeasonID)
@@ -128,11 +128,11 @@ func TestMarketRepository_MarketRunners(t *testing.T) {
 		assert.Equal(t, "BACK", fetched[0].Side)
 		assert.Equal(t, "betfair", fetched[0].Exchange)
 		assert.Equal(t, "1.567", fetched[0].MarketID)
-		assert.Equal(t, uint64(423722), fetched[0].Runner.ID)
-		assert.Equal(t, "No", fetched[0].Runner.Name)
-		assert.Equal(t, float32(3.05), fetched[0].Runner.Price.Value)
-		assert.Equal(t, float32(11.55), fetched[0].Runner.Price.Size)
-		assert.Equal(t, int64(1605139200), fetched[0].Runner.Price.Timestamp.Unix())
+		assert.Equal(t, uint64(423722), fetched[0].RunnerID)
+		assert.Equal(t, "No", fetched[0].RunnerName)
+		assert.Equal(t, float32(3.05), fetched[0].Prices[0].Value)
+		assert.Equal(t, float32(11.55), fetched[0].Prices[0].Size)
+		assert.Equal(t, int64(1605139200), fetched[0].Prices[0].Timestamp.Unix())
 	})
 
 	t.Run("returns MarketRunner struct filtered by event date", func(t *testing.T) {
@@ -156,8 +156,8 @@ func TestMarketRepository_MarketRunners(t *testing.T) {
 		}
 
 		assert.Equal(t, 1, len(fetched))
-		assert.Equal(t, "1.234", fetched[0].Market.ID)
-		assert.Equal(t, "OVER_UNDER_25", fetched[0].Market.Name)
+		assert.Equal(t, "1.234", fetched[0].MarketID)
+		assert.Equal(t, "OVER_UNDER_25", fetched[0].MarketName)
 		assert.Equal(t, uint64(1827711), fetched[0].EventID)
 		assert.Equal(t, uint64(8), fetched[0].CompetitionID)
 		assert.Equal(t, uint64(17420), fetched[0].SeasonID)
@@ -165,11 +165,11 @@ func TestMarketRepository_MarketRunners(t *testing.T) {
 		assert.Equal(t, "BACK", fetched[0].Side)
 		assert.Equal(t, "betfair", fetched[0].Exchange)
 		assert.Equal(t, "1.234", fetched[0].MarketID)
-		assert.Equal(t, uint64(423721), fetched[0].Runner.ID)
-		assert.Equal(t, "Over 2.5 Goals", fetched[0].Runner.Name)
-		assert.Equal(t, float32(1.95), fetched[0].Runner.Price.Value)
-		assert.Equal(t, float32(1591.01), fetched[0].Runner.Price.Size)
-		assert.Equal(t, int64(1606824710), fetched[0].Runner.Price.Timestamp.Unix())
+		assert.Equal(t, uint64(423721), fetched[0].RunnerID)
+		assert.Equal(t, "Over 2.5 Goals", fetched[0].RunnerName)
+		assert.Equal(t, float32(1.95), fetched[0].Prices[0].Value)
+		assert.Equal(t, float32(1591.01), fetched[0].Prices[0].Size)
+		assert.Equal(t, int64(1606824710), fetched[0].Prices[0].Timestamp.Unix())
 	})
 
 	t.Run("returns MarketRunner struct filtered price", func(t *testing.T) {
@@ -191,8 +191,8 @@ func TestMarketRepository_MarketRunners(t *testing.T) {
 		}
 
 		assert.Equal(t, 1, len(fetched))
-		assert.Equal(t, "1.567", fetched[0].Market.ID)
-		assert.Equal(t, "BOTH_TEAMS_TO_SCORE", fetched[0].Market.Name)
+		assert.Equal(t, "1.567", fetched[0].MarketID)
+		assert.Equal(t, "BOTH_TEAMS_TO_SCORE", fetched[0].MarketName)
 		assert.Equal(t, uint64(1827711), fetched[0].EventID)
 		assert.Equal(t, uint64(8), fetched[0].CompetitionID)
 		assert.Equal(t, uint64(17420), fetched[0].SeasonID)
@@ -200,11 +200,11 @@ func TestMarketRepository_MarketRunners(t *testing.T) {
 		assert.Equal(t, "BACK", fetched[0].Side)
 		assert.Equal(t, "betfair", fetched[0].Exchange)
 		assert.Equal(t, "1.567", fetched[0].MarketID)
-		assert.Equal(t, uint64(423721), fetched[0].Runner.ID)
-		assert.Equal(t, "Yes", fetched[0].Runner.Name)
-		assert.Equal(t, float32(1.95), fetched[0].Runner.Price.Value)
-		assert.Equal(t, float32(1591.45), fetched[0].Runner.Price.Size)
-		assert.Equal(t, int64(1606839427), fetched[0].Runner.Price.Timestamp.Unix())
+		assert.Equal(t, uint64(423721), fetched[0].RunnerID)
+		assert.Equal(t, "Yes", fetched[0].RunnerName)
+		assert.Equal(t, float32(1.95), fetched[0].Prices[0].Value)
+		assert.Equal(t, float32(1591.45), fetched[0].Prices[0].Size)
+		assert.Equal(t, int64(1606839427), fetched[0].Prices[0].Timestamp.Unix())
 	})
 }
 

@@ -12,7 +12,7 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/lib/pq v1.8.0
 	github.com/sirupsen/logrus v1.7.0
-	github.com/statistico/statistico-proto/statistico-odds-warehouse/go v0.0.0-20201206192523-9e9a9f4893da
+	github.com/statistico/statistico-proto/statistico-odds-warehouse/go v0.0.0-20201207083348-76abecea2f5f
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.6.1
 	golang.org/x/net v0.0.0-20201202161906-c7110b5ffcbb // indirect
