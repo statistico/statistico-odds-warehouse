@@ -1,8 +1,8 @@
 package bootstrap
 
 import (
-	"github.com/statistico/statistico-odds-warehouse/internal/market"
-	"github.com/statistico/statistico-odds-warehouse/internal/market/postgres"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/market/postgres"
 )
 
 func (c Container) MarketRepository() *postgres.MarketRepository {

@@ -2,7 +2,7 @@ package postgres
 
 import (
 	sq "github.com/Masterminds/squirrel"
-	"github.com/statistico/statistico-odds-warehouse/internal/market"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
 )
 
 func buildMarketRunnerQuery(q *market.RunnerQuery, b *sq.StatementBuilderType) sq.SelectBuilder {

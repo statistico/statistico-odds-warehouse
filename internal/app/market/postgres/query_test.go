@@ -2,7 +2,7 @@ package postgres
 
 import (
 	"github.com/Masterminds/squirrel"
-	"github.com/statistico/statistico-odds-warehouse/internal/market"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -19,15 +19,15 @@ func Test_buildMarketRunnerQuery(t *testing.T) {
 		to := time.Unix(1606729541, 0)
 
 		q := market.RunnerQuery{
-			MarketName: "OVER_UNDER_25",
-			RunnerName:        "Over 2.5 Goals",
-			Line:        "MAX",
-			GreaterThan: &gt,
-			LessThan:    &lt,
+			MarketName:     "OVER_UNDER_25",
+			RunnerName:     "Over 2.5 Goals",
+			Line:           "MAX",
+			GreaterThan:    &gt,
+			LessThan:       &lt,
 			CompetitionIDs: []uint64{123, 456},
-			SeasonIDs: []uint64{999, 000},
-			DateFrom:    &from,
-			DateTo:      &to,
+			SeasonIDs:      []uint64{999, 000},
+			DateFrom:       &from,
+			DateTo:         &to,
 		}
 
 		b := squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar)

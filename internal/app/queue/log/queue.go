@@ -2,7 +2,7 @@ package log
 
 import (
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/statistico-odds-warehouse/internal/queue"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/queue"
 	"time"
 )
 

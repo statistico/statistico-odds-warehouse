@@ -5,9 +5,9 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"
-	"github.com/statistico/statistico-odds-warehouse/internal/queue"
-	qa "github.com/statistico/statistico-odds-warehouse/internal/queue/aws"
-	"github.com/statistico/statistico-odds-warehouse/internal/queue/log"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/queue"
+	qa "github.com/statistico/statistico-odds-warehouse/internal/app/queue/aws"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/queue/log"
 )
 
 func (c Container) Queue() queue.Queue {

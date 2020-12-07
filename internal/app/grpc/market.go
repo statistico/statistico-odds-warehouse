@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/statistico-odds-warehouse/internal/market"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
 	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -10,7 +10,7 @@ import (
 
 type MarketService struct {
 	repository market.Repository
-	logger *logrus.Logger
+	logger     *logrus.Logger
 }
 
 func (m *MarketService) MarketRunnerSearch(r *statisticoproto.MarketRunnerRequest, stream statisticoproto.MarketService_MarketRunnerSearchServer) error {

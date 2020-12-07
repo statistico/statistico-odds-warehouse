@@ -14,21 +14,21 @@ type Market struct {
 }
 
 type Runner struct {
-	ID        uint64     `json:"id"`
-	MarketID  string     `json:"marketId"`
-	Name      string     `json:"name"`
-	Price     Price      `json:"price"`
+	ID       uint64 `json:"id"`
+	MarketID string `json:"marketId"`
+	Name     string `json:"name"`
+	Price    Price  `json:"price"`
 }
 
 type Price struct {
-	Value     float32     `json:"price"`
-	Size      float32     `json:"size"`
-	Timestamp time.Time   `json:"timestamp"`
+	Value     float32   `json:"price"`
+	Size      float32   `json:"size"`
+	Timestamp time.Time `json:"timestamp"`
 }
 
 type MarketRunner struct {
-	MarketID            string    `json:"marketId"`
-	MarketName          string    `json:"marketName"`
+	MarketID      string    `json:"marketId"`
+	MarketName    string    `json:"marketName"`
 	RunnerID      uint64    `json:"runnerId"`
 	RunnerName    string    `json:"runnerName"`
 	EventID       uint64    `json:"eventId"`
