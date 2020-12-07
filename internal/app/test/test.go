@@ -3,7 +3,7 @@ package test
 import (
 	"database/sql"
 	"fmt"
-	"github.com/statistico/statistico-odds-warehouse/internal/bootstrap"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/bootstrap"
 	"testing"
 )
 

@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	"github.com/statistico/statistico-odds-warehouse/internal/market"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
 	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

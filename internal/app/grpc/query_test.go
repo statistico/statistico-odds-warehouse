@@ -13,16 +13,16 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 		t.Helper()
 
 		f := statisticoproto.RunnerFilter{
-			Name:      "Home",
-			Line:      statisticoproto.RunnerFilter_MAX,
+			Name: "Home",
+			Line: statisticoproto.RunnerFilter_MAX,
 			Operators: []*statisticoproto.FilterOperator{
 				{
 					Operator: statisticoproto.FilterOperator_GTE,
-					Value: 1.95,
+					Value:    1.95,
 				},
 				{
 					Operator: statisticoproto.FilterOperator_LTE,
-					Value: 3.55,
+					Value:    3.55,
 				},
 			},
 		}
@@ -59,13 +59,13 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 		t.Helper()
 
 		f := statisticoproto.RunnerFilter{
-			Name:      "Home",
-			Line:      statisticoproto.RunnerFilter_CLOSING,
+			Name: "Home",
+			Line: statisticoproto.RunnerFilter_CLOSING,
 		}
 
 		r := statisticoproto.MarketRunnerRequest{
-			Name:           "MATCH_ODDS",
-			RunnerFilter:   &f,
+			Name:         "MATCH_ODDS",
+			RunnerFilter: &f,
 		}
 
 		query, err := convertMarketSelectionRequest(&r)

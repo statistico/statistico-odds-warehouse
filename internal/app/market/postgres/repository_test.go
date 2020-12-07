@@ -1,9 +1,9 @@
 package postgres_test
 
 import (
-	"github.com/statistico/statistico-odds-warehouse/internal/market"
-	"github.com/statistico/statistico-odds-warehouse/internal/market/postgres"
-	"github.com/statistico/statistico-odds-warehouse/internal/test"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/market/postgres"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/test"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -21,7 +21,7 @@ func TestMarketRepository_InsertMarket(t *testing.T) {
 			Market      *market.Market
 			MarketCount int8
 		}{
-			{newMarket("1.2729821", "OVER_UNDER_25", "BACK" ,time.Unix(1584014400, 0)), 1},
+			{newMarket("1.2729821", "OVER_UNDER_25", "BACK", time.Unix(1584014400, 0)), 1},
 			{newMarket("1.2729822", "OVER_UNDER_25", "BACK", time.Unix(1584014400, 0)), 2},
 			{newMarket("1.2729823", "OVER_UNDER_25", "BACK", time.Unix(1584014400, 0)), 3},
 		}
@@ -52,20 +52,20 @@ func TestMarketRepository_InsertRunners(t *testing.T) {
 
 		runners := []*market.Runner{
 			{
-				ID:    423721,
-				Name:  "Over 2.5 Goals",
+				ID:   423721,
+				Name: "Over 2.5 Goals",
 				Price: market.Price{
 					Value:     1.95,
-					Size:  1591.01,
+					Size:      1591.01,
 					Timestamp: time.Unix(1606824710, 0),
 				},
 			},
 			{
-				ID:    423721,
-				Name:  "Under 2.5 Goals",
+				ID:   423721,
+				Name: "Under 2.5 Goals",
 				Price: market.Price{
 					Value:     2.05,
-					Size:  11.55,
+					Size:      11.55,
 					Timestamp: time.Unix(1606824710, 0),
 				},
 			},
@@ -108,8 +108,8 @@ func TestMarketRepository_MarketRunners(t *testing.T) {
 
 		q := market.RunnerQuery{
 			MarketName: "BOTH_TEAMS_TO_SCORE",
-			RunnerName:  "No",
-			Line: "MAX",
+			RunnerName: "No",
+			Line:       "MAX",
 		}
 
 		fetched, err := repo.MarketRunners(&q)
@@ -145,8 +145,8 @@ func TestMarketRepository_MarketRunners(t *testing.T) {
 
 		q := market.RunnerQuery{
 			MarketName: "OVER_UNDER_25",
-			RunnerName:  "Over 2.5 Goals",
-			DateFrom: &from,
+			RunnerName: "Over 2.5 Goals",
+			DateFrom:   &from,
 		}
 
 		fetched, err := repo.MarketRunners(&q)
@@ -180,8 +180,8 @@ func TestMarketRepository_MarketRunners(t *testing.T) {
 
 		q := market.RunnerQuery{
 			MarketName: "BOTH_TEAMS_TO_SCORE",
-			RunnerName:  "Yes",
-			Line: "CLOSING",
+			RunnerName: "Yes",
+			Line:       "CLOSING",
 		}
 
 		fetched, err := repo.MarketRunners(&q)
@@ -240,21 +240,21 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo *postgres.MarketRepositor
 	run1 := []*market.Runner{
 		{
 			MarketID: mk1.ID,
-			ID:    423721,
-			Name:  "Over 2.5 Goals",
+			ID:       423721,
+			Name:     "Over 2.5 Goals",
 			Price: market.Price{
 				Value:     1.95,
-				Size:  1591.01,
+				Size:      1591.01,
 				Timestamp: time.Unix(1606824710, 0),
 			},
 		},
 		{
 			MarketID: mk1.ID,
-			ID:    423721,
-			Name:  "Under 2.5 Goals",
+			ID:       423721,
+			Name:     "Under 2.5 Goals",
 			Price: market.Price{
 				Value:     2.05,
-				Size:  11.55,
+				Size:      11.55,
 				Timestamp: time.Unix(1606824710, 0),
 			},
 		},
@@ -269,21 +269,21 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo *postgres.MarketRepositor
 	run2 := []*market.Runner{
 		{
 			MarketID: mk2.ID,
-			ID:    423721,
-			Name:  "Yes",
+			ID:       423721,
+			Name:     "Yes",
 			Price: market.Price{
 				Value:     1.95,
-				Size:  1591.45,
+				Size:      1591.45,
 				Timestamp: time.Unix(1606839427, 0),
 			},
 		},
 		{
 			MarketID: mk2.ID,
-			ID:    423721,
-			Name:  "No",
+			ID:       423721,
+			Name:     "No",
 			Price: market.Price{
 				Value:     2.05,
-				Size:  11.55,
+				Size:      11.55,
 				Timestamp: time.Unix(1606824710, 0),
 			},
 		},
@@ -298,21 +298,21 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo *postgres.MarketRepositor
 	run3 := []*market.Runner{
 		{
 			MarketID: mk3.ID,
-			ID:    423721,
-			Name:  "Yes",
+			ID:       423721,
+			Name:     "Yes",
 			Price: market.Price{
 				Value:     1.95,
-				Size:  1591.01,
+				Size:      1591.01,
 				Timestamp: time.Unix(1606824710, 0),
 			},
 		},
 		{
 			MarketID: mk3.ID,
-			ID:    423722,
-			Name:  "No",
+			ID:       423722,
+			Name:     "No",
 			Price: market.Price{
 				Value:     3.05,
-				Size:  11.55,
+				Size:      11.55,
 				Timestamp: time.Unix(1605139200, 0),
 			},
 		},

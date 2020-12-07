@@ -9,13 +9,13 @@ type Repository interface {
 }
 
 type RunnerQuery struct {
-	MarketName   string
-	RunnerName   string
-	Line         string
-	GreaterThan  *float32
-	LessThan     *float32
+	MarketName     string
+	RunnerName     string
+	Line           string
+	GreaterThan    *float32
+	LessThan       *float32
 	CompetitionIDs []uint64
-	SeasonIDs    []uint64
-	DateFrom     *time.Time
-	DateTo       *time.Time
+	SeasonIDs      []uint64
+	DateFrom       *time.Time
+	DateTo         *time.Time
 }

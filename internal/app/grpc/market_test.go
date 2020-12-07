@@ -5,9 +5,9 @@ import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
-	"github.com/statistico/statistico-odds-warehouse/internal/grpc"
-	"github.com/statistico/statistico-odds-warehouse/internal/market"
-	"github.com/statistico/statistico-odds-warehouse/internal/mock"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/grpc"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/mock"
 	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
 	"github.com/stretchr/testify/assert"
 	mock2 "github.com/stretchr/testify/mock"
@@ -27,16 +27,16 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 		server := new(mock.MarketSelectionServer)
 
 		f := statisticoproto.RunnerFilter{
-			Name:      "Home",
-			Line:      statisticoproto.RunnerFilter_MAX,
+			Name: "Home",
+			Line: statisticoproto.RunnerFilter_MAX,
 			Operators: []*statisticoproto.FilterOperator{
 				{
 					Operator: statisticoproto.FilterOperator_GTE,
-					Value: 1.95,
+					Value:    1.95,
 				},
 				{
 					Operator: statisticoproto.FilterOperator_LTE,
-					Value: 3.55,
+					Value:    3.55,
 				},
 			},
 		}
@@ -98,16 +98,16 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 		server := new(mock.MarketSelectionServer)
 
 		f := statisticoproto.RunnerFilter{
-			Name:      "Home",
-			Line:      statisticoproto.RunnerFilter_MAX,
+			Name: "Home",
+			Line: statisticoproto.RunnerFilter_MAX,
 			Operators: []*statisticoproto.FilterOperator{
 				{
 					Operator: statisticoproto.FilterOperator_GTE,
-					Value: 1.95,
+					Value:    1.95,
 				},
 				{
 					Operator: statisticoproto.FilterOperator_LTE,
-					Value: 3.55,
+					Value:    3.55,
 				},
 			},
 		}
@@ -164,16 +164,16 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 		server := new(mock.MarketSelectionServer)
 
 		f := statisticoproto.RunnerFilter{
-			Name:      "Home",
-			Line:      statisticoproto.RunnerFilter_MAX,
+			Name: "Home",
+			Line: statisticoproto.RunnerFilter_MAX,
 			Operators: []*statisticoproto.FilterOperator{
 				{
 					Operator: statisticoproto.FilterOperator_GTE,
-					Value: 1.95,
+					Value:    1.95,
 				},
 				{
 					Operator: statisticoproto.FilterOperator_LTE,
-					Value: 3.55,
+					Value:    3.55,
 				},
 			},
 		}
@@ -237,16 +237,16 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 		server := new(mock.MarketSelectionServer)
 
 		f := statisticoproto.RunnerFilter{
-			Name:      "Home",
-			Line:      statisticoproto.RunnerFilter_MAX,
+			Name: "Home",
+			Line: statisticoproto.RunnerFilter_MAX,
 			Operators: []*statisticoproto.FilterOperator{
 				{
 					Operator: statisticoproto.FilterOperator_GTE,
-					Value: 1.95,
+					Value:    1.95,
 				},
 				{
 					Operator: statisticoproto.FilterOperator_LTE,
-					Value: 3.55,
+					Value:    3.55,
 				},
 			},
 		}
@@ -317,10 +317,10 @@ func newMarketRunner() *market.MarketRunner {
 		EventID:       12981,
 		CompetitionID: 8,
 		SeasonID:      17420,
-		Prices:        []*market.Price{
+		Prices: []*market.Price{
 			{
-				Value: 1.95,
-				Size: 1298171.00,
+				Value:     1.95,
+				Size:      1298171.00,
 				Timestamp: time.Unix(1607332030, 0),
 			},
 		},

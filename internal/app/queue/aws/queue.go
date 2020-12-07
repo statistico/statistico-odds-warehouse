@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/aws/aws-sdk-go/service/sqs/sqsiface"
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/statistico-odds-warehouse/internal/queue"
+	"github.com/statistico/statistico-odds-warehouse/internal/app/queue"
 )
 
 type Message struct {
