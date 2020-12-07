@@ -16,7 +16,7 @@ import (
 )
 
 func TestMarketService_MarketRunnerSearch(t *testing.T) {
-	t.Run("parses market runners and streams market selection structs", func(t *testing.T) {
+	t.Run("parses market runners and streams market runner structs", func(t *testing.T) {
 		t.Helper()
 
 		repo := new(market.MockRepository)
