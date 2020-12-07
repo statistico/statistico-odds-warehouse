@@ -16,7 +16,6 @@ func buildMarketRunnerQuery(q *market.RunnerQuery, b *sq.StatementBuilderType) s
 			"m.name",
 			"m.exchange",
 			"m.side",
-			"mr.market_id",
 			"mr.runner_id",
 			"mr.name",
 			"mr.price",

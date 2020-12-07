@@ -28,7 +28,14 @@ func (m *MarketService) MarketRunnerSearch(r *statisticoproto.MarketRunnerReques
 	}
 
 	for _, mk := range markets {
-		if err := stream.Send(createMarketSelection(mk)); err != nil {
+		mr, err := createMarketRunner(mk)
+
+		if err != nil {
+			m.logger.Errorf("Error converting market runner in market service. %s", err.Error())
+			continue
+		}
+
+		if err := stream.Send(mr); err != nil {
 			m.logger.Errorf("Error streaming market runner back to client. %s", err.Error())
 			continue
 		}

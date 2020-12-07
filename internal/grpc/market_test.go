@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func TestMarketService_MarketSelectionSearch(t *testing.T) {
+func TestMarketService_MarketRunnerSearch(t *testing.T) {
 	t.Run("parses market runners and streams market selection structs", func(t *testing.T) {
 		t.Helper()
 
@@ -225,8 +225,104 @@ func TestMarketService_MarketSelectionSearch(t *testing.T) {
 		repo.AssertExpectations(t)
 		server.AssertExpectations(t)
 	})
+
+	t.Run("logs error if error returned when converting MarketRunner struct", func(t *testing.T) {
+		t.Helper()
+
+		repo := new(market.MockRepository)
+		logger, hook := test.NewNullLogger()
+
+		service := grpc.NewMarketService(repo, logger)
+
+		server := new(mock.MarketSelectionServer)
+
+		f := statisticoproto.RunnerFilter{
+			Name:      "Home",
+			Line:      statisticoproto.RunnerFilter_MAX,
+			Operators: []*statisticoproto.FilterOperator{
+				{
+					Operator: statisticoproto.FilterOperator_GTE,
+					Value: 1.95,
+				},
+				{
+					Operator: statisticoproto.FilterOperator_LTE,
+					Value: 3.55,
+				},
+			},
+		}
+
+		req := statisticoproto.MarketRunnerRequest{
+			Name:           "MATCH_ODDS",
+			RunnerFilter:   &f,
+			CompetitionIds: []uint64{1, 2, 3},
+			SeasonIds:      []uint64{4, 5, 6},
+			DateFrom:       &wrappers.StringValue{Value: "2020-03-12T12:00:00+00:00"},
+			DateTo:         &wrappers.StringValue{Value: "2020-03-12T20:00:00+00:00"},
+		}
+
+		q := mock2.MatchedBy(func(query *market.RunnerQuery) bool {
+			a := assert.New(t)
+
+			a.Equal("MATCH_ODDS", query.MarketName)
+			a.Equal("Home", query.RunnerName)
+			a.Equal("MAX", query.Line)
+			a.Equal([]uint64{1, 2, 3}, query.CompetitionIDs)
+			a.Equal([]uint64{4, 5, 6}, query.SeasonIDs)
+			a.Equal("2020-03-12T12:00:00Z", query.DateFrom.Format(time.RFC3339))
+			a.Equal("2020-03-12T20:00:00Z", query.DateTo.Format(time.RFC3339))
+			a.Equal(float32(1.95), *query.GreaterThan)
+			a.Equal(float32(3.55), *query.LessThan)
+			return true
+		})
+
+		mRunners := []*market.MarketRunner{
+			newMarketRunner(),
+			{
+				MarketID:      "1.238719",
+				MarketName:    "MATCH_ODDS",
+				RunnerID:      47282,
+				RunnerName:    "Home",
+				EventID:       12981,
+				CompetitionID: 8,
+				SeasonID:      17420,
+			},
+		}
+
+		repo.On("MarketRunners", q).Return(mRunners, nil)
+
+		server.On("Send", mock2.AnythingOfType("*statisticoproto.MarketRunner")).
+			Times(1).
+			Return(nil)
+
+		err := service.MarketRunnerSearch(&req, server)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, "Error converting market runner in market service. market 1.238719 and runner 47282 does not contain prices", hook.LastEntry().Message)
+		assert.Equal(t, 1, len(hook.Entries))
+		assert.Equal(t, logrus.ErrorLevel, hook.LastEntry().Level)
+		repo.AssertExpectations(t)
+		server.AssertExpectations(t)
+	})
 }
 
 func newMarketRunner() *market.MarketRunner {
-	return &market.MarketRunner{}
+	return &market.MarketRunner{
+		MarketID:      "1.238717",
+		MarketName:    "MATCH_ODDS",
+		RunnerID:      47281,
+		RunnerName:    "Home",
+		EventID:       12981,
+		CompetitionID: 8,
+		SeasonID:      17420,
+		Prices:        []*market.Price{
+			{
+				Value: 1.95,
+				Size: 1298171.00,
+				Timestamp: time.Unix(1607332030, 0),
+			},
+		},
+	}
 }

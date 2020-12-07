@@ -43,7 +43,6 @@ func Test_buildMarketRunnerQuery(t *testing.T) {
 			"m.name, " +
 			"m.exchange, " +
 			"m.side, " +
-			"mr.market_id, " +
 			"mr.runner_id, " +
 			"mr.name, " +
 			"mr.price, " +

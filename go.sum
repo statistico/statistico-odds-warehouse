@@ -64,6 +64,8 @@ github.com/sirupsen/logrus v1.7.0/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic
 github.com/statistico/statistico-proto v0.0.0-20201206192523-9e9a9f4893da h1:g83CIk8BLplMNKRrdEOvOp3q97cGjc4upb59Tfu4cTU=
 github.com/statistico/statistico-proto/statistico-odds-warehouse/go v0.0.0-20201206192523-9e9a9f4893da h1:eU0bFt3f/C6Q4zrrACfHmLgUh6ptabZzEQ0ewSHRhQI=
 github.com/statistico/statistico-proto/statistico-odds-warehouse/go v0.0.0-20201206192523-9e9a9f4893da/go.mod h1:lRpsL9+Hvkftp0O/HDI7mqFlMjuCxxkNizibZeeX3NQ=
+github.com/statistico/statistico-proto/statistico-odds-warehouse/go v0.0.0-20201207083348-76abecea2f5f h1:GiFIP2YIfv3Z8X7HVb08hZkXUb0DRCEbmSuAs/wuxsA=
+github.com/statistico/statistico-proto/statistico-odds-warehouse/go v0.0.0-20201207083348-76abecea2f5f/go.mod h1:lRpsL9+Hvkftp0O/HDI7mqFlMjuCxxkNizibZeeX3NQ=
 github.com/stretchr/objx v0.1.0 h1:4G4v2dO3VZwixGIRoQ5Lfboy6nUhCyYzaqnIAPPhYs4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.3.0 h1:NGXK3lHquSN08v5vWalVI/L8XU9hdzE/G6xsrze47As=
