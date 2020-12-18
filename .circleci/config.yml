@@ -42,11 +42,12 @@ jobs:
       - run:
           name: Build Release Image
           command: |
-            bin/docker-dev-up -d --build
+            docker network create statistico_internal
+            docker-compose -f docker-compose.build.yml up -d --build
       - run:
           name: Test Release Image
           command: |
-            bin/docker-dev-test
+            docker-compose -f docker-compose.build.yml run test gotestsum -f short-verbose
       - run:
           name: Cache Built Images
           command: |
