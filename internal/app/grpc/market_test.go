@@ -8,7 +8,7 @@ import (
 	"github.com/statistico/statistico-odds-warehouse/internal/app/grpc"
 	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
 	"github.com/statistico/statistico-odds-warehouse/internal/app/mock"
-	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
+	"github.com/statistico/statistico-proto/go"
 	"github.com/stretchr/testify/assert"
 	mock2 "github.com/stretchr/testify/mock"
 	"testing"
@@ -28,14 +28,14 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		f := statisticoproto.RunnerFilter{
 			Name: "Home",
-			Line: statisticoproto.RunnerFilter_MAX,
-			Operators: []*statisticoproto.FilterOperator{
+			Line: statisticoproto.LineEnum_MAX,
+			Operators: []*statisticoproto.MetricOperator{
 				{
-					Operator: statisticoproto.FilterOperator_GTE,
+					Metric: statisticoproto.MetricEnum_GTE,
 					Value:    1.95,
 				},
 				{
-					Operator: statisticoproto.FilterOperator_LTE,
+					Metric: statisticoproto.MetricEnum_LTE,
 					Value:    3.55,
 				},
 			},
@@ -99,14 +99,14 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		f := statisticoproto.RunnerFilter{
 			Name: "Home",
-			Line: statisticoproto.RunnerFilter_MAX,
-			Operators: []*statisticoproto.FilterOperator{
+			Line: statisticoproto.LineEnum_MAX,
+			Operators: []*statisticoproto.MetricOperator{
 				{
-					Operator: statisticoproto.FilterOperator_GTE,
+					Metric: statisticoproto.MetricEnum_GTE,
 					Value:    1.95,
 				},
 				{
-					Operator: statisticoproto.FilterOperator_LTE,
+					Metric: statisticoproto.MetricEnum_LTE,
 					Value:    3.55,
 				},
 			},
@@ -165,14 +165,14 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		f := statisticoproto.RunnerFilter{
 			Name: "Home",
-			Line: statisticoproto.RunnerFilter_MAX,
-			Operators: []*statisticoproto.FilterOperator{
+			Line: statisticoproto.LineEnum_MAX,
+			Operators: []*statisticoproto.MetricOperator{
 				{
-					Operator: statisticoproto.FilterOperator_GTE,
+					Metric: statisticoproto.MetricEnum_GTE,
 					Value:    1.95,
 				},
 				{
-					Operator: statisticoproto.FilterOperator_LTE,
+					Metric: statisticoproto.MetricEnum_LTE,
 					Value:    3.55,
 				},
 			},
@@ -238,14 +238,14 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		f := statisticoproto.RunnerFilter{
 			Name: "Home",
-			Line: statisticoproto.RunnerFilter_MAX,
-			Operators: []*statisticoproto.FilterOperator{
+			Line: statisticoproto.LineEnum_MAX,
+			Operators: []*statisticoproto.MetricOperator{
 				{
-					Operator: statisticoproto.FilterOperator_GTE,
+					Metric: statisticoproto.MetricEnum_GTE,
 					Value:    1.95,
 				},
 				{
-					Operator: statisticoproto.FilterOperator_LTE,
+					Metric: statisticoproto.MetricEnum_LTE,
 					Value:    3.55,
 				},
 			},

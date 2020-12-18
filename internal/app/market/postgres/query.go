@@ -34,7 +34,7 @@ func buildMarketRunnerQuery(q *market.RunnerQuery, b *sq.StatementBuilderType) s
 	}
 
 	if q.LessThan != nil {
-		join = join.Where(sq.Lt{"price": *q.GreaterThan})
+		join = join.Where(sq.Lt{"price": *q.LessThan})
 	}
 
 	if q.Line == "CLOSING" {

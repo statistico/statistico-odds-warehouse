@@ -3,7 +3,7 @@ package grpc
 import (
 	"fmt"
 	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
-	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
+	"github.com/statistico/statistico-proto/go"
 	"time"
 )
 

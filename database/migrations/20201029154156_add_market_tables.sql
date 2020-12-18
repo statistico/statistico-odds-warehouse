@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE market (
-    id VARCHAR NOT NULL PRIMARY KEY ,
+    id VARCHAR NOT NULL PRIMARY KEY,
     event_id INTEGER NOT NULL,
     event_date INTEGER NOT NULL,
     competition_id INTEGER NOT NULL,
