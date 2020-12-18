@@ -63,6 +63,8 @@ services:
       - postgres
     depends_on:
       - postgres
+    networks:
+      - statistico-odds-warehouse_default
 
 networks:
   statistico-odds-warehouse_default:
