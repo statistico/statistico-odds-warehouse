@@ -3,7 +3,7 @@ package grpc
 import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
-	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
+	"github.com/statistico/statistico-proto/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

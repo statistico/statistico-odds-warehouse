@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"github.com/golang/protobuf/ptypes/wrappers"
-	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
+	"github.com/statistico/statistico-proto/go"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -14,14 +14,14 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 
 		f := statisticoproto.RunnerFilter{
 			Name: "Home",
-			Line: statisticoproto.RunnerFilter_MAX,
-			Operators: []*statisticoproto.FilterOperator{
+			Line: statisticoproto.LineEnum_MAX,
+			Operators: []*statisticoproto.MetricOperator{
 				{
-					Operator: statisticoproto.FilterOperator_GTE,
+					Metric: statisticoproto.MetricEnum_GTE,
 					Value:    1.95,
 				},
 				{
-					Operator: statisticoproto.FilterOperator_LTE,
+					Metric: statisticoproto.MetricEnum_LTE,
 					Value:    3.55,
 				},
 			},
@@ -60,7 +60,7 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 
 		f := statisticoproto.RunnerFilter{
 			Name: "Home",
-			Line: statisticoproto.RunnerFilter_CLOSING,
+			Line: statisticoproto.LineEnum_CLOSING,
 		}
 
 		r := statisticoproto.MarketRunnerRequest{

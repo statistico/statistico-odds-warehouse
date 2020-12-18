@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
-	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
+	"github.com/statistico/statistico-proto/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"time"
@@ -40,11 +40,11 @@ func convertMarketSelectionRequest(r *statisticoproto.MarketRunnerRequest) (*mar
 	filters := r.GetRunnerFilter().GetOperators()
 
 	for _, f := range filters {
-		if f.GetOperator().String() == "GTE" {
+		if f.GetMetric() == statisticoproto.MetricEnum_GTE {
 			q.GreaterThan = &f.Value
 		}
 
-		if f.GetOperator().String() == "LTE" {
+		if f.GetMetric() == statisticoproto.MetricEnum_LTE {
 			q.LessThan = &f.Value
 		}
 	}

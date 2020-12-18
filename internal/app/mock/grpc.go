@@ -1,7 +1,7 @@
 package mock
 
 import (
-	"github.com/statistico/statistico-proto/statistico-odds-warehouse/go"
+	"github.com/statistico/statistico-proto/go"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 )
