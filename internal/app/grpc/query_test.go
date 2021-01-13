@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	"github.com/golang/protobuf/ptypes/wrappers"
+	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/statistico/statistico-proto/go"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -32,8 +32,8 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 			RunnerFilter:   &f,
 			CompetitionIds: []uint64{1, 2, 3},
 			SeasonIds:      []uint64{4, 5, 6},
-			DateFrom:       &wrappers.StringValue{Value: "2020-03-12T12:00:00+00:00"},
-			DateTo:         &wrappers.StringValue{Value: "2020-03-12T20:00:00+00:00"},
+			DateFrom:       &timestamp.Timestamp{Seconds: 1584014400},
+			DateTo:         &timestamp.Timestamp{Seconds: 1584014400},
 		}
 
 		query, err := convertMarketSelectionRequest(&r)
@@ -50,7 +50,7 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 		a.Equal([]uint64{1, 2, 3}, query.CompetitionIDs)
 		a.Equal([]uint64{4, 5, 6}, query.SeasonIDs)
 		a.Equal("2020-03-12T12:00:00Z", query.DateFrom.Format(time.RFC3339))
-		a.Equal("2020-03-12T20:00:00Z", query.DateTo.Format(time.RFC3339))
+		a.Equal("2020-03-12T12:00:00Z", query.DateTo.Format(time.RFC3339))
 		a.Equal(float32(1.95), *query.GreaterThan)
 		a.Equal(float32(3.55), *query.LessThan)
 	})

@@ -2,12 +2,18 @@ package grpc
 
 import (
 	"fmt"
+	"github.com/golang/protobuf/ptypes"
 	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
 	"github.com/statistico/statistico-proto/go"
-	"time"
 )
 
 func createMarketRunner(m *market.MarketRunner) (*statisticoproto.MarketRunner, error) {
+	date, err := ptypes.TimestampProto(m.EventDate)
+
+	if err != nil {
+		return nil, err
+	}
+
 	mk := statisticoproto.MarketRunner{
 		MarketId:      m.MarketID,
 		MarketName:    m.MarketName,
@@ -15,7 +21,7 @@ func createMarketRunner(m *market.MarketRunner) (*statisticoproto.MarketRunner, 
 		EventId:       m.EventID,
 		CompetitionId: m.CompetitionID,
 		SeasonId:      m.SeasonID,
-		EventDate:     m.EventDate.Format(time.RFC3339),
+		EventDate:     date,
 		Side:          m.Side,
 		Exchange:      m.Exchange,
 	}

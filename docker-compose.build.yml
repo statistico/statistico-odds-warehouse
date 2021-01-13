@@ -43,6 +43,9 @@ services:
     <<: *console
     ports:
       - "50052:50051"
+    networks:
+      - statistico_internal
+      - statistico-odds-warehouse_default
     command: [ "./grpc", "--port 50051" ]
 
   test:
