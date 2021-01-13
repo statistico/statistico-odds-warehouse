@@ -1,11 +1,11 @@
 package grpc
 
 import (
+	"github.com/golang/protobuf/ptypes"
 	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
 	"github.com/statistico/statistico-proto/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"time"
 )
 
 func convertMarketSelectionRequest(r *statisticoproto.MarketRunnerRequest) (*market.RunnerQuery, error) {
@@ -18,7 +18,7 @@ func convertMarketSelectionRequest(r *statisticoproto.MarketRunnerRequest) (*mar
 	}
 
 	if r.GetDateFrom() != nil {
-		date, err := time.Parse(time.RFC3339, r.GetDateFrom().GetValue())
+		date, err := ptypes.Timestamp(r.GetDateFrom())
 
 		if err != nil {
 			return nil, status.Error(codes.InvalidArgument, "Date provided is not a valid RFC3339 date")
@@ -28,7 +28,7 @@ func convertMarketSelectionRequest(r *statisticoproto.MarketRunnerRequest) (*mar
 	}
 
 	if r.GetDateTo() != nil {
-		date, err := time.Parse(time.RFC3339, r.GetDateTo().GetValue())
+		date, err := ptypes.Timestamp(r.GetDateTo())
 
 		if err != nil {
 			return nil, status.Error(codes.InvalidArgument, "Date provided is not a valid RFC3339 date")
