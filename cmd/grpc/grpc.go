@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/statistico/statistico-odds-warehouse/internal/app/bootstrap"
-	statistico "github.com/statistico/statistico-proto/go"
+	"github.com/statistico/statistico-proto/go"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
