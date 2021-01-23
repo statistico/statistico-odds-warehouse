@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func convertMarketSelectionRequest(r *statisticoproto.MarketRunnerRequest) (*market.RunnerQuery, error) {
+func convertMarketSelectionRequest(r *statistico.MarketRunnerRequest) (*market.RunnerQuery, error) {
 	q := market.RunnerQuery{
 		MarketName:     r.Name,
 		RunnerName:     r.RunnerFilter.Name,
@@ -40,11 +40,11 @@ func convertMarketSelectionRequest(r *statisticoproto.MarketRunnerRequest) (*mar
 	filters := r.GetRunnerFilter().GetOperators()
 
 	for _, f := range filters {
-		if f.GetMetric() == statisticoproto.MetricEnum_GTE {
+		if f.GetMetric() == statistico.MetricEnum_GTE {
 			q.GreaterThan = &f.Value
 		}
 
-		if f.GetMetric() == statisticoproto.MetricEnum_LTE {
+		if f.GetMetric() == statistico.MetricEnum_LTE {
 			q.LessThan = &f.Value
 		}
 	}

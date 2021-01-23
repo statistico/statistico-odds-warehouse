@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/statistico/statistico-odds-warehouse/internal/app/bootstrap"
-	"github.com/statistico/statistico-proto/go"
+	statistico "github.com/statistico/statistico-proto/go"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
@@ -23,7 +23,7 @@ func main() {
 	opts := grpc.KeepaliveParams(keepalive.ServerParameters{MaxConnectionIdle:5*time.Minute})
 	server := grpc.NewServer(opts)
 
-	statisticoproto.RegisterMarketServiceServer(server, app.MarketService())
+	statistico.RegisterMarketServiceServer(server, app.MarketService())
 
 	reflection.Register(server)
 

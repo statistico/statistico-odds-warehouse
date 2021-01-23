@@ -11,7 +11,7 @@ type MarketSelectionServer struct {
 	grpc.ServerStream
 }
 
-func (m *MarketSelectionServer) Send(mk *statisticoproto.MarketRunner) error {
+func (m *MarketSelectionServer) Send(mk *statistico.MarketRunner) error {
 	args := m.Called(mk)
 	return args.Error(0)
 }

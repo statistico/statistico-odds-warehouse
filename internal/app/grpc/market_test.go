@@ -26,22 +26,22 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		server := new(mock.MarketSelectionServer)
 
-		f := statisticoproto.RunnerFilter{
+		f := statistico.RunnerFilter{
 			Name: "Home",
-			Line: statisticoproto.LineEnum_MAX,
-			Operators: []*statisticoproto.MetricOperator{
+			Line: statistico.LineEnum_MAX,
+			Operators: []*statistico.MetricOperator{
 				{
-					Metric: statisticoproto.MetricEnum_GTE,
+					Metric: statistico.MetricEnum_GTE,
 					Value:    1.95,
 				},
 				{
-					Metric: statisticoproto.MetricEnum_LTE,
+					Metric: statistico.MetricEnum_LTE,
 					Value:    3.55,
 				},
 			},
 		}
 
-		req := statisticoproto.MarketRunnerRequest{
+		req := statistico.MarketRunnerRequest{
 			Name:           "MATCH_ODDS",
 			RunnerFilter:   &f,
 			CompetitionIds: []uint64{1, 2, 3},
@@ -72,7 +72,7 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		repo.On("MarketRunners", q).Return(mRunners, nil)
 
-		server.On("Send", mock2.AnythingOfType("*statisticoproto.MarketRunner")).
+		server.On("Send", mock2.AnythingOfType("*statistico.MarketRunner")).
 			Times(2).
 			Return(nil)
 
@@ -97,22 +97,22 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		server := new(mock.MarketSelectionServer)
 
-		f := statisticoproto.RunnerFilter{
+		f := statistico.RunnerFilter{
 			Name: "Home",
-			Line: statisticoproto.LineEnum_MAX,
-			Operators: []*statisticoproto.MetricOperator{
+			Line: statistico.LineEnum_MAX,
+			Operators: []*statistico.MetricOperator{
 				{
-					Metric: statisticoproto.MetricEnum_GTE,
+					Metric: statistico.MetricEnum_GTE,
 					Value:    1.95,
 				},
 				{
-					Metric: statisticoproto.MetricEnum_LTE,
+					Metric: statistico.MetricEnum_LTE,
 					Value:    3.55,
 				},
 			},
 		}
 
-		req := statisticoproto.MarketRunnerRequest{
+		req := statistico.MarketRunnerRequest{
 			Name:           "MATCH_ODDS",
 			RunnerFilter:   &f,
 			CompetitionIds: []uint64{1, 2, 3},
@@ -138,7 +138,7 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		repo.On("MarketRunners", q).Return([]*market.MarketRunner{}, errors.New("oh no"))
 
-		server.AssertNotCalled(t, "Send", mock2.AnythingOfType("*statisticoproto.MarketRunner"))
+		server.AssertNotCalled(t, "Send", mock2.AnythingOfType("*statistico.MarketRunner"))
 
 		err := service.MarketRunnerSearch(&req, server)
 
@@ -163,22 +163,22 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		server := new(mock.MarketSelectionServer)
 
-		f := statisticoproto.RunnerFilter{
+		f := statistico.RunnerFilter{
 			Name: "Home",
-			Line: statisticoproto.LineEnum_MAX,
-			Operators: []*statisticoproto.MetricOperator{
+			Line: statistico.LineEnum_MAX,
+			Operators: []*statistico.MetricOperator{
 				{
-					Metric: statisticoproto.MetricEnum_GTE,
+					Metric: statistico.MetricEnum_GTE,
 					Value:    1.95,
 				},
 				{
-					Metric: statisticoproto.MetricEnum_LTE,
+					Metric: statistico.MetricEnum_LTE,
 					Value:    3.55,
 				},
 			},
 		}
 
-		req := statisticoproto.MarketRunnerRequest{
+		req := statistico.MarketRunnerRequest{
 			Name:           "MATCH_ODDS",
 			RunnerFilter:   &f,
 			CompetitionIds: []uint64{1, 2, 3},
@@ -209,7 +209,7 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		repo.On("MarketRunners", q).Return(mRunners, nil)
 
-		server.On("Send", mock2.AnythingOfType("*statisticoproto.MarketRunner")).
+		server.On("Send", mock2.AnythingOfType("*statistico.MarketRunner")).
 			Times(2).
 			Return(errors.New("oh no"))
 
@@ -236,22 +236,22 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		server := new(mock.MarketSelectionServer)
 
-		f := statisticoproto.RunnerFilter{
+		f := statistico.RunnerFilter{
 			Name: "Home",
-			Line: statisticoproto.LineEnum_MAX,
-			Operators: []*statisticoproto.MetricOperator{
+			Line: statistico.LineEnum_MAX,
+			Operators: []*statistico.MetricOperator{
 				{
-					Metric: statisticoproto.MetricEnum_GTE,
+					Metric: statistico.MetricEnum_GTE,
 					Value:    1.95,
 				},
 				{
-					Metric: statisticoproto.MetricEnum_LTE,
+					Metric: statistico.MetricEnum_LTE,
 					Value:    3.55,
 				},
 			},
 		}
 
-		req := statisticoproto.MarketRunnerRequest{
+		req := statistico.MarketRunnerRequest{
 			Name:           "MATCH_ODDS",
 			RunnerFilter:   &f,
 			CompetitionIds: []uint64{1, 2, 3},
@@ -290,7 +290,7 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		repo.On("MarketRunners", q).Return(mRunners, nil)
 
-		server.On("Send", mock2.AnythingOfType("*statisticoproto.MarketRunner")).
+		server.On("Send", mock2.AnythingOfType("*statistico.MarketRunner")).
 			Times(1).
 			Return(nil)
 
