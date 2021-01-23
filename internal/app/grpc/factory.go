@@ -7,14 +7,14 @@ import (
 	"github.com/statistico/statistico-proto/go"
 )
 
-func createMarketRunner(m *market.MarketRunner) (*statisticoproto.MarketRunner, error) {
+func createMarketRunner(m *market.MarketRunner) (*statistico.MarketRunner, error) {
 	date, err := ptypes.TimestampProto(m.EventDate)
 
 	if err != nil {
 		return nil, err
 	}
 
-	mk := statisticoproto.MarketRunner{
+	mk := statistico.MarketRunner{
 		MarketId:      m.MarketID,
 		MarketName:    m.MarketName,
 		RunnerName:    m.RunnerName,
@@ -30,7 +30,7 @@ func createMarketRunner(m *market.MarketRunner) (*statisticoproto.MarketRunner, 
 		return nil, fmt.Errorf("market %s and runner %d does not contain prices", m.MarketID, m.RunnerID)
 	}
 
-	price := statisticoproto.Price{
+	price := statistico.Price{
 		Value:     m.Prices[0].Value,
 		Size:      m.Prices[0].Size,
 		Timestamp: m.Prices[0].Timestamp.Unix(),

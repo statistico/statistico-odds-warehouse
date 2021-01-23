@@ -12,22 +12,22 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 	t.Run("converts MarketRunnerRequest in RunnerQuery", func(t *testing.T) {
 		t.Helper()
 
-		f := statisticoproto.RunnerFilter{
+		f := statistico.RunnerFilter{
 			Name: "Home",
-			Line: statisticoproto.LineEnum_MAX,
-			Operators: []*statisticoproto.MetricOperator{
+			Line: statistico.LineEnum_MAX,
+			Operators: []*statistico.MetricOperator{
 				{
-					Metric: statisticoproto.MetricEnum_GTE,
+					Metric: statistico.MetricEnum_GTE,
 					Value:    1.95,
 				},
 				{
-					Metric: statisticoproto.MetricEnum_LTE,
+					Metric: statistico.MetricEnum_LTE,
 					Value:    3.55,
 				},
 			},
 		}
 
-		r := statisticoproto.MarketRunnerRequest{
+		r := statistico.MarketRunnerRequest{
 			Name:           "MATCH_ODDS",
 			RunnerFilter:   &f,
 			CompetitionIds: []uint64{1, 2, 3},
@@ -58,12 +58,12 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 	t.Run("converts MarketRunnerRequest in RunnerQuery handling nullable fields", func(t *testing.T) {
 		t.Helper()
 
-		f := statisticoproto.RunnerFilter{
+		f := statistico.RunnerFilter{
 			Name: "Home",
-			Line: statisticoproto.LineEnum_CLOSING,
+			Line: statistico.LineEnum_CLOSING,
 		}
 
-		r := statisticoproto.MarketRunnerRequest{
+		r := statistico.MarketRunnerRequest{
 			Name:         "MATCH_ODDS",
 			RunnerFilter: &f,
 		}
