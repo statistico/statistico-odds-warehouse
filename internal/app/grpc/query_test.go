@@ -48,9 +48,9 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 		t.Helper()
 
 		req := statistico.MarketRunnerRequest{
-			Market:         "MATCH_ODDS",
-			Runner:         "Home",
-			Line:           "MAX",
+			Market: "MATCH_ODDS",
+			Runner: "Home",
+			Line:   "MAX",
 		}
 
 		query, err := convertMarketSelectionRequest(&req)
