@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"github.com/golang/protobuf/ptypes/timestamp"
+	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-proto/go"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -12,31 +13,19 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 	t.Run("converts MarketRunnerRequest in RunnerQuery", func(t *testing.T) {
 		t.Helper()
 
-		f := statistico.RunnerFilter{
-			Name: "Home",
-			Line: statistico.LineEnum_MAX,
-			Operators: []*statistico.MetricOperator{
-				{
-					Metric: statistico.MetricEnum_GTE,
-					Value:    1.95,
-				},
-				{
-					Metric: statistico.MetricEnum_LTE,
-					Value:    3.55,
-				},
-			},
-		}
-
-		r := statistico.MarketRunnerRequest{
-			Name:           "MATCH_ODDS",
-			RunnerFilter:   &f,
+		req := statistico.MarketRunnerRequest{
+			Market:         "MATCH_ODDS",
+			Runner:         "Home",
+			Line:           "MAX",
+			MinOdds:        &wrappers.FloatValue{Value: 1.95},
+			MaxOdds:        &wrappers.FloatValue{Value: 3.55},
 			CompetitionIds: []uint64{1, 2, 3},
 			SeasonIds:      []uint64{4, 5, 6},
 			DateFrom:       &timestamp.Timestamp{Seconds: 1584014400},
 			DateTo:         &timestamp.Timestamp{Seconds: 1584014400},
 		}
 
-		query, err := convertMarketSelectionRequest(&r)
+		query, err := convertMarketSelectionRequest(&req)
 
 		if err != nil {
 			t.Fatalf("Expected nil, got %s", err.Error())
@@ -58,17 +47,13 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 	t.Run("converts MarketRunnerRequest in RunnerQuery handling nullable fields", func(t *testing.T) {
 		t.Helper()
 
-		f := statistico.RunnerFilter{
-			Name: "Home",
-			Line: statistico.LineEnum_CLOSING,
+		req := statistico.MarketRunnerRequest{
+			Market:         "MATCH_ODDS",
+			Runner:         "Home",
+			Line:           "MAX",
 		}
 
-		r := statistico.MarketRunnerRequest{
-			Name:         "MATCH_ODDS",
-			RunnerFilter: &f,
-		}
-
-		query, err := convertMarketSelectionRequest(&r)
+		query, err := convertMarketSelectionRequest(&req)
 
 		if err != nil {
 			t.Fatalf("Expected nil, got %s", err.Error())
@@ -78,7 +63,7 @@ func Test_convertMarketSelectionRequest(t *testing.T) {
 
 		a.Equal("MATCH_ODDS", query.MarketName)
 		a.Equal("Home", query.RunnerName)
-		a.Equal("CLOSING", query.Line)
+		a.Equal("MAX", query.Line)
 		a.Equal([]uint64(nil), query.CompetitionIDs)
 		a.Equal([]uint64(nil), query.SeasonIDs)
 		a.Nil(query.DateFrom)

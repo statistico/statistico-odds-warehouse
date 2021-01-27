@@ -10,11 +10,19 @@ import (
 
 func convertMarketSelectionRequest(r *statistico.MarketRunnerRequest) (*market.RunnerQuery, error) {
 	q := market.RunnerQuery{
-		MarketName:     r.Name,
-		RunnerName:     r.RunnerFilter.Name,
-		Line:           r.RunnerFilter.Line.String(),
+		MarketName:     r.GetMarket(),
+		RunnerName:     r.GetRunner(),
+		Line:           r.GetLine(),
 		CompetitionIDs: r.GetCompetitionIds(),
 		SeasonIDs:      r.GetSeasonIds(),
+	}
+
+	if r.GetMinOdds() != nil {
+		q.GreaterThan = &r.GetMinOdds().Value
+	}
+
+	if r.GetMaxOdds() != nil {
+		q.LessThan = &r.GetMaxOdds().Value
 	}
 
 	if r.GetDateFrom() != nil {
@@ -35,18 +43,6 @@ func convertMarketSelectionRequest(r *statistico.MarketRunnerRequest) (*market.R
 		}
 
 		q.DateTo = &date
-	}
-
-	filters := r.GetRunnerFilter().GetOperators()
-
-	for _, f := range filters {
-		if f.GetMetric() == statistico.MetricEnum_GTE {
-			q.GreaterThan = &f.Value
-		}
-
-		if f.GetMetric() == statistico.MetricEnum_LTE {
-			q.LessThan = &f.Value
-		}
 	}
 
 	return &q, nil

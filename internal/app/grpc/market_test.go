@@ -3,6 +3,7 @@ package grpc_test
 import (
 	"errors"
 	"github.com/golang/protobuf/ptypes/timestamp"
+	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/statistico/statistico-odds-warehouse/internal/app/grpc"
@@ -26,24 +27,12 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		server := new(mock.MarketSelectionServer)
 
-		f := statistico.RunnerFilter{
-			Name: "Home",
-			Line: statistico.LineEnum_MAX,
-			Operators: []*statistico.MetricOperator{
-				{
-					Metric: statistico.MetricEnum_GTE,
-					Value:    1.95,
-				},
-				{
-					Metric: statistico.MetricEnum_LTE,
-					Value:    3.55,
-				},
-			},
-		}
-
 		req := statistico.MarketRunnerRequest{
-			Name:           "MATCH_ODDS",
-			RunnerFilter:   &f,
+			Market:         "MATCH_ODDS",
+			Runner:         "Home",
+			Line:           "MAX",
+			MinOdds:        &wrappers.FloatValue{Value: 1.95},
+			MaxOdds:        &wrappers.FloatValue{Value: 3.55},
 			CompetitionIds: []uint64{1, 2, 3},
 			SeasonIds:      []uint64{4, 5, 6},
 			DateFrom:       &timestamp.Timestamp{Seconds: 1584014400},
@@ -97,24 +86,12 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		server := new(mock.MarketSelectionServer)
 
-		f := statistico.RunnerFilter{
-			Name: "Home",
-			Line: statistico.LineEnum_MAX,
-			Operators: []*statistico.MetricOperator{
-				{
-					Metric: statistico.MetricEnum_GTE,
-					Value:    1.95,
-				},
-				{
-					Metric: statistico.MetricEnum_LTE,
-					Value:    3.55,
-				},
-			},
-		}
-
 		req := statistico.MarketRunnerRequest{
-			Name:           "MATCH_ODDS",
-			RunnerFilter:   &f,
+			Market:         "MATCH_ODDS",
+			Runner:         "Home",
+			Line:           "MAX",
+			MinOdds:        &wrappers.FloatValue{Value: 1.95},
+			MaxOdds:        &wrappers.FloatValue{Value: 3.55},
 			CompetitionIds: []uint64{1, 2, 3},
 			SeasonIds:      []uint64{4, 5, 6},
 			DateFrom:       &timestamp.Timestamp{Seconds: 1584014400},
@@ -163,24 +140,12 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		server := new(mock.MarketSelectionServer)
 
-		f := statistico.RunnerFilter{
-			Name: "Home",
-			Line: statistico.LineEnum_MAX,
-			Operators: []*statistico.MetricOperator{
-				{
-					Metric: statistico.MetricEnum_GTE,
-					Value:    1.95,
-				},
-				{
-					Metric: statistico.MetricEnum_LTE,
-					Value:    3.55,
-				},
-			},
-		}
-
 		req := statistico.MarketRunnerRequest{
-			Name:           "MATCH_ODDS",
-			RunnerFilter:   &f,
+			Market:         "MATCH_ODDS",
+			Runner:         "Home",
+			Line:           "MAX",
+			MinOdds:        &wrappers.FloatValue{Value: 1.95},
+			MaxOdds:        &wrappers.FloatValue{Value: 3.55},
 			CompetitionIds: []uint64{1, 2, 3},
 			SeasonIds:      []uint64{4, 5, 6},
 			DateFrom:       &timestamp.Timestamp{Seconds: 1584014400},
@@ -236,24 +201,12 @@ func TestMarketService_MarketRunnerSearch(t *testing.T) {
 
 		server := new(mock.MarketSelectionServer)
 
-		f := statistico.RunnerFilter{
-			Name: "Home",
-			Line: statistico.LineEnum_MAX,
-			Operators: []*statistico.MetricOperator{
-				{
-					Metric: statistico.MetricEnum_GTE,
-					Value:    1.95,
-				},
-				{
-					Metric: statistico.MetricEnum_LTE,
-					Value:    3.55,
-				},
-			},
-		}
-
 		req := statistico.MarketRunnerRequest{
-			Name:           "MATCH_ODDS",
-			RunnerFilter:   &f,
+			Market:         "MATCH_ODDS",
+			Runner:         "Home",
+			Line:           "MAX",
+			MinOdds:        &wrappers.FloatValue{Value: 1.95},
+			MaxOdds:        &wrappers.FloatValue{Value: 3.55},
 			CompetitionIds: []uint64{1, 2, 3},
 			SeasonIds:      []uint64{4, 5, 6},
 			DateFrom:       &timestamp.Timestamp{Seconds: 1584014400},

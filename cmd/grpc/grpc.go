@@ -23,7 +23,7 @@ func main() {
 	opts := grpc.KeepaliveParams(keepalive.ServerParameters{MaxConnectionIdle:5*time.Minute})
 	server := grpc.NewServer(opts)
 
-	statistico.RegisterMarketServiceServer(server, app.MarketService())
+	statistico.RegisterOddsWarehouseServiceServer(server, app.MarketService())
 
 	reflection.Register(server)
 
@@ -31,4 +31,3 @@ func main() {
 		log.Fatalf("Failed to serve: %v", err)
 	}
 }
-

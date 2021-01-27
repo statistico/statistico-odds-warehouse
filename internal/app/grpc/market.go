@@ -11,10 +11,10 @@ import (
 type MarketService struct {
 	repository market.Repository
 	logger     *logrus.Logger
-	statistico.UnimplementedMarketServiceServer
+	statistico.UnimplementedOddsWarehouseServiceServer
 }
 
-func (m *MarketService) MarketRunnerSearch(r *statistico.MarketRunnerRequest, stream statistico.MarketService_MarketRunnerSearchServer) error {
+func (m *MarketService) MarketRunnerSearch(r *statistico.MarketRunnerRequest, stream statistico.OddsWarehouseService_MarketRunnerSearchServer) error {
 	query, err := convertMarketSelectionRequest(r)
 
 	if err != nil {
