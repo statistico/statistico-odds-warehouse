@@ -19,6 +19,10 @@ func (m *Handler) Handle(q *queue.Market) error {
 	var runners []*Runner
 
 	for _, r := range q.Runners {
+		if len(r.Prices) == 0 {
+			continue
+		}
+
 		price := Price{
 			Value:     float32(math.Round(float64(r.Prices[0].Price*100)) / 100),
 			Size:      float32(math.Round(float64(r.Prices[0].Size*100)) / 100),

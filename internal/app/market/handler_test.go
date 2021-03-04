@@ -312,4 +312,91 @@ func TestHandler_Handle(t *testing.T) {
 
 		repo.AssertExpectations(t)
 	})
+
+	t.Run("runner is not included in market if runner prices slice is empty", func(t *testing.T) {
+		t.Helper()
+
+		repo := new(market.MockRepository)
+		handler := market.NewHandler(repo)
+
+		mk := &queue.Market{
+			ID:            "1.2818721",
+			EventID:       148192,
+			CompetitionID: 8,
+			SeasonID:      17420,
+			EventDate:     "2020-11-28T12:00:00+00:00",
+			Name:          "MATCH_ODDS",
+			Side:          "BACK",
+			Exchange:      "betfair",
+			Runners: []*queue.Runner{
+				{
+					ID:   472671,
+					Name: "West Ham",
+					Sort: 1,
+					Prices: []queue.PriceSize{},
+				},
+				{
+					ID:   472672,
+					Name: "Arsenal",
+					Sort: 2,
+					Prices: []queue.PriceSize{
+						{
+							Price: 2.05091981,
+							Size:  1.92719817,
+						},
+					},
+				},
+				{
+					ID:   472673,
+					Name: "The Draw",
+					Sort: 3,
+					Prices: []queue.PriceSize{
+						{
+							Price: 3.051111,
+							Size:  0.989819,
+						},
+					},
+				},
+			},
+			Timestamp: 1583971200,
+		}
+
+		mkt := mock.MatchedBy(func(m *market.Market) bool {
+			date, _ := time.Parse(time.RFC3339, "2020-11-28T12:00:00+00:00")
+
+			assert.Equal(t, "1.2818721", m.ID)
+			assert.Equal(t, uint64(148192), m.EventID)
+			assert.Equal(t, uint64(8), m.CompetitionID)
+			assert.Equal(t, uint64(17420), m.SeasonID)
+			assert.Equal(t, "MATCH_ODDS", m.Name)
+			assert.Equal(t, "BACK", m.Side)
+			assert.Equal(t, "betfair", m.Exchange)
+			assert.Equal(t, date, m.EventDate)
+			return true
+		})
+
+		run := mock.MatchedBy(func(r []*market.Runner) bool {
+			assert.Equal(t, uint64(472672), r[0].ID)
+			assert.Equal(t, "Away", r[0].Name)
+			assert.Equal(t, float32(2.05), r[0].Price.Value)
+			assert.Equal(t, float32(1.93), r[0].Price.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[0].Price.Timestamp)
+			assert.Equal(t, "Draw", r[1].Name)
+			assert.Equal(t, float32(3.05), r[1].Price.Value)
+			assert.Equal(t, float32(0.99), r[1].Price.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[1].Price.Timestamp)
+			return true
+		})
+
+		repo.On("InsertMarket", mkt).Return(nil)
+		repo.On("InsertRunners", run).Return(nil)
+
+		err := handler.Handle(mk)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		repo.AssertExpectations(t)
+	})
 }
