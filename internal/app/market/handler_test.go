@@ -313,7 +313,7 @@ func TestHandler_Handle(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 
-	t.Run("runner is not included in market if runner prices slice is empty", func(t *testing.T) {
+	t.Run("runner is not persisted if runner prices slice is empty", func(t *testing.T) {
 		t.Helper()
 
 		repo := new(market.MockRepository)
