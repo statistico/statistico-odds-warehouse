@@ -26,7 +26,7 @@ func createMarketRunner(m *market.MarketRunner) (*statistico.MarketRunner, error
 			Value:     m.Price.Value,
 			Size:      m.Price.Size,
 			Side:      statistico.SideEnum(statistico.SideEnum_value[m.Price.Side]),
-			Timestamp: 0,
+			Timestamp: m.Price.Timestamp.Unix(),
 		},
 	}
 
