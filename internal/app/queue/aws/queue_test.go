@@ -43,20 +43,25 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 		client.On("ReceiveMessage", input).Return(&sqs.ReceiveMessageOutput{Messages: messages}, nil)
 		client.On("DeleteMessage", deleteInput).Return(&sqs.DeleteMessageOutput{}, nil)
 
-		mk := &queue.Market{
+		mk := &queue.EventMarket{
 			ID:       "1.2818721",
 			EventID:  148192,
 			Name:     "OVER_UNDER_25",
-			Side:     "BACK",
 			Exchange: "betfair",
 			Runners: []*queue.Runner{
 				{
 					ID:   472671,
 					Name: "Over 2.5 Goals",
-					Prices: []queue.PriceSize{
+					BackPrices: []queue.PriceSize{
 						{
 							Price: 1.95,
-							Size:  156.91,
+							Size:  1461,
+						},
+					},
+					LayPrices: []queue.PriceSize{
+						{
+							Price: 1.95,
+							Size:  1461,
 						},
 					},
 				},
@@ -144,7 +149,7 @@ var messageBody = `
 	  "Type": "Notification",
 	  "MessageId": "72b286fb-a288-5b04-9093-dee1c8e08a85",
 	  "TopicArn": "arn:aws:",
-	  "Message": "{\"id\":\"1.2818721\",\"eventId\":148192,\"name\":\"OVER_UNDER_25\",\"side\":\"BACK\",\"exchange\":\"betfair\",\"runners\":[{\"id\":472671,\"name\":\"Over 2.5 Goals\",\"prices\":[{\"price\":1.95,\"size\":156.91}]}],\"timestamp\":1583971200}",
+	  "Message": "{\"id\":\"1.2818721\",\"eventId\":148192,\"name\":\"OVER_UNDER_25\",\"exchange\":\"betfair\",\"runners\":[{\"id\":472671,\"name\":\"Over 2.5 Goals\",\"backPrices\":[{\"price\":1.95,\"size\":1461}],\"layPrices\":[{\"price\":1.95,\"size\":1461}]}],\"timestamp\":1583971200}",
 	  "Timestamp": "2020-11-02T20:12:24.030Z",
 	  "SignatureVersion": "1",
 	  "Signature": "aMVOnhHOyvVg4JhJ1TfopQQ55Ow5EbqzA6A/Cbhxl+ZOhI9fTEogukCQAG4lMBReh0Xbtx2BIJx+j+pDgKW3FPEuZxP/CeKdLQU+KAP1J86Nlja1cAeNMk05tJE6P4IwR07P6+0hIsZmEE9bFfwV5zw5cip7TnbpD/o9QyPnEv8Dt16RDprQfkuuJa+XAUvpFOgX6l1SQRnf3AwmZeV9H6mWPLFSyrc2RKkRzlOhbNXt31qul7+fT4R23p90TB42UtGXsf73l40Pz6s4ibb9QzMhl0kjHW7qwsH0iRMYJFtznoX4YP/X4InVzSYl7vv201ih3Wiixu0gbNByM8OBFg==",

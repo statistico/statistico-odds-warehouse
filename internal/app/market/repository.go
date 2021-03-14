@@ -12,6 +12,7 @@ type RunnerQuery struct {
 	MarketName     string
 	RunnerName     string
 	Line           string
+	Side           string
 	GreaterThan    *float32
 	LessThan       *float32
 	CompetitionIDs []uint64

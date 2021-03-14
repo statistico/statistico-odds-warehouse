@@ -22,6 +22,7 @@ func Test_buildMarketRunnerQuery(t *testing.T) {
 			MarketName:     "OVER_UNDER_25",
 			RunnerName:     "Over 2.5 Goals",
 			Line:           "MAX",
+			Side:           "BACK",
 			GreaterThan:    &gt,
 			LessThan:       &lt,
 			CompetitionIDs: []uint64{123, 456},
@@ -42,11 +43,11 @@ func Test_buildMarketRunnerQuery(t *testing.T) {
 			"m.season_id, " +
 			"m.name, " +
 			"m.exchange, " +
-			"m.side, " +
 			"mr.runner_id, " +
 			"mr.name, " +
 			"mr.price, " +
 			"mr.size, " +
+			"mr.side, " +
 			"mr.timestamp " +
 			"FROM " +
 			"market m " +
@@ -55,14 +56,14 @@ func Test_buildMarketRunnerQuery(t *testing.T) {
 			"DISTINCT on (market_id) * " +
 			"FROM " +
 			"market_runner mr " +
-			"WHERE mr.name = $1 AND price > $2 AND price < $3 " +
+			"WHERE mr.name = $1 AND mr.side = $2 AND price > $3 AND price < $4 " +
 			"ORDER BY " +
 			"mr.market_id, mr.price DESC ) as mr ON " +
 			"m.id = mr.market_id " +
-			"WHERE m.name = $4 " +
-			"AND m.event_date > $5 AND m.event_date < $6 " +
-			"AND m.competition_id IN ($7,$8) " +
-			"AND m.season_id IN ($9,$10)"
+			"WHERE m.name = $5 " +
+			"AND m.event_date > $6 AND m.event_date < $7 " +
+			"AND m.competition_id IN ($8,$9) " +
+			"AND m.season_id IN ($10,$11)"
 
 		sql, _, _ := query.ToSql()
 

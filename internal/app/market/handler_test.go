@@ -17,20 +17,25 @@ func TestHandler_Handle(t *testing.T) {
 		repo := new(market.MockRepository)
 		handler := market.NewHandler(repo)
 
-		mk := &queue.Market{
+		mk := &queue.EventMarket{
 			ID:            "1.2818721",
 			EventID:       148192,
 			CompetitionID: 8,
 			SeasonID:      17420,
 			EventDate:     "2020-11-28T12:00:00+00:00",
 			Name:          "OVER_UNDER_25",
-			Side:          "BACK",
 			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
 					ID:   472671,
 					Name: "Over 2.5 Goals",
-					Prices: []queue.PriceSize{
+					BackPrices: []queue.PriceSize{
+						{
+							Price: 1.95,
+							Size:  156.91,
+						},
+					},
+					LayPrices: []queue.PriceSize{
 						{
 							Price: 1.95,
 							Size:  156.91,
@@ -40,7 +45,13 @@ func TestHandler_Handle(t *testing.T) {
 				{
 					ID:   472672,
 					Name: "Under 2.5 Goals",
-					Prices: []queue.PriceSize{
+					BackPrices: []queue.PriceSize{
+						{
+							Price: 2.05,
+							Size:  1.92,
+						},
+					},
+					LayPrices: []queue.PriceSize{
 						{
 							Price: 2.05,
 							Size:  1.92,
@@ -59,7 +70,6 @@ func TestHandler_Handle(t *testing.T) {
 			assert.Equal(t, uint64(8), m.CompetitionID)
 			assert.Equal(t, uint64(17420), m.SeasonID)
 			assert.Equal(t, "OVER_UNDER_25", m.Name)
-			assert.Equal(t, "BACK", m.Side)
 			assert.Equal(t, "betfair", m.Exchange)
 			assert.Equal(t, date, m.EventDate)
 			return true
@@ -68,14 +78,20 @@ func TestHandler_Handle(t *testing.T) {
 		run := mock.MatchedBy(func(r []*market.Runner) bool {
 			assert.Equal(t, uint64(472671), r[0].ID)
 			assert.Equal(t, "Over 2.5 Goals", r[0].Name)
-			assert.Equal(t, float32(1.95), r[0].Price.Value)
-			assert.Equal(t, float32(156.91), r[0].Price.Size)
-			assert.Equal(t, time.Unix(1583971200, 0), r[0].Price.Timestamp)
+			assert.Equal(t, float32(1.95), r[0].BackPrice.Value)
+			assert.Equal(t, float32(156.91), r[0].BackPrice.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[0].BackPrice.Timestamp)
+			assert.Equal(t, float32(1.95), r[0].LayPrice.Value)
+			assert.Equal(t, float32(156.91), r[0].LayPrice.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[0].LayPrice.Timestamp)
 			assert.Equal(t, uint64(472672), r[1].ID)
 			assert.Equal(t, "Under 2.5 Goals", r[1].Name)
-			assert.Equal(t, float32(2.05), r[1].Price.Value)
-			assert.Equal(t, float32(1.92), r[1].Price.Size)
-			assert.Equal(t, time.Unix(1583971200, 0), r[1].Price.Timestamp)
+			assert.Equal(t, float32(2.05), r[1].BackPrice.Value)
+			assert.Equal(t, float32(1.92), r[1].BackPrice.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[1].BackPrice.Timestamp)
+			assert.Equal(t, float32(2.05), r[1].LayPrice.Value)
+			assert.Equal(t, float32(1.92), r[1].LayPrice.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[1].LayPrice.Timestamp)
 			return true
 		})
 
@@ -97,20 +113,19 @@ func TestHandler_Handle(t *testing.T) {
 		repo := new(market.MockRepository)
 		handler := market.NewHandler(repo)
 
-		mk := &queue.Market{
+		mk := &queue.EventMarket{
 			ID:            "1.2818721",
 			EventID:       148192,
 			CompetitionID: 8,
 			SeasonID:      17420,
 			EventDate:     "2020-11-28T12:00:00+00:00",
 			Name:          "OVER_UNDER_25",
-			Side:          "BACK",
 			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
 					ID:   472671,
 					Name: "Over 2.5 Goals",
-					Prices: []queue.PriceSize{
+					BackPrices: []queue.PriceSize{
 						{
 							Price: 1.951827161651,
 							Size:  156.91671761,
@@ -120,7 +135,7 @@ func TestHandler_Handle(t *testing.T) {
 				{
 					ID:   472672,
 					Name: "Under 2.5 Goals",
-					Prices: []queue.PriceSize{
+					BackPrices: []queue.PriceSize{
 						{
 							Price: 2.0555411311,
 							Size:  1.92141241,
@@ -139,7 +154,6 @@ func TestHandler_Handle(t *testing.T) {
 			assert.Equal(t, uint64(8), m.CompetitionID)
 			assert.Equal(t, uint64(17420), m.SeasonID)
 			assert.Equal(t, "OVER_UNDER_25", m.Name)
-			assert.Equal(t, "BACK", m.Side)
 			assert.Equal(t, "betfair", m.Exchange)
 			assert.Equal(t, date, m.EventDate)
 			return true
@@ -165,20 +179,19 @@ func TestHandler_Handle(t *testing.T) {
 		repo := new(market.MockRepository)
 		handler := market.NewHandler(repo)
 
-		mk := &queue.Market{
+		mk := &queue.EventMarket{
 			ID:            "1.2818721",
 			EventID:       148192,
 			CompetitionID: 8,
 			SeasonID:      17420,
 			EventDate:     "Wrong",
 			Name:          "OVER_UNDER_25",
-			Side:          "BACK",
 			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
 					ID:   472671,
 					Name: "Over 2.5 Goals",
-					Prices: []queue.PriceSize{
+					BackPrices: []queue.PriceSize{
 						{
 							Price: 1.951827161651,
 							Size:  156.91671761,
@@ -188,7 +201,7 @@ func TestHandler_Handle(t *testing.T) {
 				{
 					ID:   472672,
 					Name: "Under 2.5 Goals",
-					Prices: []queue.PriceSize{
+					BackPrices: []queue.PriceSize{
 						{
 							Price: 2.0555411311,
 							Size:  1.92141241,
@@ -222,21 +235,20 @@ func TestHandler_Handle(t *testing.T) {
 		repo := new(market.MockRepository)
 		handler := market.NewHandler(repo)
 
-		mk := &queue.Market{
+		mk := &queue.EventMarket{
 			ID:            "1.2818721",
 			EventID:       148192,
 			CompetitionID: 8,
 			SeasonID:      17420,
 			EventDate:     "2020-11-28T12:00:00+00:00",
 			Name:          "MATCH_ODDS",
-			Side:          "BACK",
 			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
 					ID:   472671,
 					Name: "West Ham",
 					Sort: 1,
-					Prices: []queue.PriceSize{
+					BackPrices: []queue.PriceSize{
 						{
 							Price: 1.95581981,
 							Size:  156.9198171,
@@ -247,7 +259,7 @@ func TestHandler_Handle(t *testing.T) {
 					ID:   472672,
 					Name: "Arsenal",
 					Sort: 2,
-					Prices: []queue.PriceSize{
+					BackPrices: []queue.PriceSize{
 						{
 							Price: 2.05091981,
 							Size:  1.92719817,
@@ -258,7 +270,7 @@ func TestHandler_Handle(t *testing.T) {
 					ID:   472673,
 					Name: "The Draw",
 					Sort: 3,
-					Prices: []queue.PriceSize{
+					BackPrices: []queue.PriceSize{
 						{
 							Price: 3.051111,
 							Size:  0.989819,
@@ -277,7 +289,6 @@ func TestHandler_Handle(t *testing.T) {
 			assert.Equal(t, uint64(8), m.CompetitionID)
 			assert.Equal(t, uint64(17420), m.SeasonID)
 			assert.Equal(t, "MATCH_ODDS", m.Name)
-			assert.Equal(t, "BACK", m.Side)
 			assert.Equal(t, "betfair", m.Exchange)
 			assert.Equal(t, date, m.EventDate)
 			return true
@@ -286,18 +297,18 @@ func TestHandler_Handle(t *testing.T) {
 		run := mock.MatchedBy(func(r []*market.Runner) bool {
 			assert.Equal(t, uint64(472671), r[0].ID)
 			assert.Equal(t, "Home", r[0].Name)
-			assert.Equal(t, float32(1.96), r[0].Price.Value)
-			assert.Equal(t, float32(156.92), r[0].Price.Size)
-			assert.Equal(t, time.Unix(1583971200, 0), r[0].Price.Timestamp)
+			assert.Equal(t, float32(1.96), r[0].BackPrice.Value)
+			assert.Equal(t, float32(156.92), r[0].BackPrice.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[0].BackPrice.Timestamp)
 			assert.Equal(t, uint64(472672), r[1].ID)
 			assert.Equal(t, "Away", r[1].Name)
-			assert.Equal(t, float32(2.05), r[1].Price.Value)
-			assert.Equal(t, float32(1.93), r[1].Price.Size)
-			assert.Equal(t, time.Unix(1583971200, 0), r[1].Price.Timestamp)
+			assert.Equal(t, float32(2.05), r[1].BackPrice.Value)
+			assert.Equal(t, float32(1.93), r[1].BackPrice.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[1].BackPrice.Timestamp)
 			assert.Equal(t, "Draw", r[2].Name)
-			assert.Equal(t, float32(3.05), r[2].Price.Value)
-			assert.Equal(t, float32(0.99), r[2].Price.Size)
-			assert.Equal(t, time.Unix(1583971200, 0), r[2].Price.Timestamp)
+			assert.Equal(t, float32(3.05), r[2].BackPrice.Value)
+			assert.Equal(t, float32(0.99), r[2].BackPrice.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[2].BackPrice.Timestamp)
 			return true
 		})
 
@@ -319,27 +330,26 @@ func TestHandler_Handle(t *testing.T) {
 		repo := new(market.MockRepository)
 		handler := market.NewHandler(repo)
 
-		mk := &queue.Market{
+		mk := &queue.EventMarket{
 			ID:            "1.2818721",
 			EventID:       148192,
 			CompetitionID: 8,
 			SeasonID:      17420,
 			EventDate:     "2020-11-28T12:00:00+00:00",
 			Name:          "MATCH_ODDS",
-			Side:          "BACK",
 			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
 					ID:   472671,
 					Name: "West Ham",
 					Sort: 1,
-					Prices: []queue.PriceSize{},
+					LayPrices: []queue.PriceSize{},
 				},
 				{
 					ID:   472672,
 					Name: "Arsenal",
 					Sort: 2,
-					Prices: []queue.PriceSize{
+					LayPrices: []queue.PriceSize{
 						{
 							Price: 2.05091981,
 							Size:  1.92719817,
@@ -350,7 +360,7 @@ func TestHandler_Handle(t *testing.T) {
 					ID:   472673,
 					Name: "The Draw",
 					Sort: 3,
-					Prices: []queue.PriceSize{
+					LayPrices: []queue.PriceSize{
 						{
 							Price: 3.051111,
 							Size:  0.989819,
@@ -369,7 +379,6 @@ func TestHandler_Handle(t *testing.T) {
 			assert.Equal(t, uint64(8), m.CompetitionID)
 			assert.Equal(t, uint64(17420), m.SeasonID)
 			assert.Equal(t, "MATCH_ODDS", m.Name)
-			assert.Equal(t, "BACK", m.Side)
 			assert.Equal(t, "betfair", m.Exchange)
 			assert.Equal(t, date, m.EventDate)
 			return true
@@ -378,13 +387,13 @@ func TestHandler_Handle(t *testing.T) {
 		run := mock.MatchedBy(func(r []*market.Runner) bool {
 			assert.Equal(t, uint64(472672), r[0].ID)
 			assert.Equal(t, "Away", r[0].Name)
-			assert.Equal(t, float32(2.05), r[0].Price.Value)
-			assert.Equal(t, float32(1.93), r[0].Price.Size)
-			assert.Equal(t, time.Unix(1583971200, 0), r[0].Price.Timestamp)
+			assert.Equal(t, float32(2.05), r[0].LayPrice.Value)
+			assert.Equal(t, float32(1.93), r[0].LayPrice.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[0].LayPrice.Timestamp)
 			assert.Equal(t, "Draw", r[1].Name)
-			assert.Equal(t, float32(3.05), r[1].Price.Value)
-			assert.Equal(t, float32(0.99), r[1].Price.Size)
-			assert.Equal(t, time.Unix(1583971200, 0), r[1].Price.Timestamp)
+			assert.Equal(t, float32(3.05), r[1].LayPrice.Value)
+			assert.Equal(t, float32(0.99), r[1].LayPrice.Size)
+			assert.Equal(t, time.Unix(1583971200, 0), r[1].LayPrice.Timestamp)
 			return true
 		})
 

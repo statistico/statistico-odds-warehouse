@@ -33,7 +33,6 @@ func (r *MarketRepository) InsertMarket(m *market.Market) error {
 			"season_id",
 			"name",
 			"exchange",
-			"side",
 		).
 		Values(
 			m.ID,
@@ -43,7 +42,6 @@ func (r *MarketRepository) InsertMarket(m *market.Market) error {
 			m.SeasonID,
 			m.Name,
 			m.Exchange,
-			m.Side,
 		).
 		Exec()
 
@@ -54,28 +52,60 @@ func (r *MarketRepository) InsertRunners(runners []*market.Runner) error {
 	builder := r.queryBuilder()
 
 	for _, runner := range runners {
-		_, err := builder.
-			Insert("market_runner").
-			Columns(
-				"market_id",
-				"runner_id",
-				"name",
-				"price",
-				"size",
-				"timestamp",
-			).
-			Values(
-				runner.MarketID,
-				runner.ID,
-				runner.Name,
-				runner.Price.Value,
-				runner.Price.Size,
-				runner.Price.Timestamp.Unix(),
-			).
-			Exec()
+		if runner.BackPrice != nil {
+			_, err := builder.
+				Insert("market_runner").
+				Columns(
+					"market_id",
+					"runner_id",
+					"name",
+					"price",
+					"size",
+					"timestamp",
+					"side",
+				).
+				Values(
+					runner.MarketID,
+					runner.ID,
+					runner.Name,
+					runner.BackPrice.Value,
+					runner.BackPrice.Size,
+					runner.BackPrice.Timestamp.Unix(),
+					"BACK",
+				).
+				Exec()
 
-		if err != nil {
-			return err
+			if err != nil {
+				return err
+			}
+		}
+
+		if runner.LayPrice != nil {
+			_, err := builder.
+				Insert("market_runner").
+				Columns(
+					"market_id",
+					"runner_id",
+					"name",
+					"price",
+					"size",
+					"timestamp",
+					"side",
+				).
+				Values(
+					runner.MarketID,
+					runner.ID,
+					runner.Name,
+					runner.LayPrice.Value,
+					runner.LayPrice.Size,
+					runner.LayPrice.Timestamp.Unix(),
+					"LAY",
+				).
+				Exec()
+
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -97,6 +127,7 @@ func (r *MarketRepository) MarketRunners(q *market.RunnerQuery) ([]*market.Marke
 		var mr market.MarketRunner
 		var value float32
 		var size float32
+		var side string
 		var date int64
 		var timestamp int64
 
@@ -108,11 +139,11 @@ func (r *MarketRepository) MarketRunners(q *market.RunnerQuery) ([]*market.Marke
 			&mr.SeasonID,
 			&mr.MarketName,
 			&mr.Exchange,
-			&mr.Side,
 			&mr.RunnerID,
 			&mr.RunnerName,
 			&value,
 			&size,
+			&side,
 			&timestamp,
 		)
 
@@ -122,13 +153,12 @@ func (r *MarketRepository) MarketRunners(q *market.RunnerQuery) ([]*market.Marke
 
 		mr.EventDate = time.Unix(date, 0)
 
-		price := market.Price{
+		mr.Price = market.Price{
 			Value:     value,
 			Size:      size,
+			Side:      side,
 			Timestamp: time.Unix(timestamp, 0),
 		}
-
-		mr.Prices = append(mr.Prices, &price)
 
 		markets = append(markets, &mr)
 	}

@@ -27,15 +27,15 @@ type Queue struct {
 	timeout  int64
 }
 
-func (q *Queue) ReceiveMarkets() <-chan *queue.Market {
-	ch := make(chan *queue.Market, 100)
+func (q *Queue) ReceiveMarkets() <-chan *queue.EventMarket {
+	ch := make(chan *queue.EventMarket, 100)
 
 	go q.receiveMessages(ch)
 
 	return ch
 }
 
-func (q *Queue) receiveMessages(ch chan<- *queue.Market) {
+func (q *Queue) receiveMessages(ch chan<- *queue.EventMarket) {
 	defer close(ch)
 
 	input := &sqs.ReceiveMessageInput{
@@ -58,7 +58,7 @@ func (q *Queue) receiveMessages(ch chan<- *queue.Market) {
 	}
 }
 
-func (q *Queue) parseMessage(ms *sqs.Message, ch chan<- *queue.Market) {
+func (q *Queue) parseMessage(ms *sqs.Message, ch chan<- *queue.EventMarket) {
 	var message Message
 	err := json.Unmarshal([]byte(*ms.Body), &message)
 
@@ -67,7 +67,7 @@ func (q *Queue) parseMessage(ms *sqs.Message, ch chan<- *queue.Market) {
 		return
 	}
 
-	var mk *queue.Market
+	var mk *queue.EventMarket
 	err = json.Unmarshal([]byte(message.Message), &mk)
 
 	if err != nil {

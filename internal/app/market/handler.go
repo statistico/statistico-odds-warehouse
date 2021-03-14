@@ -15,25 +15,38 @@ type Handler struct {
 	repository Repository
 }
 
-func (m *Handler) Handle(q *queue.Market) error {
+func (m *Handler) Handle(q *queue.EventMarket) error {
 	var runners []*Runner
 
 	for _, r := range q.Runners {
-		if len(r.Prices) == 0 {
+		if len(r.BackPrices) == 0 && len(r.LayPrices) == 0{
 			continue
-		}
-
-		price := Price{
-			Value:     float32(math.Round(float64(r.Prices[0].Price*100)) / 100),
-			Size:      float32(math.Round(float64(r.Prices[0].Size*100)) / 100),
-			Timestamp: time.Unix(q.Timestamp, 0),
 		}
 
 		run := Runner{
 			ID:       r.ID,
 			MarketID: q.ID,
 			Name:     parseRunner(q.Name, r),
-			Price:    price,
+		}
+
+		if len(r.BackPrices) != 0 {
+			price := Price{
+				Value:     float32(math.Round(float64(r.BackPrices[0].Price*100)) / 100),
+				Size:      float32(math.Round(float64(r.BackPrices[0].Size*100)) / 100),
+				Timestamp: time.Unix(q.Timestamp, 0),
+			}
+
+			run.BackPrice = &price
+		}
+
+		if len(r.LayPrices) != 0 {
+			price := Price{
+				Value:     float32(math.Round(float64(r.LayPrices[0].Price*100)) / 100),
+				Size:      float32(math.Round(float64(r.LayPrices[0].Size*100)) / 100),
+				Timestamp: time.Unix(q.Timestamp, 0),
+			}
+
+			run.LayPrice = &price
 		}
 
 		runners = append(runners, &run)
@@ -52,7 +65,6 @@ func (m *Handler) Handle(q *queue.Market) error {
 		CompetitionID: q.CompetitionID,
 		SeasonID:      q.SeasonID,
 		EventDate:     date,
-		Side:          q.Side,
 		Exchange:      q.Exchange,
 	}
 
