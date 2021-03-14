@@ -13,6 +13,7 @@ func convertMarketSelectionRequest(r *statistico.MarketRunnerRequest) (*market.R
 		MarketName:     r.GetMarket(),
 		RunnerName:     r.GetRunner(),
 		Line:           r.GetLine(),
+		Side:           r.GetSide().String(),
 		CompetitionIDs: r.GetCompetitionIds(),
 		SeasonIDs:      r.GetSeasonIds(),
 	}

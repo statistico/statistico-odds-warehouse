@@ -9,7 +9,6 @@ type Market struct {
 	CompetitionID uint64    `json:"competitionId"`
 	SeasonID      uint64    `json:"seasonId"`
 	EventDate     time.Time `json:"date"`
-	Side          string    `json:"side"`
 	Exchange      string    `json:"exchange"`
 }
 
@@ -17,12 +16,14 @@ type Runner struct {
 	ID       uint64 `json:"id"`
 	MarketID string `json:"marketId"`
 	Name     string `json:"name"`
-	Price    Price  `json:"price"`
+	BackPrice  *Price  `json:"backPrice"`
+	LayPrice   *Price  `json:"layPrice"`
 }
 
 type Price struct {
 	Value     float32   `json:"price"`
 	Size      float32   `json:"size"`
+	Side      string    `json:"side"`
 	Timestamp time.Time `json:"timestamp"`
 }
 
@@ -35,7 +36,6 @@ type MarketRunner struct {
 	CompetitionID uint64    `json:"competitionId"`
 	SeasonID      uint64    `json:"seasonId"`
 	EventDate     time.Time `json:"date"`
-	Side          string    `json:"side"`
 	Exchange      string    `json:"exchange"`
-	Prices        []*Price  `json:""`
+	Price         Price     `json:"price"`
 }

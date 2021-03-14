@@ -15,11 +15,11 @@ func buildMarketRunnerQuery(q *market.RunnerQuery, b *sq.StatementBuilderType) s
 			"m.season_id",
 			"m.name",
 			"m.exchange",
-			"m.side",
 			"mr.runner_id",
 			"mr.name",
 			"mr.price",
 			"mr.size",
+			"mr.side",
 			"mr.timestamp",
 		).
 		From("market m").
@@ -27,7 +27,8 @@ func buildMarketRunnerQuery(q *market.RunnerQuery, b *sq.StatementBuilderType) s
 
 	join := sq.Select("DISTINCT on (market_id) *").
 		From("market_runner mr").
-		Where(sq.Eq{"mr.name": q.RunnerName})
+		Where(sq.Eq{"mr.name": q.RunnerName}).
+		Where(sq.Eq{"mr.side": q.Side})
 
 	if q.GreaterThan != nil {
 		join = join.Where(sq.Gt{"price": *q.GreaterThan})

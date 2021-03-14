@@ -12,12 +12,12 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.1.0 // indirect
 	github.com/lib/pq v1.8.0
 	github.com/sirupsen/logrus v1.7.0
-	github.com/statistico/statistico-proto/go v0.0.0-20210127141535-19abef3f9457
+	github.com/statistico/statistico-proto/go v0.0.0-20210314191446-a6cf7fca9658
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.6.1
-	golang.org/x/net v0.0.0-20210119194325-5f4716e94777 // indirect
-	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c // indirect
+	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
+	golang.org/x/sys v0.0.0-20210314195730-07df6a141424 // indirect
 	golang.org/x/text v0.3.5 // indirect
-	google.golang.org/genproto v0.0.0-20210126160654-44e461bb6506 // indirect
-	google.golang.org/grpc v1.35.0
+	google.golang.org/genproto v0.0.0-20210312152112-fc591d9ea70f // indirect
+	google.golang.org/grpc v1.36.0
 )
