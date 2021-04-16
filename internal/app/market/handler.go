@@ -6,11 +6,6 @@ import (
 	"time"
 )
 
-const Away = "Away"
-const Draw = "Draw"
-const Home = "Home"
-const MatchOdds = "MATCH_ODDS"
-
 type Handler struct {
 	repository Repository
 }
@@ -19,14 +14,14 @@ func (m *Handler) Handle(q *queue.EventMarket) error {
 	var runners []*Runner
 
 	for _, r := range q.Runners {
-		if len(r.BackPrices) == 0 && len(r.LayPrices) == 0{
+		if len(r.BackPrices) == 0 && len(r.LayPrices) == 0 {
 			continue
 		}
 
 		run := Runner{
 			ID:       r.ID,
 			MarketID: q.ID,
-			Name:     parseRunner(q.Name, r),
+			Name:     r.Name,
 		}
 
 		if len(r.BackPrices) != 0 {
@@ -77,22 +72,6 @@ func (m *Handler) Handle(q *queue.EventMarket) error {
 	}
 
 	return nil
-}
-
-func parseRunner(market string, runner *queue.Runner) string {
-	if market != MatchOdds {
-		return runner.Name
-	}
-
-	if runner.Sort == 1 {
-		return Home
-	}
-
-	if runner.Sort == 2 {
-		return Away
-	}
-
-	return Draw
 }
 
 func NewHandler(r Repository) *Handler {

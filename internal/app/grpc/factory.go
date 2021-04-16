@@ -17,7 +17,7 @@ func createMarketRunner(m *market.MarketRunner) (*statistico.MarketRunner, error
 		SeasonId:      m.SeasonID,
 		EventDate:     timestamppb.New(m.EventDate),
 		Exchange:      m.Exchange,
-		Price:         &statistico.Price{
+		Price: &statistico.Price{
 			Value:     m.Price.Value,
 			Size:      m.Price.Size,
 			Side:      statistico.SideEnum(statistico.SideEnum_value[m.Price.Side]),
