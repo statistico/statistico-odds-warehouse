@@ -246,8 +246,7 @@ func TestHandler_Handle(t *testing.T) {
 			Runners: []*queue.Runner{
 				{
 					ID:   472671,
-					Name: "West Ham",
-					Sort: 1,
+					Name: "Home",
 					BackPrices: []queue.PriceSize{
 						{
 							Price: 1.95581981,
@@ -257,8 +256,7 @@ func TestHandler_Handle(t *testing.T) {
 				},
 				{
 					ID:   472672,
-					Name: "Arsenal",
-					Sort: 2,
+					Name: "Away",
 					BackPrices: []queue.PriceSize{
 						{
 							Price: 2.05091981,
@@ -268,8 +266,7 @@ func TestHandler_Handle(t *testing.T) {
 				},
 				{
 					ID:   472673,
-					Name: "The Draw",
-					Sort: 3,
+					Name: "Draw",
 					BackPrices: []queue.PriceSize{
 						{
 							Price: 3.051111,
@@ -341,14 +338,12 @@ func TestHandler_Handle(t *testing.T) {
 			Runners: []*queue.Runner{
 				{
 					ID:   472671,
-					Name: "West Ham",
-					Sort: 1,
+					Name: "Home",
 					LayPrices: []queue.PriceSize{},
 				},
 				{
 					ID:   472672,
-					Name: "Arsenal",
-					Sort: 2,
+					Name: "Away",
 					LayPrices: []queue.PriceSize{
 						{
 							Price: 2.05091981,
@@ -358,8 +353,7 @@ func TestHandler_Handle(t *testing.T) {
 				},
 				{
 					ID:   472673,
-					Name: "The Draw",
-					Sort: 3,
+					Name: "Draw",
 					LayPrices: []queue.PriceSize{
 						{
 							Price: 3.051111,
