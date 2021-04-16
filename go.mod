@@ -15,11 +15,10 @@ require (
 	github.com/statistico/statistico-proto/go v0.0.0-20210404061231-83b5035e8b94
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.6.1
-	golang.org/x/net v0.0.0-20210331212208-0fccb6fa2b5c // indirect
-	golang.org/x/sys v0.0.0-20210403161142-5e06dd20ab57 // indirect
-	golang.org/x/text v0.3.6 // indirect
-	google.golang.org/genproto v0.0.0-20210402141018-6c239bbf2bb1 // indirect
-	google.golang.org/grpc v1.36.1
+	golang.org/x/net v0.0.0-20210415231046-e915ea6b2b7d // indirect
+	golang.org/x/sys v0.0.0-20210415045647-66c3f260301c // indirect
+	google.golang.org/genproto v0.0.0-20210415145412-64678f1ae2d5 // indirect
+	google.golang.org/grpc v1.37.0
 	google.golang.org/protobuf v1.26.0
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )

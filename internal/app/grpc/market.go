@@ -37,7 +37,7 @@ func (m *MarketService) MarketRunnerSearch(r *statistico.MarketRunnerRequest, st
 		}
 
 		if err := stream.Send(mr); err != nil {
-			m.logger.Errorf("Error streaming market runner back to client. %s", err.Error())
+			m.logger.Errorf("Error streaming market runner %+v back to client. %s", mr, err.Error())
 			continue
 		}
 	}
