@@ -337,8 +337,8 @@ func TestHandler_Handle(t *testing.T) {
 			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
-					ID:   472671,
-					Name: "Home",
+					ID:        472671,
+					Name:      "Home",
 					LayPrices: []queue.PriceSize{},
 				},
 				{

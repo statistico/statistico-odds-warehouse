@@ -202,10 +202,10 @@ func newMarketRunner() *market.MarketRunner {
 		CompetitionID: 8,
 		SeasonID:      17420,
 		Price: market.Price{
-				Value:     1.95,
-				Size:      1298171.00,
-				Side:     "BACK",
-				Timestamp: time.Unix(1607332030, 0),
+			Value:     1.95,
+			Size:      1298171.00,
+			Side:      "BACK",
+			Timestamp: time.Unix(1607332030, 0),
 		},
 	}
 }

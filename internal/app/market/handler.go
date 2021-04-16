@@ -14,7 +14,7 @@ func (m *Handler) Handle(q *queue.EventMarket) error {
 	var runners []*Runner
 
 	for _, r := range q.Runners {
-		if len(r.BackPrices) == 0 && len(r.LayPrices) == 0{
+		if len(r.BackPrices) == 0 && len(r.LayPrices) == 0 {
 			continue
 		}
 
