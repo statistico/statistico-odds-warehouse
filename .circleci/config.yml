@@ -22,14 +22,14 @@ workflows:
           filters:
             branches:
               only: main
-#      - deploy-to-production:
-#          context: aws
-#          requires:
-#            - build-and-test
-#            - release-images
-#          filters:
-#            branches:
-#              only: main
+      - deploy-to-production:
+          context: aws
+          requires:
+            - build-and-test
+            - release-images
+          filters:
+            branches:
+              only: main
 
 jobs:
   build-and-test:
@@ -79,5 +79,10 @@ jobs:
           family: 'statistico-odds-warehouse-background'
           cluster-name: 'statistico-production'
           container-image-name-updates: >
-            container=queue,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-odds-warehouse:${CIRCLE_SHA1},
-            container=migrate,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-odds-warehouse:${CIRCLE_SHA1}
+            container=statistico-odds-warehouse-queue,tag=latest
+      - aws-ecs/update-service:
+          family: 'statistico-odds-warehouse-grpc'
+          cluster-name: 'statistico-production'
+          container-image-name-updates: >
+            container=statistico-odds-warehouse-grpc,tag=latest,
+            container=statistico-odds-warehouse-migrate,tag=latest,
