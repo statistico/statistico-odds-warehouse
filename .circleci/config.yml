@@ -81,7 +81,7 @@ jobs:
           container-image-name-updates: >
             container=statistico-odds-warehouse-queue,tag=latest
       - aws-ecs/update-service:
-          family: 'statistico-odds-warehouse-grpc'
+          family: 'statistico-odds-warehouse'
           cluster-name: 'statistico-production'
           container-image-name-updates: >
             container=statistico-odds-warehouse-grpc,tag=latest,
