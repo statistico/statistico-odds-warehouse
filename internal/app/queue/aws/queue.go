@@ -58,16 +58,8 @@ func (q *Queue) receiveMessages(ch chan<- *queue.EventMarket) {
 }
 
 func (q *Queue) parseMessage(ms *sqs.Message, ch chan<- *queue.EventMarket) {
-	var message Message
-	err := json.Unmarshal([]byte(*ms.Body), &message)
-
-	if err != nil {
-		q.logger.Errorf("Unable to marshal message into message struct, %v.", err)
-		return
-	}
-
 	var mk *queue.EventMarket
-	err = json.Unmarshal([]byte(message.Message), &mk)
+	err := json.Unmarshal([]byte(*ms.Body), &mk)
 
 	if err != nil {
 		q.logger.Errorf("Unable to marshal message into market struct, %v.", err)
