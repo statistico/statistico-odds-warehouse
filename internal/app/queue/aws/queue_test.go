@@ -138,7 +138,7 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 		assert.Equal(t, 0, len(ch))
 		assert.Equal(t, 1, len(hook.Entries))
 		assert.Equal(t, logrus.ErrorLevel, hook.LastEntry().Level)
-		assert.Equal(t, "Unable to marshal message into message struct, invalid character 'i' looking for beginning of value.", hook.LastEntry().Message)
+		assert.Equal(t, "Unable to marshal message into market struct, invalid character 'i' looking for beginning of value.", hook.LastEntry().Message)
 
 		client.AssertExpectations(t)
 	})
@@ -146,14 +146,28 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 
 var messageBody = `
 	{
-	  "Type": "Notification",
-	  "MessageId": "72b286fb-a288-5b04-9093-dee1c8e08a85",
-	  "TopicArn": "arn:aws:",
-	  "Message": "{\"id\":\"1.2818721\",\"eventId\":148192,\"name\":\"OVER_UNDER_25\",\"exchange\":\"betfair\",\"runners\":[{\"id\":472671,\"name\":\"Over 2.5 Goals\",\"backPrices\":[{\"price\":1.95,\"size\":1461}],\"layPrices\":[{\"price\":1.95,\"size\":1461}]}],\"timestamp\":1583971200}",
-	  "Timestamp": 1583971200,
-	  "SignatureVersion": "1",
-	  "Signature": "aMVOnhHOyvVg4JhJ1TfopQQ55Ow5EbqzA6A/Cbhxl+ZOhI9fTEogukCQAG4lMBReh0Xbtx2BIJx+j+pDgKW3FPEuZxP/CeKdLQU+KAP1J86Nlja1cAeNMk05tJE6P4IwR07P6+0hIsZmEE9bFfwV5zw5cip7TnbpD/o9QyPnEv8Dt16RDprQfkuuJa+XAUvpFOgX6l1SQRnf3AwmZeV9H6mWPLFSyrc2RKkRzlOhbNXt31qul7+fT4R23p90TB42UtGXsf73l40Pz6s4ibb9QzMhl0kjHW7qwsH0iRMYJFtznoX4YP/X4InVzSYl7vv201ih3Wiixu0gbNByM8OBFg==",
-	  "SigningCertURL": "https://sns.eu-west-2.amazonaws.com",
-	  "UnsubscribeURL": "https://sns.eu-west-2.amazonaws.com"
+	  "id": "1.2818721",
+	  "eventId": 148192,
+	  "name": "OVER_UNDER_25",
+	  "exchange": "betfair",
+	  "runners": [
+		{
+		  "id": 472671,
+		  "name": "Over 2.5 Goals",
+		  "backPrices": [
+			{
+			  "price": 1.95,
+			  "size": 1461
+			}
+		  ],
+		  "layPrices": [
+			{
+			  "price": 1.95,
+			  "size": 1461
+			}
+		  ]
+		}
+	  ],
+	  "timestamp": 1583971200
 	}
 `
