@@ -14,7 +14,6 @@ type Message struct {
 	MessageID      string `json:"messageId"`
 	TopicArn       string `json:"topicArn"`
 	Message        string `json:"message"`
-	Timestamp      int    `json:"timestamp"`
 	Signature      string `json:"signature"`
 	SigningCertURL string `json:"signingCertUrl"`
 	UnsubscribeURL string `json:"unsubscribeUrl"`
