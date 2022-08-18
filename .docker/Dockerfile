@@ -5,6 +5,10 @@ WORKDIR /app
 
 RUN go install github.com/pressly/goose/v3/cmd/goose@latest
 
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
 COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/grpc
