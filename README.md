@@ -1,12 +1,12 @@
 # Statistico Odds Warehouse
 
-This application is responsible for parsing and storing market odds data for different sports events.
+This application is responsible for parsing and storing market odds data for different sport events.
 
 ## Getting started
 To develop this application locally you will need to following tools and language version installed:
 - Docker
 - Docker Compose
-- Golang >=1.13.9
+- Golang >=1.17
 
 ## Applications
 This service provides one application:
