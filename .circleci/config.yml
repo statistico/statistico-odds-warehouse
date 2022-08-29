@@ -86,4 +86,4 @@ jobs:
           container-image-name-updates: >
             container=statistico-odds-warehouse-console,tag=latest
       - aws-ecs/deploy-ecs-scheduled-task:
-          rule-name: statistico-odds-warehouse_market:queue-fetch
+          rule-name: statistico-odds-warehouse_market-queue-fetch
