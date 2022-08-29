@@ -6,12 +6,9 @@ This application is responsible for parsing and storing market odds data for dif
 To develop this application locally you will need to following tools and language version installed:
 - Docker
 - Docker Compose
-- Golang >=1.17
 
 ## Applications
-This service provides one application:
+This service provides two application:
 
+- gRPC
 - Queue
-
-For help with testing and deployment additional documentation can be found in the [docs](https://github.com/statistico/statistico-data/docs)
-directory
