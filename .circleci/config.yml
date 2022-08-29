@@ -81,3 +81,9 @@ jobs:
           container-image-name-updates: >
             container=statistico-odds-warehouse-grpc,tag=latest,
             container=statistico-odds-warehouse-migrate,tag=latest,
+      - aws-ecs/update-task-definition:
+          family: 'statistico-odds-warehouse-console'
+          container-image-name-updates: >
+            container=statistico-odds-warehouse-console,tag=latest
+      - aws-ecs/deploy-ecs-scheduled-task:
+          rule-name: statistico-odds-warehouse_market:queue-fetch
