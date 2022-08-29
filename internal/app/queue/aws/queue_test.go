@@ -69,11 +69,9 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 			Timestamp: 1583971200,
 		}
 
-		ch := r.ReceiveMarkets()
+		markets := r.ReceiveMarkets()
 
-		mt := <-ch
-
-		assert.Equal(t, mk, mt)
+		assert.Equal(t, mk, markets[0])
 		client.AssertExpectations(t)
 	})
 
@@ -95,11 +93,9 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 
 		client.On("ReceiveMessage", input).Return(&sqs.ReceiveMessageOutput{}, e)
 
-		ch := r.ReceiveMarkets()
+		markets := r.ReceiveMarkets()
 
-		<-ch
-
-		assert.Equal(t, 0, len(ch))
+		assert.Equal(t, 0, len(markets))
 		assert.Equal(t, 1, len(hook.Entries))
 		assert.Equal(t, logrus.ErrorLevel, hook.LastEntry().Level)
 		assert.Equal(t, "Unable to receive messages from queue \"messages\", error happened.", hook.LastEntry().Message)
@@ -131,11 +127,9 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 
 		client.On("ReceiveMessage", input).Return(&sqs.ReceiveMessageOutput{Messages: messages}, nil)
 
-		ch := r.ReceiveMarkets()
+		markets := r.ReceiveMarkets()
 
-		<-ch
-
-		assert.Equal(t, 0, len(ch))
+		assert.Equal(t, 0, len(markets))
 		assert.Equal(t, 1, len(hook.Entries))
 		assert.Equal(t, logrus.ErrorLevel, hook.LastEntry().Level)
 		assert.Equal(t, "Unable to marshal message into market struct, invalid character 'i' looking for beginning of value.", hook.LastEntry().Message)

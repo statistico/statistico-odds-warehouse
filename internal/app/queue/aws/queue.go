@@ -26,17 +26,9 @@ type Queue struct {
 	timeout  int64
 }
 
-func (q *Queue) ReceiveMarkets() <-chan *queue.EventMarket {
-	ch := make(chan *queue.EventMarket, 100)
+func (q *Queue) ReceiveMarkets() []*queue.EventMarket {
+	markets := []*queue.EventMarket{}
 
-	go q.receiveMessages(ch)
-
-	return ch
-}
-
-func (q *Queue) receiveMessages(ch chan<- *queue.EventMarket) {
-	defer close(ch)
-	
 	input := &sqs.ReceiveMessageInput{
 		QueueUrl: &q.queueUrl,
 		MessageAttributeNames: aws.StringSlice([]string{
@@ -49,26 +41,34 @@ func (q *Queue) receiveMessages(ch chan<- *queue.EventMarket) {
 
 	if err != nil {
 		q.logger.Errorf("Unable to receive messages from queue %q, %v.", q.queueUrl, err)
-		return
+		return markets
 	}
 
 	for _, message := range result.Messages {
-		q.parseMessage(message, ch)
+		mk := q.parseMessage(message)
+
+		if mk == nil {
+			continue
+		}
+
+		markets = append(markets, mk)
 	}
+
+	return markets
 }
 
-func (q *Queue) parseMessage(ms *sqs.Message, ch chan<- *queue.EventMarket) {
+func (q *Queue) parseMessage(ms *sqs.Message) *queue.EventMarket {
 	var mk *queue.EventMarket
 	err := json.Unmarshal([]byte(*ms.Body), &mk)
 
 	if err != nil {
 		q.logger.Errorf("Unable to marshal message into market struct, %v.", err)
-		return
+		return nil
 	}
 
-	ch <- mk
-
 	q.deleteMessage(ms.ReceiptHandle)
+
+	return mk
 }
 
 func (q *Queue) deleteMessage(handle *string) {
