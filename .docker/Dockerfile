@@ -11,8 +11,8 @@ RUN go mod download
 
 COPY . .
 
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/console
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/grpc
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/queue
 
 # Step 2
 FROM alpine
@@ -22,7 +22,7 @@ COPY ./bin ./bin
 COPY ./database ./database
 COPY ./.docker/wait-for-it.sh .
 COPY --from=builder /go/bin/goose /usr/local/bin
+COPY --from=builder /app/console .
 COPY --from=builder /app/grpc .
-COPY --from=builder /app/queue .
 
 CMD ["/bin/sh"]
