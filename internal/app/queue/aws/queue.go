@@ -36,7 +36,7 @@ func (q *Queue) ReceiveMarkets() <-chan *queue.EventMarket {
 
 func (q *Queue) receiveMessages(ch chan<- *queue.EventMarket) {
 	defer close(ch)
-
+	
 	input := &sqs.ReceiveMessageInput{
 		QueueUrl: &q.queueUrl,
 		MessageAttributeNames: aws.StringSlice([]string{
