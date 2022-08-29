@@ -22,11 +22,11 @@ func main() {
 				Usage:       "Fetch and parse markets from queue",
 				Description: "Fetch and parse markets from queue",
 				Before: func(c *cli.Context) error {
-					fmt.Println("Fetching markets from queue...")
+					fmt.Println("[INFO] Fetching markets from queue")
 					return nil
 				},
 				After: func(c *cli.Context) error {
-					fmt.Println("Complete.")
+					fmt.Println("[INFO] Complete")
 					return nil
 				},
 				Action: func(c *cli.Context) error {
@@ -34,11 +34,11 @@ func main() {
 						markets := q.ReceiveMarkets()
 
 						if len(markets) == 0 {
-							fmt.Println("Queue is empty. Exiting.")
+							fmt.Println("[INFO] Queue is empty - exiting")
 							break
 						}
 
-						for m := range markets {
+						for _, m := range markets {
 							err := h.Handle(m)
 
 							if err != nil {

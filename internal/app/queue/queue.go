@@ -1,7 +1,7 @@
 package queue
 
 type Queue interface {
-	ReceiveMarkets() <-chan *EventMarket
+	ReceiveMarkets() []*EventMarket
 }
 
 type EventMarket struct {

@@ -10,22 +10,16 @@ type Queue struct {
 	logger *logrus.Logger
 }
 
-func (q *Queue) ReceiveMarkets() <-chan *queue.EventMarket {
-	ch := make(chan *queue.EventMarket, 100)
+func (q *Queue) ReceiveMarkets() []*queue.EventMarket {
+	markets := []*queue.EventMarket{}
 
 	q.logger.Infof("Pretending to poll for messages from queue...")
 
-	go q.simulate(ch)
-
-	return ch
-}
-
-func (q *Queue) simulate(ch chan<- *queue.EventMarket) {
 	time.Sleep(10 * time.Second)
 
-	q.logger.Infof("..polling complete.")
+	q.logger.Infof("...polling complete.")
 
-	close(ch)
+	return markets
 }
 
 func NewQueue(l *logrus.Logger) queue.Queue {
