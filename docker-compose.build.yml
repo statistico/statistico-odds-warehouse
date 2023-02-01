@@ -32,9 +32,6 @@ services:
     links:
       - postgres
 
-  queue:
-    <<: *console
-
   migrate:
     <<: *console
     command: [ "./bin/migrate" ]
@@ -68,6 +65,9 @@ services:
       - postgres
     networks:
       - statistico-odds-warehouse_default
+
+  queue:
+    <<: *console
 
 networks:
   statistico-odds-warehouse_default:
