@@ -61,8 +61,10 @@ services:
       QUEUE_DRIVER: log
     links:
       - postgres
+      - migrate
     depends_on:
       - postgres
+      - migrate
     networks:
       - statistico-odds-warehouse_default
 
