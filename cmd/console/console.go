@@ -18,9 +18,9 @@ func main() {
 		Name: "Statistico Odds Warehouse - Command Line Application",
 		Commands: []cli.Command{
 			{
-				Name:        "market:queue-fetch",
-				Usage:       "Fetch and parse markets from queue",
-				Description: "Fetch and parse markets from queue",
+				Name:        "market:queue",
+				Usage:       "Fetch and parse markets from a queue",
+				Description: "Fetch and parse markets from a queue",
 				Before: func(c *cli.Context) error {
 					fmt.Println("[INFO] Fetching markets from queue")
 					return nil
