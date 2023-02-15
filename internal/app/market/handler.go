@@ -47,19 +47,13 @@ func (m *Handler) Handle(q *queue.EventMarket) error {
 		runners = append(runners, &run)
 	}
 
-	date, err := time.Parse(time.RFC3339, q.EventDate)
-
-	if err != nil {
-		return err
-	}
-
 	market := Market{
 		ID:            q.ID,
 		Name:          q.Name,
 		EventID:       q.EventID,
 		CompetitionID: q.CompetitionID,
 		SeasonID:      q.SeasonID,
-		EventDate:     date,
+		EventDate:     time.Unix(q.EventDate, 0),
 		Exchange:      q.Exchange,
 	}
 
