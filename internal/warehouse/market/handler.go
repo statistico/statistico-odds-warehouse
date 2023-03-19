@@ -1,7 +1,7 @@
 package market
 
 import (
-	"github.com/statistico/statistico-odds-warehouse/internal/app/queue"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/queue"
 	"math"
 	"time"
 )

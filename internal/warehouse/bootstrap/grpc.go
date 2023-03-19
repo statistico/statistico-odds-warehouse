@@ -1,6 +1,6 @@
 package bootstrap
 
-import "github.com/statistico/statistico-odds-warehouse/internal/app/grpc"
+import "github.com/statistico/statistico-odds-warehouse/internal/warehouse/grpc"
 
 func (c Container) MarketService() *grpc.MarketService {
 	return grpc.NewMarketService(c.MarketRepository(), c.Logger)

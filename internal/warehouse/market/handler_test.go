@@ -2,8 +2,8 @@ package market_test
 
 import (
 	"errors"
-	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
-	"github.com/statistico/statistico-odds-warehouse/internal/app/queue"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/market"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/queue"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"testing"

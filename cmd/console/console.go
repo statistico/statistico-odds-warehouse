@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/statistico/statistico-odds-warehouse/internal/app/bootstrap"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/bootstrap"
 	"github.com/urfave/cli"
 	"os"
 )

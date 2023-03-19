@@ -1,15 +1,13 @@
 module github.com/statistico/statistico-odds-warehouse
 
-go 1.17
+go 1.19
 
 require (
 	github.com/Masterminds/squirrel v1.4.0
 	github.com/aws/aws-sdk-go v1.35.19
 	github.com/evalphobia/logrus_sentry v0.8.2
-	github.com/golang/protobuf v1.5.2
 	github.com/lib/pq v1.8.0
 	github.com/sirupsen/logrus v1.7.0
-	github.com/statistico/statistico-proto/go v0.0.0-20210404061231-83b5035e8b94
 	github.com/stretchr/testify v1.6.1
 	google.golang.org/grpc v1.36.1
 	google.golang.org/protobuf v1.26.0
@@ -20,6 +18,7 @@ require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/getsentry/raven-go v0.2.0 // indirect
+	github.com/golang/protobuf v1.5.1 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/lann/builder v0.0.0-20180802200727-47ae307949d0 // indirect
@@ -28,6 +27,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
+	github.com/statistico/statistico-proto v0.0.9 // indirect
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/urfave/cli v1.22.9 // indirect
 	golang.org/x/net v0.0.0-20210331212208-0fccb6fa2b5c // indirect
