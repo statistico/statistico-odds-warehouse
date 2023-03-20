@@ -25,18 +25,13 @@ type Runner struct {
 	ID        uint64 `json:"id"`
 	MarketID  string `json:"marketId"`
 	Name      string `json:"name"`
-	BackPrice *Price `json:"backPrice"`
-	LayPrice  *Price `json:"layPrice"`
-}
-
-type Price struct {
-	Value     float32   `json:"price"`
-	Size      float32   `json:"size"`
-	Side      string    `json:"side"`
-	Timestamp time.Time `json:"timestamp"`
+	BackPrice *Odds  `json:"backPrice"`
+	LayPrice  *Odds  `json:"layPrice"`
 }
 
 type Odds struct {
-	Price     float32   `json:"price"`
+	Value     float32   `json:"price"`
+	Size      float32   `json:"size"`
+	Side      string    `json:"side"`
 	Timestamp time.Time `json:"timestamp"`
 }

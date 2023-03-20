@@ -42,7 +42,7 @@ func (m *marketReader) ExchangeMarketRunnerOdds(eventID uint64, market, runner, 
 		var o *app.Odds
 		var timestamp int64
 
-		if err := rows.Scan(&o.Price, &timestamp); err != nil {
+		if err := rows.Scan(&o.Value, &timestamp); err != nil {
 			return []*app.Odds{}, err
 		}
 

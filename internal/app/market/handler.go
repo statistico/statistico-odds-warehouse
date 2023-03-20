@@ -26,7 +26,7 @@ func (m *Handler) Handle(q *queue.EventMarket) error {
 		}
 
 		if len(r.BackPrices) != 0 {
-			price := app.Price{
+			price := app.Odds{
 				Value:     float32(math.Round(float64(r.BackPrices[0].Price*100)) / 100),
 				Size:      float32(math.Round(float64(r.BackPrices[0].Size*100)) / 100),
 				Timestamp: time.Unix(q.Timestamp, 0),
@@ -36,7 +36,7 @@ func (m *Handler) Handle(q *queue.EventMarket) error {
 		}
 
 		if len(r.LayPrices) != 0 {
-			price := app.Price{
+			price := app.Odds{
 				Value:     float32(math.Round(float64(r.LayPrices[0].Price*100)) / 100),
 				Size:      float32(math.Round(float64(r.LayPrices[0].Size*100)) / 100),
 				Timestamp: time.Unix(q.Timestamp, 0),
