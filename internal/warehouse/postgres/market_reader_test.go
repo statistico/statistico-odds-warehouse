@@ -1,8 +1,8 @@
 package postgres_test
 
 import (
-	"github.com/statistico/statistico-odds-warehouse/internal/app/postgres"
-	"github.com/statistico/statistico-odds-warehouse/internal/app/test"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/postgres"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/test"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"

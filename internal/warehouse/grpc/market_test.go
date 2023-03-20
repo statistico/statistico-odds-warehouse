@@ -4,8 +4,8 @@ import (
 	"errors"
 	"github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
-	"github.com/statistico/statistico-odds-warehouse/internal/app"
-	g "github.com/statistico/statistico-odds-warehouse/internal/app/grpc"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
+	g "github.com/statistico/statistico-odds-warehouse/internal/warehouse/grpc"
 	statistico "github.com/statistico/statistico-proto/go"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -33,7 +33,7 @@ func TestMarketService_GetExchangeOdds(t *testing.T) {
 			Limit:    1,
 		}
 
-		odds := []*app.Odds{
+		odds := []*warehouse.Odds{
 			{
 				Value:     1.65,
 				Size:      12301.55,
@@ -83,7 +83,7 @@ func TestMarketService_GetExchangeOdds(t *testing.T) {
 			Limit:    1,
 		}
 
-		reader.On("ExchangeMarketRunnerOdds", req.EventId, req.Market, req.Runner, req.Exchange, req.Limit).Return([]*app.Odds{}, errors.New("oh no"))
+		reader.On("ExchangeMarketRunnerOdds", req.EventId, req.Market, req.Runner, req.Exchange, req.Limit).Return([]*warehouse.Odds{}, errors.New("oh no"))
 
 		server.AssertNotCalled(t, "Send", mock.AnythingOfType("*statistico.ExchangeOdds"))
 
@@ -118,7 +118,7 @@ func TestMarketService_GetExchangeOdds(t *testing.T) {
 			Limit:    1,
 		}
 
-		odds := []*app.Odds{
+		odds := []*warehouse.Odds{
 			{
 				Value:     1.65,
 				Size:      12301.55,
@@ -157,9 +157,9 @@ type MockMarketReader struct {
 	mock.Mock
 }
 
-func (m *MockMarketReader) ExchangeMarketRunnerOdds(eventID uint64, market, runner, exchange string, limit uint32) ([]*app.Odds, error) {
+func (m *MockMarketReader) ExchangeMarketRunnerOdds(eventID uint64, market, runner, exchange string, limit uint32) ([]*warehouse.Odds, error) {
 	args := m.Called(eventID, market, runner, exchange, limit)
-	return args.Get(0).([]*app.Odds), args.Error(1)
+	return args.Get(0).([]*warehouse.Odds), args.Error(1)
 }
 
 type MockExchangeOddsServer struct {

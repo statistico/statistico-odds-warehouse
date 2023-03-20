@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/market"
 )
 
 func (c Container) MarketHandler() *market.Handler {

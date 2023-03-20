@@ -4,14 +4,14 @@ import (
 	"database/sql"
 	sq "github.com/Masterminds/squirrel"
 	_ "github.com/lib/pq"
-	"github.com/statistico/statistico-odds-warehouse/internal/app"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
 )
 
 type marketWriter struct {
 	connection *sql.DB
 }
 
-func (w *marketWriter) InsertMarket(m *app.Market) error {
+func (w *marketWriter) InsertMarket(m *warehouse.Market) error {
 	var exists bool
 
 	err := w.connection.QueryRow(`SELECT exists (SELECT id FROM market where id = $1)`, m.ID).Scan(&exists)
@@ -47,7 +47,7 @@ func (w *marketWriter) InsertMarket(m *app.Market) error {
 	return err
 }
 
-func (w *marketWriter) InsertRunners(runners []*app.Runner) error {
+func (w *marketWriter) InsertRunners(runners []*warehouse.Runner) error {
 	builder := w.queryBuilder()
 
 	for _, runner := range runners {
@@ -115,6 +115,6 @@ func (w *marketWriter) queryBuilder() sq.StatementBuilderType {
 	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(w.connection)
 }
 
-func NewMarketWriter(connection *sql.DB) app.MarketWriter {
+func NewMarketWriter(connection *sql.DB) warehouse.MarketWriter {
 	return &marketWriter{connection: connection}
 }

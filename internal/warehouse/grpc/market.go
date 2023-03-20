@@ -2,14 +2,14 @@ package grpc
 
 import (
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/statistico-odds-warehouse/internal/app"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
 	"github.com/statistico/statistico-proto/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 type MarketService struct {
-	reader app.MarketReader
+	reader warehouse.MarketReader
 	logger *logrus.Logger
 	statistico.UnimplementedOddsWarehouseServiceServer
 }
@@ -36,7 +36,7 @@ func (m *MarketService) GetExchangeOdds(r *statistico.ExchangeOddsRequest, strea
 	return nil
 }
 
-func NewMarketService(r app.MarketReader, l *logrus.Logger) *MarketService {
+func NewMarketService(r warehouse.MarketReader, l *logrus.Logger) *MarketService {
 	return &MarketService{
 		reader: r,
 		logger: l,
