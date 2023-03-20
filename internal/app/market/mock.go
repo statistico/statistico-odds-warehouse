@@ -1,22 +1,20 @@
 package market
 
-import "github.com/stretchr/testify/mock"
+import (
+	"github.com/statistico/statistico-odds-warehouse/internal/app"
+	"github.com/stretchr/testify/mock"
+)
 
-type MockRepository struct {
+type MockMarketWriter struct {
 	mock.Mock
 }
 
-func (m *MockRepository) InsertMarket(o *Market) error {
+func (m *MockMarketWriter) InsertMarket(o *app.Market) error {
 	args := m.Called(o)
 	return args.Error(0)
 }
 
-func (m *MockRepository) InsertRunners(r []*Runner) error {
+func (m *MockMarketWriter) InsertRunners(r []*app.Runner) error {
 	args := m.Called(r)
 	return args.Error(0)
-}
-
-func (m *MockRepository) MarketRunners(q *RunnerQuery) ([]*MarketRunner, error) {
-	args := m.Called(q)
-	return args.Get(0).([]*MarketRunner), args.Error(1)
 }

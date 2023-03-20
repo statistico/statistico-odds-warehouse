@@ -2,6 +2,7 @@ package market_test
 
 import (
 	"errors"
+	"github.com/statistico/statistico-odds-warehouse/internal/app"
 	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
 	"github.com/statistico/statistico-odds-warehouse/internal/app/queue"
 	"github.com/stretchr/testify/assert"
@@ -14,8 +15,8 @@ func TestHandler_Handle(t *testing.T) {
 	t.Run("parses over under market and persist via the repository", func(t *testing.T) {
 		t.Helper()
 
-		repo := new(market.MockRepository)
-		handler := market.NewHandler(repo)
+		writer := new(market.MockMarketWriter)
+		handler := market.NewHandler(writer)
 
 		mk := &queue.EventMarket{
 			ID:            "1.2818721",
@@ -62,7 +63,7 @@ func TestHandler_Handle(t *testing.T) {
 			Timestamp: 1583971200,
 		}
 
-		mkt := mock.MatchedBy(func(m *market.Market) bool {
+		mkt := mock.MatchedBy(func(m *app.Market) bool {
 			assert.Equal(t, "1.2818721", m.ID)
 			assert.Equal(t, uint64(148192), m.EventID)
 			assert.Equal(t, uint64(8), m.CompetitionID)
@@ -73,7 +74,7 @@ func TestHandler_Handle(t *testing.T) {
 			return true
 		})
 
-		run := mock.MatchedBy(func(r []*market.Runner) bool {
+		run := mock.MatchedBy(func(r []*app.Runner) bool {
 			assert.Equal(t, uint64(472671), r[0].ID)
 			assert.Equal(t, "Over 2.5 Goals", r[0].Name)
 			assert.Equal(t, float32(1.95), r[0].BackPrice.Value)
@@ -93,8 +94,8 @@ func TestHandler_Handle(t *testing.T) {
 			return true
 		})
 
-		repo.On("InsertMarket", mkt).Return(nil)
-		repo.On("InsertRunners", run).Return(nil)
+		writer.On("InsertMarket", mkt).Return(nil)
+		writer.On("InsertRunners", run).Return(nil)
 
 		err := handler.Handle(mk)
 
@@ -102,14 +103,14 @@ func TestHandler_Handle(t *testing.T) {
 			t.Fatalf("Expected nil, got %s", err.Error())
 		}
 
-		repo.AssertExpectations(t)
+		writer.AssertExpectations(t)
 	})
 
 	t.Run("returns error if returned by repository", func(t *testing.T) {
 		t.Helper()
 
-		repo := new(market.MockRepository)
-		handler := market.NewHandler(repo)
+		writer := new(market.MockMarketWriter)
+		handler := market.NewHandler(writer)
 
 		mk := &queue.EventMarket{
 			ID:            "1.2818721",
@@ -144,7 +145,7 @@ func TestHandler_Handle(t *testing.T) {
 			Timestamp: 1583971200,
 		}
 
-		mkt := mock.MatchedBy(func(m *market.Market) bool {
+		mkt := mock.MatchedBy(func(m *app.Market) bool {
 			assert.Equal(t, "1.2818721", m.ID)
 			assert.Equal(t, uint64(148192), m.EventID)
 			assert.Equal(t, uint64(8), m.CompetitionID)
@@ -155,8 +156,8 @@ func TestHandler_Handle(t *testing.T) {
 			return true
 		})
 
-		repo.On("InsertMarket", mkt).Return(errors.New("oh no"))
-		repo.AssertNotCalled(t, "InsertRunners")
+		writer.On("InsertMarket", mkt).Return(errors.New("oh no"))
+		writer.AssertNotCalled(t, "InsertRunners")
 
 		err := handler.Handle(mk)
 
@@ -166,14 +167,14 @@ func TestHandler_Handle(t *testing.T) {
 
 		assert.Equal(t, "oh no", err.Error())
 
-		repo.AssertExpectations(t)
+		writer.AssertExpectations(t)
 	})
 
 	t.Run("parse runners name by sort priority for MATCH_ODDS market", func(t *testing.T) {
 		t.Helper()
 
-		repo := new(market.MockRepository)
-		handler := market.NewHandler(repo)
+		writer := new(market.MockMarketWriter)
+		handler := market.NewHandler(writer)
 
 		mk := &queue.EventMarket{
 			ID:            "1.2818721",
@@ -218,7 +219,7 @@ func TestHandler_Handle(t *testing.T) {
 			Timestamp: 1583971200,
 		}
 
-		mkt := mock.MatchedBy(func(m *market.Market) bool {
+		mkt := mock.MatchedBy(func(m *app.Market) bool {
 			assert.Equal(t, "1.2818721", m.ID)
 			assert.Equal(t, uint64(148192), m.EventID)
 			assert.Equal(t, uint64(8), m.CompetitionID)
@@ -229,7 +230,7 @@ func TestHandler_Handle(t *testing.T) {
 			return true
 		})
 
-		run := mock.MatchedBy(func(r []*market.Runner) bool {
+		run := mock.MatchedBy(func(r []*app.Runner) bool {
 			assert.Equal(t, uint64(472671), r[0].ID)
 			assert.Equal(t, "Home", r[0].Name)
 			assert.Equal(t, float32(1.96), r[0].BackPrice.Value)
@@ -247,8 +248,8 @@ func TestHandler_Handle(t *testing.T) {
 			return true
 		})
 
-		repo.On("InsertMarket", mkt).Return(nil)
-		repo.On("InsertRunners", run).Return(nil)
+		writer.On("InsertMarket", mkt).Return(nil)
+		writer.On("InsertRunners", run).Return(nil)
 
 		err := handler.Handle(mk)
 
@@ -256,14 +257,14 @@ func TestHandler_Handle(t *testing.T) {
 			t.Fatalf("Expected nil, got %s", err.Error())
 		}
 
-		repo.AssertExpectations(t)
+		writer.AssertExpectations(t)
 	})
 
 	t.Run("runner is not persisted if runner prices slice is empty", func(t *testing.T) {
 		t.Helper()
 
-		repo := new(market.MockRepository)
-		handler := market.NewHandler(repo)
+		writer := new(market.MockMarketWriter)
+		handler := market.NewHandler(writer)
 
 		mk := &queue.EventMarket{
 			ID:            "1.2818721",
@@ -303,7 +304,7 @@ func TestHandler_Handle(t *testing.T) {
 			Timestamp: 1583971200,
 		}
 
-		mkt := mock.MatchedBy(func(m *market.Market) bool {
+		mkt := mock.MatchedBy(func(m *app.Market) bool {
 			assert.Equal(t, "1.2818721", m.ID)
 			assert.Equal(t, uint64(148192), m.EventID)
 			assert.Equal(t, uint64(8), m.CompetitionID)
@@ -314,7 +315,7 @@ func TestHandler_Handle(t *testing.T) {
 			return true
 		})
 
-		run := mock.MatchedBy(func(r []*market.Runner) bool {
+		run := mock.MatchedBy(func(r []*app.Runner) bool {
 			assert.Equal(t, uint64(472672), r[0].ID)
 			assert.Equal(t, "Away", r[0].Name)
 			assert.Equal(t, float32(2.05), r[0].LayPrice.Value)
@@ -327,8 +328,8 @@ func TestHandler_Handle(t *testing.T) {
 			return true
 		})
 
-		repo.On("InsertMarket", mkt).Return(nil)
-		repo.On("InsertRunners", run).Return(nil)
+		writer.On("InsertMarket", mkt).Return(nil)
+		writer.On("InsertRunners", run).Return(nil)
 
 		err := handler.Handle(mk)
 
@@ -336,6 +337,6 @@ func TestHandler_Handle(t *testing.T) {
 			t.Fatalf("Expected nil, got %s", err.Error())
 		}
 
-		repo.AssertExpectations(t)
+		writer.AssertExpectations(t)
 	})
 }
