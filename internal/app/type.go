@@ -1,6 +1,15 @@
-package market
+package app
 
 import "time"
+
+type MarketWriter interface {
+	InsertMarket(market *Market) error
+	InsertRunners(runners []*Runner) error
+}
+
+type MarketReader interface {
+	ExchangeMarketRunnerOdds(eventID uint64, market, runner, exchange string, limit uint32) ([]*Odds, error)
+}
 
 type Market struct {
 	ID            string    `json:"id"`
@@ -27,15 +36,7 @@ type Price struct {
 	Timestamp time.Time `json:"timestamp"`
 }
 
-type MarketRunner struct {
-	MarketID      string    `json:"marketId"`
-	MarketName    string    `json:"marketName"`
-	RunnerID      uint64    `json:"runnerId"`
-	RunnerName    string    `json:"runnerName"`
-	EventID       uint64    `json:"eventId"`
-	CompetitionID uint64    `json:"competitionId"`
-	SeasonID      uint64    `json:"seasonId"`
-	EventDate     time.Time `json:"date"`
-	Exchange      string    `json:"exchange"`
-	Price         Price     `json:"price"`
+type Odds struct {
+	Price     float32   `json:"price"`
+	Timestamp time.Time `json:"timestamp"`
 }
