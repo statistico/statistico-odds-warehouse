@@ -18,13 +18,16 @@ func (m *marketReader) ExchangeMarketRunnerOdds(eventID uint64, market, runner, 
 	rows, err := b.
 		Select(
 			"mr.price",
+			"mr.size",
+			"mr.side",
 			"mr.timestamp",
 		).
 		From("market m").
-		Join("join market_runner mr on mr.market_id = m.id").
-		Where(sq.Eq{"event_id": eventID}).
-		Where(sq.Eq{"exchange": exchange}).
-		Where(sq.Eq{"name": market}).
+		Join("market_runner mr on mr.market_id = m.id").
+		Where(sq.Eq{"m.event_id": eventID}).
+		Where(sq.Eq{"m.exchange": exchange}).
+		Where(sq.Eq{"m.name": market}).
+		Where(sq.Eq{"mr.side": "BACK"}).
 		Where(sq.Eq{"mr.name": runner}).
 		OrderBy("mr.timestamp DESC").
 		Limit(uint64(limit)).
@@ -39,16 +42,16 @@ func (m *marketReader) ExchangeMarketRunnerOdds(eventID uint64, market, runner, 
 	var odds []*app.Odds
 
 	for rows.Next() {
-		var o *app.Odds
+		var o app.Odds
 		var timestamp int64
 
-		if err := rows.Scan(&o.Value, &timestamp); err != nil {
+		if err := rows.Scan(&o.Value, &o.Size, &o.Side, &timestamp); err != nil {
 			return []*app.Odds{}, err
 		}
 
 		o.Timestamp = time.Unix(timestamp, 0)
 
-		odds = append(odds, o)
+		odds = append(odds, &o)
 	}
 
 	return odds, nil

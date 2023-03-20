@@ -104,7 +104,7 @@ func newMarket(marketID, name string, date time.Time) *app.Market {
 		CompetitionID: 8,
 		SeasonID:      17420,
 		EventDate:     date,
-		Exchange:      "betfair",
+		Exchange:      "BETFAIR",
 	}
 }
 
@@ -128,7 +128,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 		{
 			MarketID: mk1.ID,
 			ID:       423721,
-			Name:     "Over 2.5 Goals",
+			Name:     "OVER",
 			BackPrice: &app.Odds{
 				Value:     1.95,
 				Size:      1591.01,
@@ -138,11 +138,41 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 		{
 			MarketID: mk1.ID,
 			ID:       423721,
-			Name:     "Under 2.5 Goals",
+			Name:     "OVER",
+			BackPrice: &app.Odds{
+				Value:     1.94,
+				Size:      592.61,
+				Timestamp: time.Unix(1606824712, 0),
+			},
+		},
+		{
+			MarketID: mk1.ID,
+			ID:       423721,
+			Name:     "OVER",
+			BackPrice: &app.Odds{
+				Value:     1.95,
+				Size:      1591.01,
+				Timestamp: time.Unix(1606824714, 0),
+			},
+		},
+		{
+			MarketID: mk1.ID,
+			ID:       423721,
+			Name:     "UNDER",
 			BackPrice: &app.Odds{
 				Value:     2.05,
 				Size:      11.55,
 				Timestamp: time.Unix(1606824710, 0),
+			},
+		},
+		{
+			MarketID: mk1.ID,
+			ID:       423721,
+			Name:     "UNDER",
+			BackPrice: &app.Odds{
+				Value:     2.10,
+				Size:      11.55,
+				Timestamp: time.Unix(1606824715, 0),
 			},
 		},
 	}
@@ -157,7 +187,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 		{
 			MarketID: mk2.ID,
 			ID:       423721,
-			Name:     "Yes",
+			Name:     "YES",
 			LayPrice: &app.Odds{
 				Value:     1.95,
 				Size:      1591.45,
@@ -167,7 +197,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 		{
 			MarketID: mk2.ID,
 			ID:       423721,
-			Name:     "No",
+			Name:     "NO",
 			LayPrice: &app.Odds{
 				Value:     2.05,
 				Size:      11.55,
@@ -186,7 +216,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 		{
 			MarketID: mk3.ID,
 			ID:       423721,
-			Name:     "Yes",
+			Name:     "YES",
 			BackPrice: &app.Odds{
 				Value:     1.95,
 				Size:      1591.01,
@@ -196,7 +226,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 		{
 			MarketID: mk3.ID,
 			ID:       423722,
-			Name:     "No",
+			Name:     "NO",
 			LayPrice: &app.Odds{
 				Value:     3.05,
 				Size:      11.55,
