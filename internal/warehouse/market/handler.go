@@ -1,32 +1,32 @@
 package market
 
 import (
-	"github.com/statistico/statistico-odds-warehouse/internal/app"
-	"github.com/statistico/statistico-odds-warehouse/internal/app/queue"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/queue"
 	"math"
 	"time"
 )
 
 type Handler struct {
-	writer app.MarketWriter
+	writer warehouse.MarketWriter
 }
 
 func (m *Handler) Handle(q *queue.EventMarket) error {
-	var runners []*app.Runner
+	var runners []*warehouse.Runner
 
 	for _, r := range q.Runners {
 		if len(r.BackPrices) == 0 && len(r.LayPrices) == 0 {
 			continue
 		}
 
-		run := app.Runner{
+		run := warehouse.Runner{
 			ID:       r.ID,
 			MarketID: q.ID,
 			Name:     r.Name,
 		}
 
 		if len(r.BackPrices) != 0 {
-			price := app.Odds{
+			price := warehouse.Odds{
 				Value:     float32(math.Round(float64(r.BackPrices[0].Price*100)) / 100),
 				Size:      float32(math.Round(float64(r.BackPrices[0].Size*100)) / 100),
 				Timestamp: time.Unix(q.Timestamp, 0),
@@ -36,7 +36,7 @@ func (m *Handler) Handle(q *queue.EventMarket) error {
 		}
 
 		if len(r.LayPrices) != 0 {
-			price := app.Odds{
+			price := warehouse.Odds{
 				Value:     float32(math.Round(float64(r.LayPrices[0].Price*100)) / 100),
 				Size:      float32(math.Round(float64(r.LayPrices[0].Size*100)) / 100),
 				Timestamp: time.Unix(q.Timestamp, 0),
@@ -48,7 +48,7 @@ func (m *Handler) Handle(q *queue.EventMarket) error {
 		runners = append(runners, &run)
 	}
 
-	market := app.Market{
+	market := warehouse.Market{
 		ID:            q.ID,
 		Name:          q.Name,
 		EventID:       q.EventID,
@@ -69,6 +69,6 @@ func (m *Handler) Handle(q *queue.EventMarket) error {
 	return nil
 }
 
-func NewHandler(w app.MarketWriter) *Handler {
+func NewHandler(w warehouse.MarketWriter) *Handler {
 	return &Handler{writer: w}
 }

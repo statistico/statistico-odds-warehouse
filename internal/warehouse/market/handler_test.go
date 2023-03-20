@@ -2,9 +2,9 @@ package market_test
 
 import (
 	"errors"
-	"github.com/statistico/statistico-odds-warehouse/internal/app"
-	"github.com/statistico/statistico-odds-warehouse/internal/app/market"
-	"github.com/statistico/statistico-odds-warehouse/internal/app/queue"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/market"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/queue"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"testing"
@@ -63,7 +63,7 @@ func TestHandler_Handle(t *testing.T) {
 			Timestamp: 1583971200,
 		}
 
-		mkt := mock.MatchedBy(func(m *app.Market) bool {
+		mkt := mock.MatchedBy(func(m *warehouse.Market) bool {
 			assert.Equal(t, "1.2818721", m.ID)
 			assert.Equal(t, uint64(148192), m.EventID)
 			assert.Equal(t, uint64(8), m.CompetitionID)
@@ -74,7 +74,7 @@ func TestHandler_Handle(t *testing.T) {
 			return true
 		})
 
-		run := mock.MatchedBy(func(r []*app.Runner) bool {
+		run := mock.MatchedBy(func(r []*warehouse.Runner) bool {
 			assert.Equal(t, uint64(472671), r[0].ID)
 			assert.Equal(t, "Over 2.5 Goals", r[0].Name)
 			assert.Equal(t, float32(1.95), r[0].BackPrice.Value)
@@ -145,7 +145,7 @@ func TestHandler_Handle(t *testing.T) {
 			Timestamp: 1583971200,
 		}
 
-		mkt := mock.MatchedBy(func(m *app.Market) bool {
+		mkt := mock.MatchedBy(func(m *warehouse.Market) bool {
 			assert.Equal(t, "1.2818721", m.ID)
 			assert.Equal(t, uint64(148192), m.EventID)
 			assert.Equal(t, uint64(8), m.CompetitionID)
@@ -219,7 +219,7 @@ func TestHandler_Handle(t *testing.T) {
 			Timestamp: 1583971200,
 		}
 
-		mkt := mock.MatchedBy(func(m *app.Market) bool {
+		mkt := mock.MatchedBy(func(m *warehouse.Market) bool {
 			assert.Equal(t, "1.2818721", m.ID)
 			assert.Equal(t, uint64(148192), m.EventID)
 			assert.Equal(t, uint64(8), m.CompetitionID)
@@ -230,7 +230,7 @@ func TestHandler_Handle(t *testing.T) {
 			return true
 		})
 
-		run := mock.MatchedBy(func(r []*app.Runner) bool {
+		run := mock.MatchedBy(func(r []*warehouse.Runner) bool {
 			assert.Equal(t, uint64(472671), r[0].ID)
 			assert.Equal(t, "Home", r[0].Name)
 			assert.Equal(t, float32(1.96), r[0].BackPrice.Value)
@@ -304,7 +304,7 @@ func TestHandler_Handle(t *testing.T) {
 			Timestamp: 1583971200,
 		}
 
-		mkt := mock.MatchedBy(func(m *app.Market) bool {
+		mkt := mock.MatchedBy(func(m *warehouse.Market) bool {
 			assert.Equal(t, "1.2818721", m.ID)
 			assert.Equal(t, uint64(148192), m.EventID)
 			assert.Equal(t, uint64(8), m.CompetitionID)
@@ -315,7 +315,7 @@ func TestHandler_Handle(t *testing.T) {
 			return true
 		})
 
-		run := mock.MatchedBy(func(r []*app.Runner) bool {
+		run := mock.MatchedBy(func(r []*warehouse.Runner) bool {
 			assert.Equal(t, uint64(472672), r[0].ID)
 			assert.Equal(t, "Away", r[0].Name)
 			assert.Equal(t, float32(2.05), r[0].LayPrice.Value)

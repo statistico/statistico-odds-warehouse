@@ -1,9 +1,9 @@
 package postgres_test
 
 import (
-	"github.com/statistico/statistico-odds-warehouse/internal/app"
-	"github.com/statistico/statistico-odds-warehouse/internal/app/postgres"
-	"github.com/statistico/statistico-odds-warehouse/internal/app/test"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/postgres"
+	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/test"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -18,7 +18,7 @@ func TestMarketRepository_InsertMarket(t *testing.T) {
 		defer cleanUp()
 
 		marketCounts := []struct {
-			Market      *app.Market
+			Market      *warehouse.Market
 			MarketCount int8
 		}{
 			{newMarket("1.2729821", "OVER_UNDER_25", time.Unix(1584014400, 0)), 1},
@@ -50,11 +50,11 @@ func TestMarketRepository_InsertRunners(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		runners := []*app.Runner{
+		runners := []*warehouse.Runner{
 			{
 				ID:   423721,
 				Name: "Over 2.5 Goals",
-				BackPrice: &app.Odds{
+				BackPrice: &warehouse.Odds{
 					Value:     1.95,
 					Size:      1591.01,
 					Timestamp: time.Unix(1606824710, 0),
@@ -63,7 +63,7 @@ func TestMarketRepository_InsertRunners(t *testing.T) {
 			{
 				ID:   423721,
 				Name: "Under 2.5 Goals",
-				LayPrice: &app.Odds{
+				LayPrice: &warehouse.Odds{
 					Value:     2.05,
 					Size:      11.55,
 					Timestamp: time.Unix(1606824710, 0),
@@ -72,7 +72,7 @@ func TestMarketRepository_InsertRunners(t *testing.T) {
 		}
 
 		runnerCounts := []struct {
-			Runners     []*app.Runner
+			Runners     []*warehouse.Runner
 			RunnerCount int8
 		}{
 			{runners, 2},
@@ -96,8 +96,8 @@ func TestMarketRepository_InsertRunners(t *testing.T) {
 	})
 }
 
-func newMarket(marketID, name string, date time.Time) *app.Market {
-	return &app.Market{
+func newMarket(marketID, name string, date time.Time) *warehouse.Market {
+	return &warehouse.Market{
 		ID:            marketID,
 		Name:          name,
 		EventID:       1827711,
@@ -108,28 +108,28 @@ func newMarket(marketID, name string, date time.Time) *app.Market {
 	}
 }
 
-func insertMarket(t *testing.T, repo app.MarketWriter, m *app.Market) {
+func insertMarket(t *testing.T, repo warehouse.MarketWriter, m *warehouse.Market) {
 	if err := repo.InsertMarket(m); err != nil {
 		t.Errorf("Error when inserting market into the database: %s", err.Error())
 	}
 }
 
-func insertRunners(t *testing.T, repo app.MarketWriter, r []*app.Runner) {
+func insertRunners(t *testing.T, repo warehouse.MarketWriter, r []*warehouse.Runner) {
 	if err := repo.InsertRunners(r); err != nil {
 		t.Errorf("Error when inserting market into the database: %s", err.Error())
 	}
 }
 
-func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
+func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 	// Event Date: 2020-03-12T12:00:00+00:00
 	mk1 := newMarket("1.234", "OVER_UNDER_25", time.Unix(1584014400, 0))
 
-	run1 := []*app.Runner{
+	run1 := []*warehouse.Runner{
 		{
 			MarketID: mk1.ID,
 			ID:       423721,
 			Name:     "OVER",
-			BackPrice: &app.Odds{
+			BackPrice: &warehouse.Odds{
 				Value:     1.95,
 				Size:      1591.01,
 				Timestamp: time.Unix(1606824710, 0),
@@ -139,7 +139,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 			MarketID: mk1.ID,
 			ID:       423721,
 			Name:     "OVER",
-			BackPrice: &app.Odds{
+			BackPrice: &warehouse.Odds{
 				Value:     1.94,
 				Size:      592.61,
 				Timestamp: time.Unix(1606824712, 0),
@@ -149,7 +149,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 			MarketID: mk1.ID,
 			ID:       423721,
 			Name:     "OVER",
-			BackPrice: &app.Odds{
+			BackPrice: &warehouse.Odds{
 				Value:     1.95,
 				Size:      1591.01,
 				Timestamp: time.Unix(1606824714, 0),
@@ -159,7 +159,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 			MarketID: mk1.ID,
 			ID:       423721,
 			Name:     "UNDER",
-			BackPrice: &app.Odds{
+			BackPrice: &warehouse.Odds{
 				Value:     2.05,
 				Size:      11.55,
 				Timestamp: time.Unix(1606824710, 0),
@@ -169,7 +169,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 			MarketID: mk1.ID,
 			ID:       423721,
 			Name:     "UNDER",
-			BackPrice: &app.Odds{
+			BackPrice: &warehouse.Odds{
 				Value:     2.10,
 				Size:      11.55,
 				Timestamp: time.Unix(1606824715, 0),
@@ -183,12 +183,12 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 	// Event Date: 2020-03-01T00:00:00+00:00
 	mk2 := newMarket("1.567", "BOTH_TEAMS_TO_SCORE", time.Unix(1583020800, 0))
 
-	run2 := []*app.Runner{
+	run2 := []*warehouse.Runner{
 		{
 			MarketID: mk2.ID,
 			ID:       423721,
 			Name:     "YES",
-			LayPrice: &app.Odds{
+			LayPrice: &warehouse.Odds{
 				Value:     1.95,
 				Size:      1591.45,
 				Timestamp: time.Unix(1606839427, 0),
@@ -198,7 +198,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 			MarketID: mk2.ID,
 			ID:       423721,
 			Name:     "NO",
-			LayPrice: &app.Odds{
+			LayPrice: &warehouse.Odds{
 				Value:     2.05,
 				Size:      11.55,
 				Timestamp: time.Unix(1606824710, 0),
@@ -212,12 +212,12 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 	// Event Date: 2020-03-01T00:00:00+00:00
 	mk3 := newMarket("1.567", "BOTH_TEAMS_TO_SCORE", time.Unix(1583020800, 0))
 
-	run3 := []*app.Runner{
+	run3 := []*warehouse.Runner{
 		{
 			MarketID: mk3.ID,
 			ID:       423721,
 			Name:     "YES",
-			BackPrice: &app.Odds{
+			BackPrice: &warehouse.Odds{
 				Value:     1.95,
 				Size:      1591.01,
 				Timestamp: time.Unix(1606824710, 0),
@@ -227,7 +227,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo app.MarketWriter) {
 			MarketID: mk3.ID,
 			ID:       423722,
 			Name:     "NO",
-			LayPrice: &app.Odds{
+			LayPrice: &warehouse.Odds{
 				Value:     3.05,
 				Size:      11.55,
 				Timestamp: time.Unix(1605139200, 0),
