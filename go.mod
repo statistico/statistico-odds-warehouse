@@ -9,7 +9,6 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/lib/pq v1.8.0
 	github.com/sirupsen/logrus v1.7.0
-	github.com/statistico/statistico-proto/go v0.0.0-20210404061231-83b5035e8b94
 	github.com/stretchr/testify v1.6.1
 	github.com/urfave/cli v1.22.9
 	google.golang.org/grpc v1.36.1
