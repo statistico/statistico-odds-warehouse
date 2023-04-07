@@ -39,8 +39,8 @@ func databaseConnection(config *Config) *sql.DB {
 		panic(err)
 	}
 
-	conn.SetMaxOpenConns(50)
-	conn.SetMaxIdleConns(25)
+	conn.SetMaxOpenConns(100)
+	conn.SetMaxIdleConns(50)
 
 	return conn
 }
