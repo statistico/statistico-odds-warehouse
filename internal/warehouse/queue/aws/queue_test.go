@@ -49,6 +49,7 @@ func TestQueue_ReceiveMarkets(t *testing.T) {
 			Name:          "OVER_UNDER_25",
 			CompetitionID: 8,
 			SeasonID:      19734,
+			Round:         5,
 			EventDate:     1676490300,
 			Exchange:      "betfair",
 			Runners: []*queue.Runner{
@@ -148,6 +149,7 @@ var messageBody = `
 	  "name": "OVER_UNDER_25",
       "competitionId": 8,
       "seasonId": 19734,
+      "round": 5,
       "eventDate": 1676490300,
 	  "exchange": "betfair",
 	  "runners": [
