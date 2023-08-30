@@ -6,6 +6,7 @@ import (
 	"github.com/statistico/statistico-proto/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"time"
 )
 
 type MarketService struct {
@@ -30,6 +31,58 @@ func (m *MarketService) GetExchangeOdds(r *statistico.ExchangeOddsRequest, strea
 
 		if err := stream.Send(&eo); err != nil {
 			m.logger.Errorf("error streaming exchange odds back to client: %s", err.Error())
+		}
+	}
+
+	return nil
+}
+
+func (m *MarketService) GetEventMarkets(r *statistico.EventMarketRequest, stream statistico.OddsWarehouseService_GetEventMarketsServer) error {
+	q := warehouse.MarketReaderQuery{
+		Market:   r.Market,
+		Exchange: r.Exchange,
+	}
+
+	markets, err := m.reader.MarketsByEventID(r.EventId, &q)
+
+	if err != nil {
+		m.logger.Errorf("error fetching markets from reader: %s", err.Error())
+		return status.Error(codes.Internal, "internal server error")
+	}
+
+	for _, mk := range markets {
+		ms := statistico.Market{
+			Id:            mk.ID,
+			Name:          mk.Name,
+			EventId:       mk.EventID,
+			CompetitionId: mk.CompetitionID,
+			SeasonId:      mk.SeasonID,
+			Exchange:      mk.Exchange,
+			DateTime: &statistico.Date{
+				Utc: mk.EventDate.Unix(),
+				Rfc: mk.EventDate.Format(time.RFC3339),
+			},
+		}
+
+		var runners []*statistico.Runner
+
+		for _, r := range mk.Runners {
+			runners = append(runners, &statistico.Runner{
+				Id:   r.ID,
+				Name: r.Name,
+				BackOdds: &statistico.ExchangeOdds{
+					Price:     r.BackPrice.Value,
+					Size:      r.BackPrice.Size,
+					Side:      r.BackPrice.Side,
+					Timestamp: uint64(r.BackPrice.Timestamp.Unix()),
+				},
+			})
+		}
+
+		ms.Runners = runners
+
+		if err := stream.Send(&ms); err != nil {
+			m.logger.Errorf("error streaming market back to client: %s", err.Error())
 		}
 	}
 
