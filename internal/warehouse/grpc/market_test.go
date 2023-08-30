@@ -162,6 +162,11 @@ func (m *MockMarketReader) ExchangeMarketRunnerOdds(eventID uint64, market, runn
 	return args.Get(0).([]*warehouse.Odds), args.Error(1)
 }
 
+func (m *MockMarketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReaderQuery) ([]*warehouse.Market, error) {
+	args := m.Called(eventID, q)
+	return args.Get(0).([]*warehouse.Market), args.Error(1)
+}
+
 type MockExchangeOddsServer struct {
 	mock.Mock
 	grpc.ServerStream
