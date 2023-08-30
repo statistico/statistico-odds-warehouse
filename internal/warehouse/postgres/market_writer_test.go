@@ -157,7 +157,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 		},
 		{
 			MarketID: mk1.ID,
-			ID:       423721,
+			ID:       423722,
 			Name:     "UNDER",
 			BackPrice: &warehouse.Odds{
 				Value:     2.05,
@@ -167,7 +167,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 		},
 		{
 			MarketID: mk1.ID,
-			ID:       423721,
+			ID:       423722,
 			Name:     "UNDER",
 			BackPrice: &warehouse.Odds{
 				Value:     2.10,

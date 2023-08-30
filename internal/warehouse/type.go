@@ -9,6 +9,12 @@ type MarketWriter interface {
 
 type MarketReader interface {
 	ExchangeMarketRunnerOdds(eventID uint64, market, runner, exchange string, limit uint32) ([]*Odds, error)
+	MarketsByEventID(eventID uint64, q *MarketReaderQuery) ([]*Market, error)
+}
+
+type MarketReaderQuery struct {
+	Name     *string
+	Exchange []string
 }
 
 type Market struct {
@@ -19,6 +25,7 @@ type Market struct {
 	SeasonID      uint64    `json:"seasonId"`
 	EventDate     time.Time `json:"date"`
 	Exchange      string    `json:"exchange"`
+	Runners       []*Runner `json:"runners"`
 }
 
 type Runner struct {
