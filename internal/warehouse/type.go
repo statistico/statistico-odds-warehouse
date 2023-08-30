@@ -13,7 +13,7 @@ type MarketReader interface {
 }
 
 type MarketReaderQuery struct {
-	Name     *string
+	Market   []string
 	Exchange []string
 }
 

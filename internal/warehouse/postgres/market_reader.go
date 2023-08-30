@@ -66,8 +66,8 @@ func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReade
 		Where(sq.Eq{"m.event_id": eventID}).
 		OrderBy("name ASC", "exchange ASC")
 
-	if q.Name != nil {
-		query = query.Where(sq.Eq{"name": *q.Name})
+	if len(q.Market) > 0 {
+		query = query.Where(sq.Eq{"name": q.Market})
 	}
 
 	if len(q.Exchange) > 0 {
