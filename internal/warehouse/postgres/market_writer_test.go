@@ -21,9 +21,9 @@ func TestMarketRepository_InsertMarket(t *testing.T) {
 			Market      *warehouse.Market
 			MarketCount int8
 		}{
-			{newMarket("1.2729821", "OVER_UNDER_25", time.Unix(1584014400, 0)), 1},
-			{newMarket("1.2729822", "OVER_UNDER_25", time.Unix(1584014400, 0)), 2},
-			{newMarket("1.2729823", "OVER_UNDER_25", time.Unix(1584014400, 0)), 3},
+			{newMarket("1.2729821", "OVER_UNDER_25", "BETFAIR", time.Unix(1584014400, 0)), 1},
+			{newMarket("1.2729822", "OVER_UNDER_25", "BETFAIR", time.Unix(1584014400, 0)), 2},
+			{newMarket("1.2729823", "OVER_UNDER_25", "BETFAIR", time.Unix(1584014400, 0)), 3},
 		}
 
 		for _, tc := range marketCounts {
@@ -96,7 +96,7 @@ func TestMarketRepository_InsertRunners(t *testing.T) {
 	})
 }
 
-func newMarket(marketID, name string, date time.Time) *warehouse.Market {
+func newMarket(marketID, name, exchange string, date time.Time) *warehouse.Market {
 	return &warehouse.Market{
 		ID:            marketID,
 		Name:          name,
@@ -104,7 +104,7 @@ func newMarket(marketID, name string, date time.Time) *warehouse.Market {
 		CompetitionID: 8,
 		SeasonID:      17420,
 		EventDate:     date,
-		Exchange:      "BETFAIR",
+		Exchange:      exchange,
 	}
 }
 
@@ -122,7 +122,7 @@ func insertRunners(t *testing.T, repo warehouse.MarketWriter, r []*warehouse.Run
 
 func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 	// Event Date: 2020-03-12T12:00:00+00:00
-	mk1 := newMarket("1.234", "OVER_UNDER_25", time.Unix(1584014400, 0))
+	mk1 := newMarket("1.234", "OVER_UNDER_25", "BETFAIR", time.Unix(1584014400, 0))
 
 	run1 := []*warehouse.Runner{
 		{
@@ -181,7 +181,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 	insertRunners(t, repo, run1)
 
 	// Event Date: 2020-03-01T00:00:00+00:00
-	mk2 := newMarket("1.567", "BOTH_TEAMS_TO_SCORE", time.Unix(1583020800, 0))
+	mk2 := newMarket("1.567", "BOTH_TEAMS_TO_SCORE", "BETFAIR", time.Unix(1583020800, 0))
 
 	run2 := []*warehouse.Runner{
 		{
@@ -210,7 +210,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 	insertRunners(t, repo, run2)
 
 	// Event Date: 2020-03-01T00:00:00+00:00
-	mk3 := newMarket("1.567", "BOTH_TEAMS_TO_SCORE", time.Unix(1583020800, 0))
+	mk3 := newMarket("1.555", "MATCH_ODDS", "BETFAIR", time.Unix(1583020800, 0))
 
 	run3 := []*warehouse.Runner{
 		{
@@ -237,4 +237,63 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 
 	insertMarket(t, repo, mk3)
 	insertRunners(t, repo, run3)
+
+	// Event Date: 2020-03-12T12:00:00+00:00
+	mk4 := newMarket("1.999", "OVER_UNDER_25", "PINNACLE", time.Unix(1584015400, 0))
+
+	run4 := []*warehouse.Runner{
+		{
+			MarketID: mk4.ID,
+			ID:       423721,
+			Name:     "OVER",
+			BackPrice: &warehouse.Odds{
+				Value:     1.95,
+				Size:      1591.01,
+				Timestamp: time.Unix(1606824710, 0),
+			},
+		},
+		{
+			MarketID: mk4.ID,
+			ID:       423721,
+			Name:     "OVER",
+			BackPrice: &warehouse.Odds{
+				Value:     1.94,
+				Size:      592.61,
+				Timestamp: time.Unix(1606824712, 0),
+			},
+		},
+		{
+			MarketID: mk4.ID,
+			ID:       423721,
+			Name:     "OVER",
+			BackPrice: &warehouse.Odds{
+				Value:     1.90,
+				Size:      1591.01,
+				Timestamp: time.Unix(1606824704, 0),
+			},
+		},
+		{
+			MarketID: mk4.ID,
+			ID:       423722,
+			Name:     "UNDER",
+			BackPrice: &warehouse.Odds{
+				Value:     2.12,
+				Size:      11.55,
+				Timestamp: time.Unix(1606824712, 0),
+			},
+		},
+		{
+			MarketID: mk4.ID,
+			ID:       423722,
+			Name:     "UNDER",
+			BackPrice: &warehouse.Odds{
+				Value:     2.15,
+				Size:      11.55,
+				Timestamp: time.Unix(1606824718, 0),
+			},
+		},
+	}
+
+	insertMarket(t, repo, mk4)
+	insertRunners(t, repo, run4)
 }
