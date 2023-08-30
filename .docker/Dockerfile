@@ -7,7 +7,6 @@ RUN go install github.com/pressly/goose/v3/cmd/goose@latest
 
 COPY go.mod .
 COPY go.sum .
-RUN go mod tidy
 RUN go mod download
 
 COPY . .
