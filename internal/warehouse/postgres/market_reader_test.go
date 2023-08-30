@@ -19,10 +19,8 @@ func TestMarketReader_MarketsByEventID(t *testing.T) {
 		defer cleanUp()
 
 		insertMultipleMarketsAndRunner(t, writer)
-
-		mk := "OVER_UNDER_25"
-
-		q := warehouse.MarketReaderQuery{Name: &mk}
+		
+		q := warehouse.MarketReaderQuery{Market: []string{"OVER_UNDER_25"}}
 
 		markets, err := reader.MarketsByEventID(1827711, &q)
 
