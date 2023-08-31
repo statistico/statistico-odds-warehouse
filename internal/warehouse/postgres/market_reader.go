@@ -61,7 +61,7 @@ func (m *marketReader) ExchangeMarketRunnerOdds(eventID uint64, market, runner, 
 func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReaderQuery) ([]*warehouse.Market, error) {
 	b := m.queryBuilder()
 
-	fmt.Printf("Open connections %d\n", m.connection.Stats().OpenConnections)
+	fmt.Printf("Open connections %d for Event %d\n", m.connection.Stats().OpenConnections, eventID)
 
 	query := b.
 		Select("*").
@@ -105,7 +105,7 @@ func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReade
 
 		mk.EventDate = time.Unix(date, 0)
 
-		runners, err := m.marketRunners(b, mk.ID)
+		runners, err := m.marketRunners(b, mk.ID, eventID)
 
 		if err != nil {
 			return []*warehouse.Market{}, err
@@ -119,7 +119,8 @@ func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReade
 	return markets, nil
 }
 
-func (m *marketReader) marketRunners(b sq.StatementBuilderType, marketID string) ([]*warehouse.Runner, error) {
+func (m *marketReader) marketRunners(b sq.StatementBuilderType, marketID string, eventID uint64) ([]*warehouse.Runner, error) {
+	fmt.Printf("Open connections %d for Event %d and runners\n", m.connection.Stats().OpenConnections, eventID)
 
 	rows, err := b.
 		Select("DISTINCT ON(name) *").
