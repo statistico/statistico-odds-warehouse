@@ -40,7 +40,7 @@ func databaseConnection(config *Config) *sql.DB {
 	}
 
 	conn.SetMaxOpenConns(0)
-	conn.SetMaxIdleConns(5)
+	conn.SetMaxIdleConns(10)
 
 	return conn
 }

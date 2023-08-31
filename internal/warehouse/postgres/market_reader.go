@@ -2,7 +2,6 @@ package postgres
 
 import (
 	"database/sql"
-	"fmt"
 	sq "github.com/Masterminds/squirrel"
 	_ "github.com/lib/pq"
 	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
@@ -61,8 +60,6 @@ func (m *marketReader) ExchangeMarketRunnerOdds(eventID uint64, market, runner, 
 func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReaderQuery) ([]*warehouse.Market, error) {
 	b := m.queryBuilder()
 
-	fmt.Printf("Open connections %d for Event %d\n", m.connection.Stats().OpenConnections, eventID)
-
 	query := b.
 		Select("*").
 		From("market m").
@@ -105,7 +102,7 @@ func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReade
 
 		mk.EventDate = time.Unix(date, 0)
 
-		runners, err := m.marketRunners(b, mk.ID, eventID)
+		runners, err := m.marketRunners(b, mk.ID)
 
 		if err != nil {
 			return []*warehouse.Market{}, err
@@ -119,9 +116,7 @@ func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReade
 	return markets, nil
 }
 
-func (m *marketReader) marketRunners(b sq.StatementBuilderType, marketID string, eventID uint64) ([]*warehouse.Runner, error) {
-	fmt.Printf("Open connections %d for Event %d and runners\n", m.connection.Stats().OpenConnections, eventID)
-
+func (m *marketReader) marketRunners(b sq.StatementBuilderType, marketID string) ([]*warehouse.Runner, error) {
 	rows, err := b.
 		Select("DISTINCT ON(name) *").
 		From("market_runner").
