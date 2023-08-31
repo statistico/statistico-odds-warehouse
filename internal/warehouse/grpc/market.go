@@ -43,8 +43,6 @@ func (m *MarketService) GetEventMarkets(r *statistico.EventMarketRequest, stream
 		Exchange: r.Exchange,
 	}
 
-	m.logger.Infof("Receiving a request for event %d: %+v\n", r.EventId, q.Market)
-
 	markets, err := m.reader.MarketsByEventID(r.EventId, &q)
 
 	if err != nil {

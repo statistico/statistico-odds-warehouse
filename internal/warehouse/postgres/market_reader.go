@@ -60,10 +60,6 @@ func (m *marketReader) ExchangeMarketRunnerOdds(eventID uint64, market, runner, 
 func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReaderQuery) ([]*warehouse.Market, error) {
 	b := m.queryBuilder()
 
-	if eventID != 18860501 && eventID != 18841653 {
-		return []*warehouse.Market{}, nil
-	}
-
 	query := b.
 		Select("*").
 		From("market m").
@@ -106,7 +102,7 @@ func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReade
 
 		mk.EventDate = time.Unix(date, 0)
 
-		runners, err := m.marketRunners(mk.ID)
+		runners, err := m.marketRunners(b, mk.ID)
 
 		if err != nil {
 			return []*warehouse.Market{}, err
@@ -120,9 +116,7 @@ func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReade
 	return markets, nil
 }
 
-func (m *marketReader) marketRunners(marketID string) ([]*warehouse.Runner, error) {
-	b := m.queryBuilder()
-
+func (m *marketReader) marketRunners(b sq.StatementBuilderType, marketID string) ([]*warehouse.Runner, error) {
 	rows, err := b.
 		Select("DISTINCT ON(name) *").
 		From("market_runner").

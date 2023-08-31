@@ -253,7 +253,7 @@ func TestMarketService_GetEventMarkets(t *testing.T) {
 			t.Fatalf("Expected nil, got %s", err.Error())
 		}
 
-		assert.Equal(t, 1, len(hook.Entries))
+		assert.Equal(t, 0, len(hook.Entries))
 		reader.AssertExpectations(t)
 		server.AssertExpectations(t)
 	})
@@ -291,7 +291,7 @@ func TestMarketService_GetEventMarkets(t *testing.T) {
 
 		assert.Equal(t, "rpc error: code = Internal desc = internal server error", err.Error())
 		assert.Equal(t, "error fetching markets from reader: oh no", hook.LastEntry().Message)
-		assert.Equal(t, 2, len(hook.Entries))
+		assert.Equal(t, 1, len(hook.Entries))
 		assert.Equal(t, logrus.ErrorLevel, hook.LastEntry().Level)
 		reader.AssertExpectations(t)
 	})
@@ -396,7 +396,7 @@ func TestMarketService_GetEventMarkets(t *testing.T) {
 		}
 
 		assert.Equal(t, "error streaming market back to client: oh no", hook.LastEntry().Message)
-		assert.Equal(t, 2, len(hook.Entries))
+		assert.Equal(t, 1, len(hook.Entries))
 		assert.Equal(t, logrus.ErrorLevel, hook.LastEntry().Level)
 		reader.AssertExpectations(t)
 		server.AssertExpectations(t)
