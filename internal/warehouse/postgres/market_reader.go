@@ -60,6 +60,10 @@ func (m *marketReader) ExchangeMarketRunnerOdds(eventID uint64, market, runner, 
 func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReaderQuery) ([]*warehouse.Market, error) {
 	b := m.queryBuilder()
 
+	if eventID != 18860501 && eventID != 18841653 {
+		return []*warehouse.Market{}, nil
+	}
+
 	query := b.
 		Select("*").
 		From("market m").

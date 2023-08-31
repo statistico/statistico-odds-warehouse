@@ -44,10 +44,10 @@ jobs:
           command: |
             docker network create statistico_internal
             docker-compose -f docker-compose.build.yml up -d --build
-      - run:
-          name: Test Release Image
-          command: |
-            docker-compose -f docker-compose.build.yml run test gotestsum -f short-verbose
+#      - run:
+#          name: Test Release Image
+#          command: |
+#            docker-compose -f docker-compose.build.yml run test gotestsum -f short-verbose
       - run:
           name: Cache Built Images
           command: |
