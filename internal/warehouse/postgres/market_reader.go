@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"database/sql"
+	"fmt"
 	sq "github.com/Masterminds/squirrel"
 	_ "github.com/lib/pq"
 	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
@@ -84,6 +85,8 @@ func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReade
 
 	var markets []*warehouse.Market
 
+	fmt.Printf("Fetched rows  for Event %d\n", eventID)
+
 	for rows.Next() {
 		var mk warehouse.Market
 		var date int64
@@ -117,6 +120,8 @@ func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReade
 }
 
 func (m *marketReader) marketRunners(b sq.StatementBuilderType, marketID string) ([]*warehouse.Runner, error) {
+	fmt.Printf("Fetching runners for Market %s\n", marketID)
+
 	rows, err := b.
 		Select("DISTINCT ON(name) *").
 		From("market_runner").
@@ -132,6 +137,8 @@ func (m *marketReader) marketRunners(b sq.StatementBuilderType, marketID string)
 	defer rows.Close()
 
 	var runners []*warehouse.Runner
+
+	fmt.Printf("Fetched runners for Market %s\n", marketID)
 
 	for rows.Next() {
 		var r warehouse.Runner
