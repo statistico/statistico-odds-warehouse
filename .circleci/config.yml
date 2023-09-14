@@ -80,6 +80,7 @@ jobs:
       - image: 'circleci/python:3.7.1'
     steps:
       - aws-cli/setup
+      - *attach_workspace
       - aws-ecs/update-service:
           family: 'statistico-odds-warehouse'
           cluster: 'statistico-grpc-services'
