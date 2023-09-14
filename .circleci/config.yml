@@ -91,4 +91,4 @@ jobs:
           command: aws s3 sync --exclude="*" --include="*.zip" /tmp/workspace/artifacts/ s3://statistico-lambda
       - run:
           name: Update Lambda Function
-          command: aws lambda update-function-code --function-name statistico-odds-checker --s3-bucket statistico-lambda --s3-key statistico-odds-checker.zip
+          command: aws lambda update-function-code --function-name statistico-odds-warehouse --s3-bucket statistico-lambda --s3-key statistico-odds-warehouse.zip
