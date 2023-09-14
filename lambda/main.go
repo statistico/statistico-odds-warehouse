@@ -4,16 +4,17 @@ import (
 	"encoding/json"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/bootstrap"
 	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/queue"
 )
 
-func parseMessage(ms events.SQSMessage) *queue.EventMarket {
+func parseMessage(ms events.SQSMessage, logger *logrus.Logger) *queue.EventMarket {
 	var mk *queue.EventMarket
 	err := json.Unmarshal([]byte(ms.Body), &mk)
 
 	if err != nil {
-		//logger.Errorf("Unable to marshal message into market struct, %v.", err)
+		logger.Errorf("Unable to marshal message into market struct, %v.", err)
 		return nil
 	}
 
@@ -27,7 +28,7 @@ func handle(event events.SQSEvent) {
 	logger := app.Logger
 
 	for _, message := range event.Records {
-		mk := parseMessage(message)
+		mk := parseMessage(message, logger)
 
 		if err := handler.Handle(mk); err != nil {
 			logger.Errorf("Error inserting market %q", err)
