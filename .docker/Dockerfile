@@ -21,7 +21,6 @@ COPY ./bin ./bin
 COPY ./database ./database
 COPY ./.docker/wait-for-it.sh .
 COPY --from=builder /go/bin/goose /usr/local/bin
-COPY --from=builder /app/console .
 COPY --from=builder /app/grpc .
 
 CMD ["/bin/sh"]
