@@ -4,7 +4,6 @@ import "os"
 
 type Config struct {
 	Database
-	QueueDriver string
 	Sentry
 }
 
@@ -23,8 +22,6 @@ type Sentry struct {
 
 func BuildConfig(ssm bool) *Config {
 	config := Config{}
-
-	config.QueueDriver = os.Getenv("QUEUE_DRIVER")
 
 	if ssm {
 		config.Database = Database{
