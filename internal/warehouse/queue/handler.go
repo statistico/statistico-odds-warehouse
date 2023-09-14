@@ -1,17 +1,16 @@
-package market
+package queue
 
 import (
 	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
-	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/queue"
 	"math"
 	"time"
 )
 
-type Handler struct {
+type MarketHandler struct {
 	writer warehouse.MarketWriter
 }
 
-func (m *Handler) Handle(q *queue.EventMarket) error {
+func (m *MarketHandler) Handle(q *EventMarket) error {
 	var runners []*warehouse.Runner
 
 	for _, r := range q.Runners {
@@ -69,6 +68,6 @@ func (m *Handler) Handle(q *queue.EventMarket) error {
 	return nil
 }
 
-func NewHandler(w warehouse.MarketWriter) *Handler {
-	return &Handler{writer: w}
+func NewMarketHandler(w warehouse.MarketWriter) *MarketHandler {
+	return &MarketHandler{writer: w}
 }

@@ -52,10 +52,15 @@ jobs:
           name: Cache Built Images
           command: |
             chmod +x ./.circleci/deploy/docker-save.sh && ./.circleci/deploy/docker-save.sh
+      - run:
+          name: Build / Store Lambda
+          command: |
+            chmod +x ./.circleci/deploy/build-store.sh && ./.circleci/deploy/build-store.sh
       - persist_to_workspace:
           root: *workspace_root
           paths:
             - docker-cache
+            - artifacts
 
   release-images:
     executor: aws-cli/default
@@ -81,9 +86,9 @@ jobs:
           container-image-name-updates: >
             container=statistico-odds-warehouse-grpc,tag=latest,
             container=statistico-odds-warehouse-migrate,tag=latest,
-      - aws-ecs/update-task-definition:
-          family: 'statistico-odds-warehouse-console'
-          container-image-name-updates: >
-            container=statistico-odds-warehouse-console,tag=latest
-      - aws-ecs/deploy-ecs-scheduled-task:
-          rule-name: StatisticoOddsWarehouse-MarketQueue
+      - run:
+          name: Deploy Artifacts to S3
+          command: aws s3 sync --exclude="*" --include="*.zip" /tmp/workspace/artifacts/ s3://statistico-lambda
+      - run:
+          name: Update Lambda Function
+          command: aws lambda update-function-code --function-name statistico-odds-checker --s3-bucket statistico-lambda --s3-key statistico-odds-checker.zip

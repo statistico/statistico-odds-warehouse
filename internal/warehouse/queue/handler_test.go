@@ -1,9 +1,8 @@
-package market_test
+package queue_test
 
 import (
 	"errors"
 	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
-	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/market"
 	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/queue"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -15,8 +14,8 @@ func TestHandler_Handle(t *testing.T) {
 	t.Run("parses over under market and persist via the repository", func(t *testing.T) {
 		t.Helper()
 
-		writer := new(market.MockMarketWriter)
-		handler := market.NewHandler(writer)
+		writer := new(queue.MockMarketWriter)
+		handler := queue.NewMarketHandler(writer)
 
 		mk := &queue.EventMarket{
 			ID:            "1.2818721",
@@ -109,8 +108,8 @@ func TestHandler_Handle(t *testing.T) {
 	t.Run("returns error if returned by repository", func(t *testing.T) {
 		t.Helper()
 
-		writer := new(market.MockMarketWriter)
-		handler := market.NewHandler(writer)
+		writer := new(queue.MockMarketWriter)
+		handler := queue.NewMarketHandler(writer)
 
 		mk := &queue.EventMarket{
 			ID:            "1.2818721",
@@ -173,8 +172,8 @@ func TestHandler_Handle(t *testing.T) {
 	t.Run("parse runners name by sort priority for MATCH_ODDS market", func(t *testing.T) {
 		t.Helper()
 
-		writer := new(market.MockMarketWriter)
-		handler := market.NewHandler(writer)
+		writer := new(queue.MockMarketWriter)
+		handler := queue.NewMarketHandler(writer)
 
 		mk := &queue.EventMarket{
 			ID:            "1.2818721",
@@ -263,8 +262,8 @@ func TestHandler_Handle(t *testing.T) {
 	t.Run("runner is not persisted if runner prices slice is empty", func(t *testing.T) {
 		t.Helper()
 
-		writer := new(market.MockMarketWriter)
-		handler := market.NewHandler(writer)
+		writer := new(queue.MockMarketWriter)
+		handler := queue.NewMarketHandler(writer)
 
 		mk := &queue.EventMarket{
 			ID:            "1.2818721",

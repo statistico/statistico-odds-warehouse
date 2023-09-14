@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/Masterminds/squirrel v1.4.0
+	github.com/aws/aws-lambda-go v1.41.0
 	github.com/aws/aws-sdk-go v1.35.19
 	github.com/evalphobia/logrus_sentry v0.8.2
 	github.com/lib/pq v1.8.0
@@ -15,7 +16,6 @@ require (
 )
 
 require (
-	github.com/aws/aws-lambda-go v1.41.0 // indirect
 	github.com/certifi/gocertifi v0.0.0-20200922220541-2c3bb06c6054 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

@@ -1,4 +1,4 @@
-package market
+package queue
 
 import (
 	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
