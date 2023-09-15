@@ -18,8 +18,8 @@ func main() {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
-	app := bootstrap.BuildContainer(bootstrap.BuildConfig(false))
-
+	app := bootstrap.BuildContainer(bootstrap.BuildConfig())
+	
 	opts := grpc.KeepaliveParams(keepalive.ServerParameters{MaxConnectionIdle: 5 * time.Minute})
 	server := grpc.NewServer(opts)
 
