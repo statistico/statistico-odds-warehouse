@@ -19,7 +19,7 @@ func main() {
 	}
 
 	app := bootstrap.BuildContainer(bootstrap.BuildConfig())
-	
+
 	opts := grpc.KeepaliveParams(keepalive.ServerParameters{MaxConnectionIdle: 5 * time.Minute})
 	server := grpc.NewServer(opts)
 

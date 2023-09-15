@@ -1,7 +1,6 @@
 package grpc
 
 import (
-	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
 	"github.com/statistico/statistico-proto/go"
