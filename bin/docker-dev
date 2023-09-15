@@ -6,4 +6,4 @@ if [ -z $(docker network ls --filter name=^${NETWORK_NAME}$ --format="{{ .Name }
      docker network create ${NETWORK_NAME};
 fi
 
-docker-compose -f docker-compose.build.yml -f docker-compose.dev.yml $@
+docker-compose -f docker-compose.build.yml $@

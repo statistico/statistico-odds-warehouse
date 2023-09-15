@@ -22,7 +22,7 @@ func parseMessage(ms events.SQSMessage, logger *logrus.Logger) *queue.EventMarke
 }
 
 func handle(event events.SQSEvent) {
-	app := bootstrap.BuildContainer(bootstrap.BuildConfig(true))
+	app := bootstrap.BuildContainer(bootstrap.BuildSsmConfig())
 
 	handler := app.QueueMarketHandler()
 	logger := app.Logger

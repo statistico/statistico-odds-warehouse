@@ -8,7 +8,7 @@ import (
 )
 
 func GetConnection(t *testing.T, tables []string) (*sql.DB, func()) {
-	db := bootstrap.BuildConfig(false).Database
+	db := bootstrap.BuildConfig().Database
 
 	dsn := "host=%s port=%s user=%s " + "password=%s dbname=%s sslmode=disable"
 

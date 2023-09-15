@@ -24,7 +24,6 @@ services:
       DB_PASSWORD: password
       DB_USER: statistico
       DB_PORT: 5432
-      QUEUE_DRIVER: log
     networks:
       - statistico_internal
       - statistico-odds-warehouse_default
@@ -58,7 +57,6 @@ services:
       DB_NAME: statistico_odds_warehouse
       DB_USER: statistico
       DB_PORT: 5432
-      QUEUE_DRIVER: log
     links:
       - postgres
       - migrate
@@ -67,9 +65,6 @@ services:
       - migrate
     networks:
       - statistico-odds-warehouse_default
-
-  queue:
-    <<: *console
 
 networks:
   statistico-odds-warehouse_default:
