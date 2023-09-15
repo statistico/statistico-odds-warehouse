@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/statistico/statistico-odds-warehouse/internal/warehouse/bootstrap"
 	"github.com/statistico/statistico-proto/go"
 	"google.golang.org/grpc"
@@ -19,11 +18,7 @@ func main() {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
-	fmt.Println("Starting application")
-
 	app := bootstrap.BuildContainer(bootstrap.BuildConfig())
-
-	fmt.Printf("Config %+v\n", app.Config)
 
 	opts := grpc.KeepaliveParams(keepalive.ServerParameters{MaxConnectionIdle: 5 * time.Minute})
 	server := grpc.NewServer(opts)

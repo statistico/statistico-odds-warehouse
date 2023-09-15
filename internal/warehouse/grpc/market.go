@@ -1,7 +1,6 @@
 package grpc
 
 import (
-	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
 	"github.com/statistico/statistico-proto/go"
@@ -44,11 +43,7 @@ func (m *MarketService) GetEventMarkets(r *statistico.EventMarketRequest, stream
 		Exchange: r.Exchange,
 	}
 
-	fmt.Printf("Fetching markets for fixture %d\n", r.EventId)
-
 	markets, err := m.reader.MarketsByEventID(r.EventId, &q)
-
-	fmt.Printf("Fetched markets for fixture %d: %+v\n", r.EventId, markets)
 
 	if err != nil {
 		m.logger.Errorf("error fetching markets from reader: %s", err.Error())
