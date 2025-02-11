@@ -8,7 +8,7 @@ To develop this application locally you will need to following tools and languag
 - Docker Compose
 
 ## Applications
-This service is built using Golang 1.17 and provides two applications:
+This service is built using Golang 1.23.3 and provides two applications:
 
 - gRPC
 - Queue

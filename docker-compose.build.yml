@@ -33,7 +33,7 @@ services:
 
   migrate:
     <<: *console
-    command: [ "./bin/migrate" ]
+    command: ["make", "migrate"]
 
   statistico-odds-warehouse-grpc:
     <<: *console
