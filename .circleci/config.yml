@@ -12,7 +12,7 @@ executors:
       image: ubuntu-2004:2023.10.1
   python-executor:
     docker:
-      - image: 'circleci/python:3.7.1'
+      - image: cimg/python:3.8.4
 
 references:
   workspace_root: &workspace_root
@@ -27,10 +27,11 @@ workflows:
     jobs:
 #      - build-and-test
       - build-store-lambda
-#      - production-deploy-infrastructure:
-#          context: aws
-#          requires:
+      - production-deploy-infrastructure:
+          context: aws
+          requires:
 #            - build-and-test
+            - build-store-lambda
 #          filters:
 #            branches:
 #              only: master
@@ -124,8 +125,7 @@ jobs:
             chmod +x ./.circleci/deploy/docker-push.sh && ./.circleci/deploy/docker-push.sh
 
   deploy-to-production:
-    docker:
-      - image: 'circleci/python:3.7.1'
+    executor: python-executor
     steps:
       - aws-cli/setup
       - *attach_workspace
