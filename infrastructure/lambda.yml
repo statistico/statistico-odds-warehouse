@@ -29,7 +29,7 @@ Resources:
       PackageType: "Zip"
       Role:
         Fn::ImportValue: !Sub ${ServiceName}:LambdaFunctionRoleArn
-      Runtime: "go1.x"
+      Runtime: "provided.al2023"
       MemorySize: 256
       Layers:
         - !Ref ParameterStoreExtensionLayer

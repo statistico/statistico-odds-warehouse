@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Deploy a service into an ECS cluster with service discovery endpoint for statistico-odds-warehouse service
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: statistico-production
+  MinContainers:
+    Type: Number
+    Default: 1
+    Description: Minimum number of copies of the service task to run
+  MaxContainers:
+    Type: Number
+    Default: 3
+    Description: Maximum number of copies of the service task to run
+  ServiceName:
+    Type: String
+    Default: statistico-odds-warehouse
+Resources:
+  GrpcService:
+    Type: AWS::ECS::Service
+    DependsOn: ServiceDiscoveryService
+    Properties:
+      ServiceName: !Ref ServiceName
+      Cluster:
+        Fn::ImportValue: !Sub ${EnvironmentName}:GrpcServiceEcsClusterArn
+      LaunchType: FARGATE
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 75
+      DesiredCount: !Ref MinContainers
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          SecurityGroups:
+            - Fn::ImportValue: !Sub ${ServiceName}:SecurityGroupId
+          Subnets:
+            - Fn::ImportValue: !Sub ${EnvironmentName}:PrivateSubnetOne
+      TaskDefinition:
+        Fn::ImportValue:
+          !Sub ${ServiceName}:GrpcTaskDefinitionArn
+      ServiceRegistries:
+        - RegistryArn: !GetAtt ServiceDiscoveryService.Arn
+
+  ServiceDiscoveryService:
+    Type: AWS::ServiceDiscovery::Service
+    Properties:
+      Name: !Ref ServiceName
+      DnsConfig:
+        DnsRecords: [ { Type: "A", TTL: "300" } ]
+        NamespaceId:
+          Fn::ImportValue:
+            !Sub ${EnvironmentName}:ServiceDiscoveryNamespace
+      HealthCheckCustomConfig:
+        FailureThreshold: 1

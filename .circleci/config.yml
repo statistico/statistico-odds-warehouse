@@ -106,6 +106,7 @@ jobs:
             aws cloudformation deploy --template-file infrastructure/ec2.yml --stack-name statistico-odds-warehouse-ec2 --no-fail-on-empty-changeset
             aws cloudformation deploy --template-file infrastructure/task-definition.yml --stack-name statistico-odds-warehouse-task-definition --no-fail-on-empty-changeset
             aws cloudformation deploy --template-file infrastructure/lambda.yml --stack-name statistico-odds-warehouse-lambda --no-fail-on-empty-changeset
+            aws cloudformation deploy --template-file infrastructure/ecs.yml --stack-name statistico-odds-warehouse-ecs --no-fail-on-empty-changeset
 
   release-images:
     executor: aws-cli/default
