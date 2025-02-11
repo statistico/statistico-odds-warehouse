@@ -36,7 +36,7 @@ Resources:
   GrpcTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: !Sub ${ServiceName}
+      Family: !Sub ${ServiceName}-grpc
       Cpu: !Ref Cpu
       Memory: !Ref Memory
       NetworkMode: awsvpc
