@@ -27,20 +27,20 @@ workflows:
     jobs:
 #      - build-and-test
       - build-store-lambda
-      - production-deploy-infrastructure:
-          context: aws
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only: master
-      - release-images:
-          context: aws
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only: master
+#      - production-deploy-infrastructure:
+#          context: aws
+#          requires:
+#            - build-and-test
+#          filters:
+#            branches:
+#              only: master
+#      - release-images:
+#          context: aws
+#          requires:
+#            - build-and-test
+#          filters:
+#            branches:
+#              only: master
       - deploy-to-production:
           context: aws
           requires:
