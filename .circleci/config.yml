@@ -134,7 +134,7 @@ jobs:
           security_group_ids: ${AWS_SECURITY_GROUP_IDS}
           subnet_ids: ${AWS_PRIVATE_SUBNET_ONE_ID}
           task_definition: "statistico-odds-warehouse-migrate"
-      - aws-ecs/update-service:
+      - aws-ecs/update_service:
           family: 'statistico-odds-warehouse-grpc'
           service_name: 'statistico-odds-warehouse'
           cluster: 'statistico-grpc-services'
