@@ -22,6 +22,17 @@ Parameters:
     Type: Number
     Default: 512
 Resources:
+  GrpcLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub ${ServiceName}-grpc-log-group
+      RetentionInDays: 7
+  MigrateLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub ${ServiceName}-migrate-log-group
+      RetentionInDays: 7
+
   GrpcTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -59,7 +70,7 @@ Resources:
           LogConfiguration:
             LogDriver: 'awslogs'
             Options:
-              awslogs-group: !Ref LogGroup
+              awslogs-group: !Ref GrpcLogGroup
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: !Sub ${ServiceName}-grpc
 
@@ -101,7 +112,7 @@ Resources:
             LogDriver: awslogs
             Options:
               awslogs-region: !Ref AWS::Region
-              awslogs-group: !Ref ConsoleLogGroup
+              awslogs-group: !Ref MigrateLogGroup
               awslogs-stream-prefix: !Sub ${ServiceName}-migrate
 
 Outputs:
