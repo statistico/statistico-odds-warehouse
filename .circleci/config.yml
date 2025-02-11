@@ -138,7 +138,7 @@ jobs:
           family: 'statistico-odds-warehouse-grpc'
           service_name: 'statistico-odds-warehouse'
           cluster: 'statistico-grpc-services'
-          container-image-name-updates: >
+          container_image_name_updates: >
             container=statistico-odds-warehouse-grpc,tag=latest
       - run:
           name: Deploy Artifacts to S3
