@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Task definition for the statistico-odds-warehouse service.
+Parameters:
+  ServiceName:
+    Type: String
+    Default: statistico-odds-warehouse
+  EnvironmentName:
+    Type: String
+    Default: statistico-production
+  EcrImageUri:
+    Type: String
+    Description: The full URI for the statistico-odds-warehouse image within ECR.
+    Default: "396921332736.dkr.ecr.eu-west-2.amazonaws.com/statistico-odds-warehouse:latest"
+  ContainerPort:
+    Type: Number
+    Default: 50051
+    Description: What port number the application inside the docker container is binding to
+  Cpu:
+    Type: Number
+    Default: 256
+  Memory:
+    Type: Number
+    Default: 512
+Resources:
+  GrpcTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub ${ServiceName}
+      Cpu: !Ref Cpu
+      Memory: !Ref Memory
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      ExecutionRoleArn:
+        Fn::ImportValue: !Sub ${EnvironmentName}:EcsTaskRoleArn
+      ContainerDefinitions:
+        - Name: !Sub ${ServiceName}-grpc
+          Image: !Ref EcrImageUri
+          Memory: !Ref Memory
+          Essential: true
+          Secrets:
+            - Name: DB_DRIVER
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_DRIVER
+            - Name: DB_HOST
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_HOST
+            - Name: DB_NAME
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_NAME
+            - Name: DB_PASSWORD
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_PASSWORD
+            - Name: DB_PORT
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_PORT
+            - Name: DB_USER
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_USER
+            - Name: SENTRY_DSN
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-SENTRY_DSN
+          Command:
+            - "./grpc"
+            - "--port 50051"
+          LogConfiguration:
+            LogDriver: 'awslogs'
+            Options:
+              awslogs-group: !Ref LogGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: !Sub ${ServiceName}-grpc
+
+  MigrateTaskDefinition:
+    Type: "AWS::ECS::TaskDefinition"
+    Properties:
+      Family: !Sub ${ServiceName}-migrate
+      Cpu: !Ref Cpu
+      Memory: !Ref Memory
+      RequiresCompatibilities:
+        - FARGATE
+      NetworkMode: awsvpc
+      ExecutionRoleArn:
+        Fn::ImportValue: !Sub ${EnvironmentName}:EcsTaskRoleArn
+      ContainerDefinitions:
+        - Name: !Sub ${ServiceName}-migrate
+          Image: !Ref EcrImageUri
+          Memory: !Ref Memory
+          Essential: true
+          Secrets:
+            - Name: DB_DRIVER
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_DRIVER
+            - Name: DB_HOST
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_HOST
+            - Name: DB_NAME
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_NAME
+            - Name: DB_PASSWORD
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_PASSWORD
+            - Name: DB_PORT
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_PORT
+            - Name: DB_USER
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_USER
+            - Name: SENTRY_DSN
+              ValueFrom: arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-SENTRY_DSN
+          Command:
+            - "make"
+            - "migrate"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-region: !Ref AWS::Region
+              awslogs-group: !Ref ConsoleLogGroup
+              awslogs-stream-prefix: !Sub ${ServiceName}-migrate
+
+Outputs:
+  GrpcTaskDefinitionArn:
+    Description: ARN of the grpc task definition which was created.
+    Value: !GetAtt GrpcTaskDefinition.TaskDefinitionArn
+    Export:
+      Name: !Sub ${ServiceName}:GrpcTaskDefinitionArn

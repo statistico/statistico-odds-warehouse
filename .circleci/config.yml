@@ -1,7 +1,18 @@
 version: 2.1
 orbs:
-  aws-cli: circleci/aws-cli@0.1.20
-  aws-ecs: circleci/aws-ecs@3.1.0
+  aws-cli: circleci/aws-cli@4.0
+  aws-ecs: circleci/aws-ecs@6.0.0
+
+executors:
+  go-executor:
+    docker:
+      - image: cimg/go:1.23.3
+  machine-executor:
+    machine:
+      image: ubuntu-2004:2023.10.1
+  python-executor:
+    docker:
+      - image: 'circleci/python:3.7.1'
 
 references:
   workspace_root: &workspace_root
@@ -15,6 +26,14 @@ workflows:
   build-test-deploy:
     jobs:
       - build-and-test
+      - build-store-lambda
+      - production-deploy-infrastructure:
+          context: aws
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: master
       - release-images:
           context: aws
           requires:
@@ -22,36 +41,48 @@ workflows:
           filters:
             branches:
               only: master
-      - deploy-to-production:
-          context: aws
-          requires:
-            - build-and-test
-            - release-images
-          filters:
-            branches:
-              only: master
+#      - deploy-to-production:
+#          context: aws
+#          requires:
+#            - build-and-test
+#            - release-images
+#          filters:
+#            branches:
+#              only: master
 
 jobs:
   build-and-test:
     working_directory: ~/go/src/github.com/statistico/statistico-odds-warehouse
-    machine: true
+    executor: machine-executor
     environment:
       GOPATH: /home/circleci/go
     steps:
+      - *attach_workspace
       - checkout
       - run:
           name: Build Release Image
           command: |
-            docker network create statistico_internal
-            docker-compose -f docker-compose.build.yml up -d --build
+            make docker-build
       - run:
           name: Test Release Image
           command: |
-            docker-compose -f docker-compose.build.yml run test gotestsum -f short-verbose
+            make test
       - run:
           name: Cache Built Images
           command: |
             chmod +x ./.circleci/deploy/docker-save.sh && ./.circleci/deploy/docker-save.sh
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - docker-cache
+
+  build-store-lambda:
+    executor: go-executor
+    environment:
+      GOPATH: /home/circleci/go
+    steps:
+      - *attach_workspace
+      - checkout
       - run:
           name: Build / Store Lambda
           command: |
@@ -59,8 +90,19 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
-            - docker-cache
             - artifacts
+
+  production-deploy-infrastructure:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup
+      - run:
+          name: Deploy Cloudformation templates for application infrastructure
+          command: |
+            aws cloudformation deploy --template-file infrastructure/ecr.yml --stack-name statistico-odds-warehouse-ecr --no-fail-on-empty-changeset
+            aws cloudformation deploy --template-file infrastructure/ec2.yml --stack-name statistico-odds-warehouse-ec2 --no-fail-on-empty-changeset
+            aws cloudformation deploy --template-file infrastructure/task-definition.yml --stack-name statistico-odds-warehouse-task-definition --no-fail-on-empty-changeset
 
   release-images:
     executor: aws-cli/default
@@ -75,21 +117,21 @@ jobs:
             chmod +x ./.circleci/deploy/docker-load.sh && ./.circleci/deploy/docker-load.sh
             chmod +x ./.circleci/deploy/docker-push.sh && ./.circleci/deploy/docker-push.sh
 
-  deploy-to-production:
-    docker:
-      - image: 'circleci/python:3.7.1'
-    steps:
-      - aws-cli/setup
-      - *attach_workspace
-      - aws-ecs/update-service:
-          family: 'statistico-odds-warehouse'
-          cluster: 'statistico-grpc-services'
-          container-image-name-updates: >
-            container=statistico-odds-warehouse-grpc,tag=latest,
-            container=statistico-odds-warehouse-migrate,tag=latest,
-      - run:
-          name: Deploy Artifacts to S3
-          command: aws s3 sync --exclude="*" --include="*.zip" /tmp/workspace/artifacts/ s3://statistico-lambda
-      - run:
-          name: Update Lambda Function
-          command: aws lambda update-function-code --function-name statistico-odds-warehouse --s3-bucket statistico-lambda --s3-key statistico-odds-warehouse.zip
+#  deploy-to-production:
+#    docker:
+#      - image: 'circleci/python:3.7.1'
+#    steps:
+#      - aws-cli/setup
+#      - *attach_workspace
+#      - aws-ecs/update-service:
+#          family: 'statistico-odds-warehouse'
+#          cluster: 'statistico-grpc-services'
+#          container-image-name-updates: >
+#            container=statistico-odds-warehouse-grpc,tag=latest,
+#            container=statistico-odds-warehouse-migrate,tag=latest,
+#      - run:
+#          name: Deploy Artifacts to S3
+#          command: aws s3 sync --exclude="*" --include="*.zip" /tmp/workspace/artifacts/ s3://statistico-lambda
+#      - run:
+#          name: Update Lambda Function
+#          command: aws lambda update-function-code --function-name statistico-odds-warehouse --s3-bucket statistico-lambda --s3-key statistico-odds-warehouse.zip
