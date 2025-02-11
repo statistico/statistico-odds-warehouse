@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: CloudFormation Template for automation of the statistico-odds-warehouse user
+Parameters:
+  ServiceName:
+    Type: String
+    Default: statistico-odds-warehouse
+Resources:
+  LambdaFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "statistico-odds-warehouse-lambda-execution-role"
+      Description: IAM Policy for lambda execution role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+      Path: "/"
+      Policies:
+        - PolicyName: AppendToLogsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+        - PolicyName: !Sub ${AWS::StackName}-sqs-access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:*
+                Resource:
+                  - Fn::ImportValue: !Sub ${ServiceName}:QueueArn
+        - PolicyName: !Sub ${AWS::StackName}-parameter-store-access
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                  - kms:Decrypt
+                Resource:
+                  - arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_DRIVER
+                  - arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_HOST
+                  - arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_NAME
+                  - arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_PASSWORD
+                  - arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_PORT
+                  - arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-DB_USER
+                  - arn:aws:ssm:eu-west-2:396921332736:parameter/statistico-odds-warehouse-SENTRY_DSN
+
+Outputs:
+  LambdaFunctionRoleArn:
+    Description: ARN of the lambda function execution role.
+    Value: !GetAtt LambdaFunctionRole.Arn
+    Export:
+      Name: !Sub ${ServiceName}:LambdaFunctionRoleArn

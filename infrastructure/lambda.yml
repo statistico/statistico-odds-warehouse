@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Lambda functions for the statistico-odds-warehouse application.
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: statistico-production
+  ServiceName:
+    Type: String
+    Default: statistico-odds-warehouse
+  GlobalS3BucketName:
+    Type: String
+    Default: statistico-lambda
+  ParameterStoreExtensionLayer:
+    Type: String
+    Default: arn:aws:lambda:eu-west-2:133256977650:layer:AWS-Parameters-and-Secrets-Lambda-Extension:4
+Resources:
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: !Ref GlobalS3BucketName
+        S3Key: !Join
+          - ''
+          - - !Ref ServiceName
+            - '.zip'
+      Description: "Fetch and persist odds from supported exchanges"
+      FunctionName: !Ref ServiceName
+      Handler: !Ref ServiceName
+      PackageType: "Zip"
+      Role:
+        Fn::ImportValue: !Sub ${ServiceName}:LambdaFunctionRoleArn
+      Runtime: "go1.x"
+      MemorySize: 256
+      Layers:
+        - !Ref ParameterStoreExtensionLayer
+      Timeout: 30
+      VpcConfig:
+        SecurityGroupIds:
+          - Fn::ImportValue: !Sub ${ServiceName}:SecurityGroupId
+        SubnetIds:
+          - Fn::ImportValue: !Sub ${EnvironmentName}:PrivateSubnetOne
+      Tags:
+        - Key: "name"
+          Value: !Ref ServiceName
+
+  LambdaFunctionEventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 300
+      MaximumBatchingWindowInSeconds: 1
+      Enabled: true
+      EventSourceArn:
+        Fn::ImportValue: !Sub ${ServiceName}:QueueArn
+      FunctionName: !GetAtt LambdaFunction.Arn
+
+Outputs:
+  LambdaFunctionArn:
+    Description: ARN of the statistico-odds-warehouse lambda function.
+    Value: !GetAtt LambdaFunction.Arn
+    Export:
+      Name: !Sub ${ServiceName}:LambdaFunctionArn

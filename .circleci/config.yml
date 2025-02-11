@@ -100,9 +100,12 @@ jobs:
       - run:
           name: Deploy Cloudformation templates for application infrastructure
           command: |
+            aws cloudformation deploy --template-file infrastructure/sqs.yml --stack-name statistico-odds-warehouse-sqs --no-fail-on-empty-changeset
+            aws cloudformation deploy --template-file infrastructure/iam.yml --stack-name statistico-odds-warehouse-iam --no-fail-on-empty-changeset --capabilities "CAPABILITY_NAMED_IAM" --no-fail-on-empty-changeset
             aws cloudformation deploy --template-file infrastructure/ecr.yml --stack-name statistico-odds-warehouse-ecr --no-fail-on-empty-changeset
             aws cloudformation deploy --template-file infrastructure/ec2.yml --stack-name statistico-odds-warehouse-ec2 --no-fail-on-empty-changeset
             aws cloudformation deploy --template-file infrastructure/task-definition.yml --stack-name statistico-odds-warehouse-task-definition --no-fail-on-empty-changeset
+            aws cloudformation deploy --template-file infrastructure/lambda.yml --stack-name statistico-odds-warehouse-lambda --no-fail-on-empty-changeset
 
   release-images:
     executor: aws-cli/default
@@ -130,15 +133,16 @@ jobs:
           security_group_ids: ${AWS_SECURITY_GROUP_IDS}
           subnet_ids: ${AWS_PRIVATE_SUBNET_ONE_ID}
           task_definition: "statistico-odds-warehouse-migrate"
+      - run:
+          name: Deploy Artifacts to S3
+          command: aws s3 sync --exclude="*" --include="*.zip" /tmp/workspace/artifacts/ s3://statistico-lambda
+      - run:
+          name: Update Lambda Function
+          command: aws lambda update-function-code --function-name statistico-odds-warehouse --s3-bucket statistico-lambda --s3-key statistico-odds-warehouse.zip
+
 #      - aws-ecs/update-service:
 #          family: 'statistico-odds-warehouse'
 #          cluster: 'statistico-grpc-services'
 #          container-image-name-updates: >
 #            container=statistico-odds-warehouse-grpc,tag=latest,
 #            container=statistico-odds-warehouse-migrate,tag=latest,
-#      - run:
-#          name: Deploy Artifacts to S3
-#          command: aws s3 sync --exclude="*" --include="*.zip" /tmp/workspace/artifacts/ s3://statistico-lambda
-#      - run:
-#          name: Update Lambda Function
-#          command: aws lambda update-function-code --function-name statistico-odds-warehouse --s3-bucket statistico-lambda --s3-key statistico-odds-warehouse.zip
