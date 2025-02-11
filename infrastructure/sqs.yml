@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CloudFormation template to create an SQS queue for the statistico-odds-warehouse service to consume statistico-odds-checker data
+Parameters:
+  ServiceName:
+    Type: String
+    Default: statistico-odds-warehouse
+  OddsCheckerService:
+    Type: String
+    Default: statistico-odds-checker
+    AllowedValues: [ "statistico-odds-checker" ]
+Resources:
+  SqsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Ref ServiceName
+      Tags:
+        - Key: Name
+          Value: !Sub ${ServiceName}-queue
+  QueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref SqsQueue
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - sqs:SendMessage
+            Resource:
+              - !GetAtt SqsQueue.Arn
+            Condition:
+              ArnEquals:
+                aws:SourceArn:
+                  Fn::ImportValue: !Sub ${OddsCheckerService}:TopicArn
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - sqs:ReceiveMessage
+            Resource:
+              - !GetAtt SqsQueue.Arn
+  SnsTopicSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn:
+        Fn::ImportValue: !Sub ${OddsCheckerService}:TopicArn
+      Endpoint: !GetAtt SqsQueue.Arn
+      Protocol: sqs
+      RawMessageDelivery: true
+
+Outputs:
+  QueueURL:
+    Description: "URL of new Amazon SQS Queue"
+    Value: !Ref SqsQueue
+  QueueARN:
+    Description: "ARN of new AmazonSQS Queue"
+    Value:
+      Fn::GetAtt:
+        - "SqsQueue"
+        - "Arn"
+    Export:
+      Name: !Sub ${ServiceName}:QueueArn
+  QueueName:
+    Description: "Name of new Amazon SQS Queue"
+    Value:
+      Fn::GetAtt:
+        - "SqsQueue"
+        - "QueueName"
+    Export:
+      Name: !Sub ${ServiceName}:QueueName
