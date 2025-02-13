@@ -170,6 +170,8 @@ func TestMarketService_GetEventMarkets(t *testing.T) {
 			Exchange: []string{"BETFAIR"},
 		}
 
+		label := "1.5"
+
 		markets := []*warehouse.Market{
 			{
 				ID:            "1.2345",
@@ -184,6 +186,7 @@ func TestMarketService_GetEventMarkets(t *testing.T) {
 						ID:       "1234",
 						MarketID: "1.2345",
 						Name:     "OVER",
+						Label:    &label,
 						BackPrice: &warehouse.Odds{
 							Value:     1.45,
 							Size:      3410.12,
@@ -229,6 +232,7 @@ func TestMarketService_GetEventMarkets(t *testing.T) {
 
 			a.Equal("1234", m.Runners[0].Id)
 			a.Equal("OVER", m.Runners[0].Name)
+			a.Equal("1.5", m.Runners[0].Label.Value)
 			a.Equal(float32(1.45), m.Runners[0].BackOdds.Price)
 			a.Equal(float32(3410.12), m.Runners[0].BackOdds.Size)
 			a.Equal("BACK", m.Runners[0].BackOdds.Side)
@@ -236,6 +240,7 @@ func TestMarketService_GetEventMarkets(t *testing.T) {
 
 			a.Equal("6789", m.Runners[1].Id)
 			a.Equal("UNDER", m.Runners[1].Name)
+			a.Nil(m.Runners[1].Label)
 			a.Equal(float32(2.26), m.Runners[1].BackOdds.Price)
 			a.Equal(float32(3410.12), m.Runners[1].BackOdds.Size)
 			a.Equal("BACK", m.Runners[1].BackOdds.Side)
