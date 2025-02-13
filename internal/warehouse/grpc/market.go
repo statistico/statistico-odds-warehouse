@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	"fmt"
+	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-odds-warehouse/internal/warehouse"
 	"github.com/statistico/statistico-proto/go"
@@ -44,11 +44,7 @@ func (m *MarketService) GetEventMarkets(r *statistico.EventMarketRequest, stream
 		Exchange: r.Exchange,
 	}
 
-	fmt.Printf("Fetching markets for fixture %d\n", r.EventId)
-
 	markets, err := m.reader.MarketsByEventID(r.EventId, &q)
-
-	fmt.Printf("Fetching %d markets for fixture %d\n", len(markets), r.EventId)
 
 	if err != nil {
 		m.logger.Errorf("error fetching markets from reader: %s", err.Error())
@@ -72,7 +68,7 @@ func (m *MarketService) GetEventMarkets(r *statistico.EventMarketRequest, stream
 		var runners []*statistico.Runner
 
 		for _, r := range mk.Runners {
-			runners = append(runners, &statistico.Runner{
+			run := statistico.Runner{
 				Id:   r.ID,
 				Name: r.Name,
 				BackOdds: &statistico.ExchangeOdds{
@@ -81,7 +77,13 @@ func (m *MarketService) GetEventMarkets(r *statistico.EventMarketRequest, stream
 					Side:      r.BackPrice.Side,
 					Timestamp: uint64(r.BackPrice.Timestamp.Unix()),
 				},
-			})
+			}
+
+			if r.Label != nil {
+				run.Label = &wrappers.StringValue{Value: *r.Label}
+			}
+
+			runners = append(runners, &run)
 		}
 
 		ms.Runners = runners
