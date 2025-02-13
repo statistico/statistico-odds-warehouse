@@ -19,7 +19,7 @@ func TestMarketReader_MarketsByEventID(t *testing.T) {
 		defer cleanUp()
 
 		insertMultipleMarketsAndRunner(t, writer)
-		
+
 		q := warehouse.MarketReaderQuery{Market: []string{"OVER_UNDER_25"}}
 
 		markets, err := reader.MarketsByEventID(1827711, &q)
@@ -44,7 +44,7 @@ func TestMarketReader_MarketsByEventID(t *testing.T) {
 		a.Equal("BETFAIR", market.Exchange)
 		a.Equal(2, len(market.Runners))
 
-		a.Equal(uint64(423721), r1.ID)
+		a.Equal("423721", r1.ID)
 		a.Equal("1.234", r1.MarketID)
 		a.Equal("OVER", r1.Name)
 		a.Equal(warehouse.Odds{
@@ -54,7 +54,7 @@ func TestMarketReader_MarketsByEventID(t *testing.T) {
 			Timestamp: time.Unix(1606824714, 0),
 		}, *r1.BackPrice)
 
-		a.Equal(uint64(423722), r2.ID)
+		a.Equal("423722", r2.ID)
 		a.Equal("1.234", r2.MarketID)
 		a.Equal("UNDER", r2.Name)
 		a.Equal(warehouse.Odds{
@@ -95,7 +95,7 @@ func TestMarketReader_MarketsByEventID(t *testing.T) {
 		a.Equal("PINNACLE", market.Exchange)
 		a.Equal(2, len(market.Runners))
 
-		a.Equal(uint64(423721), r1.ID)
+		a.Equal("423744", r1.ID)
 		a.Equal("1.999", r1.MarketID)
 		a.Equal("OVER", r1.Name)
 		a.Equal(warehouse.Odds{
@@ -105,7 +105,7 @@ func TestMarketReader_MarketsByEventID(t *testing.T) {
 			Timestamp: time.Unix(1606824712, 0),
 		}, *r1.BackPrice)
 
-		a.Equal(uint64(423722), r2.ID)
+		a.Equal("423745", r2.ID)
 		a.Equal("1.999", r2.MarketID)
 		a.Equal("UNDER", r2.Name)
 		a.Equal(warehouse.Odds{

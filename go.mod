@@ -10,7 +10,7 @@ require (
 	github.com/evalphobia/logrus_sentry v0.8.2
 	github.com/lib/pq v1.8.0
 	github.com/sirupsen/logrus v1.7.0
-	github.com/statistico/statistico-proto v0.2.7
+	github.com/statistico/statistico-proto v0.2.10
 	github.com/stretchr/testify v1.7.2
 	google.golang.org/grpc v1.68.0
 )

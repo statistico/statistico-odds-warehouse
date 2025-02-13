@@ -23,11 +23,11 @@ func TestHandler_Handle(t *testing.T) {
 			CompetitionID: 8,
 			SeasonID:      17420,
 			EventDate:     1583971200,
-			Name:          "OVER_UNDER_25",
+			Name:          "MATCH_GOALS",
 			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
-					ID:   472671,
+					ID:   "472671",
 					Name: "Over 2.5 Goals",
 					BackPrices: []queue.PriceSize{
 						{
@@ -43,7 +43,7 @@ func TestHandler_Handle(t *testing.T) {
 					},
 				},
 				{
-					ID:   472672,
+					ID:   "472672",
 					Name: "Under 2.5 Goals",
 					BackPrices: []queue.PriceSize{
 						{
@@ -67,14 +67,14 @@ func TestHandler_Handle(t *testing.T) {
 			assert.Equal(t, uint64(148192), m.EventID)
 			assert.Equal(t, uint64(8), m.CompetitionID)
 			assert.Equal(t, uint64(17420), m.SeasonID)
-			assert.Equal(t, "OVER_UNDER_25", m.Name)
+			assert.Equal(t, "MATCH_GOALS", m.Name)
 			assert.Equal(t, "betfair", m.Exchange)
 			assert.Equal(t, time.Unix(1583971200, 0), m.EventDate)
 			return true
 		})
 
 		run := mock.MatchedBy(func(r []*warehouse.Runner) bool {
-			assert.Equal(t, uint64(472671), r[0].ID)
+			assert.Equal(t, "472671", r[0].ID)
 			assert.Equal(t, "Over 2.5 Goals", r[0].Name)
 			assert.Equal(t, float32(1.95), r[0].BackPrice.Value)
 			assert.Equal(t, float32(156.91), r[0].BackPrice.Size)
@@ -82,7 +82,7 @@ func TestHandler_Handle(t *testing.T) {
 			assert.Equal(t, float32(1.95), r[0].LayPrice.Value)
 			assert.Equal(t, float32(156.91), r[0].LayPrice.Size)
 			assert.Equal(t, time.Unix(1583971200, 0), r[0].LayPrice.Timestamp)
-			assert.Equal(t, uint64(472672), r[1].ID)
+			assert.Equal(t, "472672", r[1].ID)
 			assert.Equal(t, "Under 2.5 Goals", r[1].Name)
 			assert.Equal(t, float32(2.05), r[1].BackPrice.Value)
 			assert.Equal(t, float32(1.92), r[1].BackPrice.Size)
@@ -121,7 +121,7 @@ func TestHandler_Handle(t *testing.T) {
 			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
-					ID:   472671,
+					ID:   "472671",
 					Name: "Over 2.5 Goals",
 					BackPrices: []queue.PriceSize{
 						{
@@ -131,7 +131,7 @@ func TestHandler_Handle(t *testing.T) {
 					},
 				},
 				{
-					ID:   472672,
+					ID:   "472672",
 					Name: "Under 2.5 Goals",
 					BackPrices: []queue.PriceSize{
 						{
@@ -185,7 +185,7 @@ func TestHandler_Handle(t *testing.T) {
 			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
-					ID:   472671,
+					ID:   "472671",
 					Name: "Home",
 					BackPrices: []queue.PriceSize{
 						{
@@ -195,7 +195,7 @@ func TestHandler_Handle(t *testing.T) {
 					},
 				},
 				{
-					ID:   472672,
+					ID:   "472672",
 					Name: "Away",
 					BackPrices: []queue.PriceSize{
 						{
@@ -205,7 +205,7 @@ func TestHandler_Handle(t *testing.T) {
 					},
 				},
 				{
-					ID:   472673,
+					ID:   "472673",
 					Name: "Draw",
 					BackPrices: []queue.PriceSize{
 						{
@@ -230,12 +230,12 @@ func TestHandler_Handle(t *testing.T) {
 		})
 
 		run := mock.MatchedBy(func(r []*warehouse.Runner) bool {
-			assert.Equal(t, uint64(472671), r[0].ID)
+			assert.Equal(t, "472671", r[0].ID)
 			assert.Equal(t, "Home", r[0].Name)
 			assert.Equal(t, float32(1.96), r[0].BackPrice.Value)
 			assert.Equal(t, float32(156.92), r[0].BackPrice.Size)
 			assert.Equal(t, time.Unix(1583971200, 0), r[0].BackPrice.Timestamp)
-			assert.Equal(t, uint64(472672), r[1].ID)
+			assert.Equal(t, "472672", r[1].ID)
 			assert.Equal(t, "Away", r[1].Name)
 			assert.Equal(t, float32(2.05), r[1].BackPrice.Value)
 			assert.Equal(t, float32(1.93), r[1].BackPrice.Size)
@@ -275,12 +275,12 @@ func TestHandler_Handle(t *testing.T) {
 			Exchange:      "betfair",
 			Runners: []*queue.Runner{
 				{
-					ID:        472671,
+					ID:        "472671",
 					Name:      "Home",
 					LayPrices: []queue.PriceSize{},
 				},
 				{
-					ID:   472672,
+					ID:   "472672",
 					Name: "Away",
 					LayPrices: []queue.PriceSize{
 						{
@@ -290,7 +290,7 @@ func TestHandler_Handle(t *testing.T) {
 					},
 				},
 				{
-					ID:   472673,
+					ID:   "472673",
 					Name: "Draw",
 					LayPrices: []queue.PriceSize{
 						{
@@ -315,7 +315,7 @@ func TestHandler_Handle(t *testing.T) {
 		})
 
 		run := mock.MatchedBy(func(r []*warehouse.Runner) bool {
-			assert.Equal(t, uint64(472672), r[0].ID)
+			assert.Equal(t, "472672", r[0].ID)
 			assert.Equal(t, "Away", r[0].Name)
 			assert.Equal(t, float32(2.05), r[0].LayPrice.Value)
 			assert.Equal(t, float32(1.93), r[0].LayPrice.Size)
