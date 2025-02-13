@@ -228,14 +228,14 @@ func TestMarketService_GetEventMarkets(t *testing.T) {
 			a.Equal("BETFAIR", m.Exchange)
 
 			a.Equal(uint64(1234), m.Runners[0].Id)
-			a.Equal("OVER", m.Runners[0].Name)
+			a.Equal("OVER", m.Runners[0].Label)
 			a.Equal(float32(1.45), m.Runners[0].BackOdds.Price)
 			a.Equal(float32(3410.12), m.Runners[0].BackOdds.Size)
 			a.Equal("BACK", m.Runners[0].BackOdds.Side)
 			a.Equal(uint64(1606824714), m.Runners[0].BackOdds.Timestamp)
 
 			a.Equal(uint64(6789), m.Runners[1].Id)
-			a.Equal("UNDER", m.Runners[1].Name)
+			a.Equal("UNDER", m.Runners[1].Label)
 			a.Equal(float32(2.26), m.Runners[1].BackOdds.Price)
 			a.Equal(float32(3410.12), m.Runners[1].BackOdds.Size)
 			a.Equal("BACK", m.Runners[1].BackOdds.Side)
@@ -368,14 +368,14 @@ func TestMarketService_GetEventMarkets(t *testing.T) {
 			a.Equal("BETFAIR", m.Exchange)
 
 			a.Equal(uint64(1234), m.Runners[0].Id)
-			a.Equal("OVER", m.Runners[0].Name)
+			a.Equal("OVER", m.Runners[0].Label)
 			a.Equal(float32(1.45), m.Runners[0].BackOdds.Price)
 			a.Equal(float32(3410.12), m.Runners[0].BackOdds.Size)
 			a.Equal("BACK", m.Runners[0].BackOdds.Side)
 			a.Equal(uint64(1606824714), m.Runners[0].BackOdds.Timestamp)
 
 			a.Equal(uint64(6789), m.Runners[1].Id)
-			a.Equal("UNDER", m.Runners[1].Name)
+			a.Equal("UNDER", m.Runners[1].Label)
 			a.Equal(float32(2.26), m.Runners[1].BackOdds.Price)
 			a.Equal(float32(3410.12), m.Runners[1].BackOdds.Size)
 			a.Equal("BACK", m.Runners[1].BackOdds.Side)
