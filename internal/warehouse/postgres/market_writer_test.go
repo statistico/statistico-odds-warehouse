@@ -52,7 +52,7 @@ func TestMarketRepository_InsertRunners(t *testing.T) {
 
 		runners := []*warehouse.Runner{
 			{
-				ID:   423721,
+				ID:   "423721",
 				Name: "Over 2.5 Goals",
 				BackPrice: &warehouse.Odds{
 					Value:     1.95,
@@ -61,7 +61,7 @@ func TestMarketRepository_InsertRunners(t *testing.T) {
 				},
 			},
 			{
-				ID:   423721,
+				ID:   "423721",
 				Name: "Under 2.5 Goals",
 				LayPrice: &warehouse.Odds{
 					Value:     2.05,
@@ -124,11 +124,14 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 	// Event Date: 2020-03-12T12:00:00+00:00
 	mk1 := newMarket("1.234", "OVER_UNDER_25", "BETFAIR", time.Unix(1584014400, 0))
 
+	value := "Over 1.5"
+
 	run1 := []*warehouse.Runner{
 		{
 			MarketID: mk1.ID,
-			ID:       423721,
+			ID:       "423721",
 			Name:     "OVER",
+			Label:    &value,
 			BackPrice: &warehouse.Odds{
 				Value:     1.95,
 				Size:      1591.01,
@@ -137,8 +140,9 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 		},
 		{
 			MarketID: mk1.ID,
-			ID:       423721,
+			ID:       "423721",
 			Name:     "OVER",
+			Label:    &value,
 			BackPrice: &warehouse.Odds{
 				Value:     1.94,
 				Size:      592.61,
@@ -147,7 +151,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 		},
 		{
 			MarketID: mk1.ID,
-			ID:       423721,
+			ID:       "423721",
 			Name:     "OVER",
 			BackPrice: &warehouse.Odds{
 				Value:     1.95,
@@ -157,7 +161,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 		},
 		{
 			MarketID: mk1.ID,
-			ID:       423722,
+			ID:       "423722",
 			Name:     "UNDER",
 			BackPrice: &warehouse.Odds{
 				Value:     2.05,
@@ -167,7 +171,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 		},
 		{
 			MarketID: mk1.ID,
-			ID:       423722,
+			ID:       "423722",
 			Name:     "UNDER",
 			BackPrice: &warehouse.Odds{
 				Value:     2.10,
@@ -186,7 +190,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 	run2 := []*warehouse.Runner{
 		{
 			MarketID: mk2.ID,
-			ID:       423721,
+			ID:       "423726",
 			Name:     "YES",
 			LayPrice: &warehouse.Odds{
 				Value:     1.95,
@@ -196,7 +200,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 		},
 		{
 			MarketID: mk2.ID,
-			ID:       423721,
+			ID:       "423727",
 			Name:     "NO",
 			LayPrice: &warehouse.Odds{
 				Value:     2.05,
@@ -215,7 +219,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 	run3 := []*warehouse.Runner{
 		{
 			MarketID: mk3.ID,
-			ID:       423721,
+			ID:       "423728",
 			Name:     "YES",
 			BackPrice: &warehouse.Odds{
 				Value:     1.95,
@@ -225,7 +229,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 		},
 		{
 			MarketID: mk3.ID,
-			ID:       423722,
+			ID:       "423729",
 			Name:     "NO",
 			LayPrice: &warehouse.Odds{
 				Value:     3.05,
@@ -244,7 +248,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 	run4 := []*warehouse.Runner{
 		{
 			MarketID: mk4.ID,
-			ID:       423721,
+			ID:       "423744",
 			Name:     "OVER",
 			BackPrice: &warehouse.Odds{
 				Value:     1.95,
@@ -254,7 +258,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 		},
 		{
 			MarketID: mk4.ID,
-			ID:       423721,
+			ID:       "423744",
 			Name:     "OVER",
 			BackPrice: &warehouse.Odds{
 				Value:     1.94,
@@ -264,7 +268,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 		},
 		{
 			MarketID: mk4.ID,
-			ID:       423721,
+			ID:       "423744",
 			Name:     "OVER",
 			BackPrice: &warehouse.Odds{
 				Value:     1.90,
@@ -274,7 +278,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 		},
 		{
 			MarketID: mk4.ID,
-			ID:       423722,
+			ID:       "423745",
 			Name:     "UNDER",
 			BackPrice: &warehouse.Odds{
 				Value:     2.12,
@@ -284,7 +288,7 @@ func insertMultipleMarketsAndRunner(t *testing.T, repo warehouse.MarketWriter) {
 		},
 		{
 			MarketID: mk4.ID,
-			ID:       423722,
+			ID:       "423745",
 			Name:     "UNDER",
 			BackPrice: &warehouse.Odds{
 				Value:     2.15,

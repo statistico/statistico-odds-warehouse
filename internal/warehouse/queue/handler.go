@@ -22,6 +22,7 @@ func (m *MarketHandler) Handle(q *EventMarket) error {
 			ID:       r.ID,
 			MarketID: q.ID,
 			Name:     r.Name,
+			Label:    r.Label,
 		}
 
 		if len(r.BackPrices) != 0 {

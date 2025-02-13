@@ -118,11 +118,11 @@ func (m *marketReader) MarketsByEventID(eventID uint64, q *warehouse.MarketReade
 
 func (m *marketReader) marketRunners(b sq.StatementBuilderType, marketID string) ([]*warehouse.Runner, error) {
 	rows, err := b.
-		Select("DISTINCT ON(name) *").
+		Select("DISTINCT ON(id) *").
 		From("market_runner").
 		Where(sq.Eq{"market_id": marketID}).
 		Where(sq.Eq{"side": "BACK"}).
-		OrderBy("name ASC", "timestamp DESC").
+		OrderBy("id asc", "name ASC", "timestamp DESC").
 		Query()
 
 	if err != nil {
@@ -138,7 +138,7 @@ func (m *marketReader) marketRunners(b sq.StatementBuilderType, marketID string)
 		var o warehouse.Odds
 		var timestamp int64
 
-		if err := rows.Scan(&r.MarketID, &r.ID, &r.Name, &o.Value, &o.Size, &timestamp, &o.Side); err != nil {
+		if err := rows.Scan(&r.ID, &r.MarketID, &r.Name, &r.Label, &o.Side, &o.Value, &o.Size, &timestamp); err != nil {
 			return []*warehouse.Runner{}, err
 		}
 

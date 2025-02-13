@@ -29,11 +29,12 @@ type Market struct {
 }
 
 type Runner struct {
-	ID        uint64 `json:"id"`
-	MarketID  string `json:"marketId"`
-	Name      string `json:"name"`
-	BackPrice *Odds  `json:"backPrice"`
-	LayPrice  *Odds  `json:"layPrice"`
+	ID        string  `json:"id"`
+	MarketID  string  `json:"marketId"`
+	Name      string  `json:"name"`
+	Label     *string `json:"label"`
+	BackPrice *Odds   `json:"backPrice"`
+	LayPrice  *Odds   `json:"layPrice"`
 }
 
 type Odds struct {

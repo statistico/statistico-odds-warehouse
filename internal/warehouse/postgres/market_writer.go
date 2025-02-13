@@ -55,22 +55,24 @@ func (w *marketWriter) InsertRunners(runners []*warehouse.Runner) error {
 			_, err := builder.
 				Insert("market_runner").
 				Columns(
+					"id",
 					"market_id",
-					"runner_id",
 					"name",
+					"label",
+					"side",
 					"price",
 					"size",
 					"timestamp",
-					"side",
 				).
 				Values(
-					runner.MarketID,
 					runner.ID,
+					runner.MarketID,
 					runner.Name,
+					runner.Label,
+					"BACK",
 					runner.BackPrice.Value,
 					runner.BackPrice.Size,
 					runner.BackPrice.Timestamp.Unix(),
-					"BACK",
 				).
 				Exec()
 
@@ -83,22 +85,24 @@ func (w *marketWriter) InsertRunners(runners []*warehouse.Runner) error {
 			_, err := builder.
 				Insert("market_runner").
 				Columns(
+					"id",
 					"market_id",
-					"runner_id",
 					"name",
+					"label",
+					"side",
 					"price",
 					"size",
 					"timestamp",
-					"side",
 				).
 				Values(
-					runner.MarketID,
 					runner.ID,
+					runner.MarketID,
 					runner.Name,
+					runner.Label,
+					"LAY",
 					runner.LayPrice.Value,
 					runner.LayPrice.Size,
 					runner.LayPrice.Timestamp.Unix(),
-					"LAY",
 				).
 				Exec()
 
