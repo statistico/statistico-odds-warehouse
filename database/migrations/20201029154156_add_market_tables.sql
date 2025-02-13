@@ -11,7 +11,7 @@ CREATE TABLE market (
 );
 
 CREATE TABLE market_runner (
-    id INTEGER NOT NULL,
+    id VARCHAR NOT NULL,
     market_id VARCHAR NOT NULL,
     name VARCHAR NOT NULL,
     label VARCHAR,
