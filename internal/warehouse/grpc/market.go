@@ -73,8 +73,8 @@ func (m *MarketService) GetEventMarkets(r *statistico.EventMarketRequest, stream
 
 		for _, r := range mk.Runners {
 			runners = append(runners, &statistico.Runner{
-				Id:   r.ID,
-				Name: r.Name,
+				Id:    r.ID,
+				Label: r.Name,
 				BackOdds: &statistico.ExchangeOdds{
 					Price:     r.BackPrice.Value,
 					Size:      r.BackPrice.Size,
